@@ -5,9 +5,11 @@ from sqlalchemy.ext.asyncio import (
     AsyncAttrs, async_sessionmaker, create_async_engine, AsyncSession
     )
 
+from config import settings
+
 # Этот код создает асинхронное подключение к базе данных
-database_url = 'sqlite+iosqlite:///db.sqlite3'
-engine = create_async_engine(url=database_url)
+
+engine = create_async_engine(url=settings.get_database_url())
 async_session_maker = async_sessionmaker(engine, class_=AsyncSession)
 
 
