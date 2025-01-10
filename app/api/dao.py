@@ -26,13 +26,13 @@ class ApplicationDAO(BaseDAO):
     async def get_applications_by_user(cls, user_id: int):
         """
         Возвращает все заявки пользователя по user_id с дополнительной информацией
-        о мастере и услуге.
+        о магазине и услуге.
 
         Аргументы:
             user_id: Идентификатор пользователя.
 
         Возвращает:
-            Список заявок пользователя с именами мастеров и услуг.
+            Список заявок пользователя с именами магазинов и услуг.
         """
         async with async_session_maker() as session:
             try:
@@ -55,6 +55,8 @@ class ApplicationDAO(BaseDAO):
                         'appointment_time': app.appointment_time,
                         'local': app.local.value,
                         'comment': app.comment,
+                        'number': app.phone_number,
+                        'is_completed': app.is_completed
                     }
                     for app in applications
                 ]
@@ -65,10 +67,10 @@ class ApplicationDAO(BaseDAO):
     @classmethod
     async def get_all_applications(cls):
         """
-        Возвращает все заявки в базе данных с дополнительной информацией о мастере и услуге.
+        Возвращает все заявки в базе данных с дополнительной информацией о магазине и услуге.
 
         Возвращает:
-            Список всех заявок с именами мастеров и услуг.
+            Список всех заявок с именами магазинов и услуг.
         """
         async with async_session_maker() as session:
             try:
@@ -85,13 +87,15 @@ class ApplicationDAO(BaseDAO):
                     {
                         'application_id': app.id,
                         'user_id': app.user_id,
-                        'service_name': app.service.service_name,  # Название услуги
+                        'service_name': app.service.service_name,
                         'address_name': app.shop.address_name,
                         'appointment_date': app.appointment_date,
                         'appointment_time': app.appointment_time,
-                        'client_name': app.client_name,  # Имя клиента
+                        'client_name': app.client_name,
                         'local': app.local.value,
                         'comment': app.comment,
+                        'number': app.phone_number,
+                        'is_completed': app.is_completed
                     }
                     for app in applications
                 ]
