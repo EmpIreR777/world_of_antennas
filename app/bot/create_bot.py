@@ -9,16 +9,19 @@ bot = Bot(token=settings.BOT_TOKEN, default=DefaultBotProperties(
     parse_mode=ParseMode.HTML))
 dp = Dispatcher()
 
+admins = settings.ADMIN_IDS
 
 async def start_bot():
-    try:
-        await bot.send_message(settings.ADMIN_ID, f'Я запущен 🥳.')
-    except:
-        pass
+    for admin_id in admins:
+        try:
+            await bot.send_message(admin_id, f'Я запущен 🥳')
+        except:
+            pass
 
 
 async def stop_bot():
     try:
-        await bot.send_message(settings.ADMIN_ID, 'Бот остановлен 😔.')
+        for admin_id in admins:
+            await bot.send_message(admin_id, 'Бот остановлен 😔')
     except:
         pass

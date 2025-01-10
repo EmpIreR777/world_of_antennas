@@ -11,7 +11,7 @@ def main_keyboard(user_id: int, first_name: str) -> ReplyKeyboardMarkup:
     kb.button(text='🌐 Мои заявки', web_app=WebAppInfo(url=url_applications))
     kb.button(text='📝 Оставить заявку', web_app=WebAppInfo(url=url_add_application))
     kb.button(text='ℹ️ О нас')
-    if user_id in settings.ADMIN_ID:
+    if user_id in settings.ADMIN_IDS:
         kb.button(text='🔑 Админ панель')
     kb.adjust(1)
     return kb.as_markup(resize_keyboard=True)
@@ -25,7 +25,7 @@ def back_keyboard() -> ReplyKeyboardMarkup:
 
 
 def admin_keyboard(user_id: int) -> InlineKeyboardMarkup:
-    url_applications = f'{settings.BASE_SITE}/admin?admin_id={user_id}'
+    url_applications = f'{settings.BASE_SITE}/admin?ADMIN_IDS={user_id}'
     kb = InlineKeyboardBuilder()
     kb.button(text='🏠 На главную', callback_data='back_home')
     kb.button(text='📝 Смотреть заявки', web_app=WebAppInfo(url=url_applications))

@@ -1,11 +1,12 @@
 import os
+from typing import List
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
     BOT_TOKEN: str
     BASE_SITE: str
-    ADMIN_ID: int
+    ADMIN_IDS: List[int]
     DATABASE_URL: str
 
     model_config = SettingsConfigDict(

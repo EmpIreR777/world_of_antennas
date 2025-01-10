@@ -1,5 +1,6 @@
 import enum
-from sqlalchemy import String, BigInteger, Integer, Date, Time, ForeignKey, Enum
+from sqlalchemy import (Boolean, String, BigInteger,
+                        Integer, Date, Time, ForeignKey, Enum)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -49,7 +50,10 @@ class Application(Base):
     appointment_time: Mapped[Time] = mapped_column(Time, nullable=False)  # Время заявки
     client_name: Mapped[str] = mapped_column(String, nullable=False)  # Имя пользователя
     local: Mapped[LocalEnum] = mapped_column(Enum(LocalEnum), nullable=False) # Город\межгород
-    comment: Mapped[str] = mapped_column(String(255), nullable=True)  # Комментарий к заявке
+    comment: Mapped[str] = mapped_column(String(255), nullable=True) # Комментарий к заявке
+    phone_number: Mapped[str] = mapped_column(String(20), nullable=True) # Номер телефона (необязательное поле)
+    is_completed: Mapped[bool] = mapped_column(Boolean, default=False) # Статус выполнения заявки (по умолчанию - не выполнена)
+
     # Связи с пользователем, магазином и услугой
     user: Mapped['User'] = relationship(back_populates='applications')
     shop: Mapped['Shop'] = relationship(back_populates='applications')
