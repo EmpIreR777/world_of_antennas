@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import (
     AsyncAttrs, async_sessionmaker, create_async_engine, AsyncSession
     )
 
-from config import settings
+from app.config import settings
 
 # Этот код создает асинхронное подключение к базе данных
 

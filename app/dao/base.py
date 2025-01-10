@@ -6,7 +6,7 @@ from app.database import async_session_maker
 
 
 class BaseDAO:
-    model = None
+    model = None # Устанавливается в дочернем классе
 
     @classmethod
     async def find_one_or_none_by_id(cls, data_id: int):
