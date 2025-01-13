@@ -53,10 +53,9 @@ class ApplicationDAO(BaseDAO):
                         'address_name': app.shop.address_name,
                         'appointment_date': app.appointment_date,
                         'appointment_time': app.appointment_time,
-                        'local': app.local.value,
+                        'status': app.status.value,
                         'comment': app.comment,
-                        'number': app.phone_number,
-                        'is_completed': app.is_completed
+                        'phone_number': app.phone_number,
                     }
                     for app in applications
                 ]
@@ -92,10 +91,9 @@ class ApplicationDAO(BaseDAO):
                         'appointment_date': app.appointment_date,
                         'appointment_time': app.appointment_time,
                         'client_name': app.client_name,
-                        'local': app.local.value,
+                        'status': app.status.value,
                         'comment': app.comment,
-                        'number': app.phone_number,
-                        'is_completed': app.is_completed
+                        'phone_number': app.phone_number,
                     }
                     for app in applications
                 ]

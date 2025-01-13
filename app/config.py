@@ -1,7 +1,14 @@
 import os
 from typing import List
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from dotenv import load_dotenv
 
+
+
+env_file_path = os.path.join(os.path.dirname(
+    os.path.abspath(__file__)), '..', '.env')
+
+load_dotenv(env_file_path, override=True)
 
 class Settings(BaseSettings):
     BOT_TOKEN: str
@@ -10,8 +17,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str
 
     model_config = SettingsConfigDict(
-        env_file=os.path.join(os.path.dirname(
-            os.path.abspath(__file__)), '..', '.env')
+        env_file=env_file_path
     )
 
     def get_webhook_url(self) -> str:

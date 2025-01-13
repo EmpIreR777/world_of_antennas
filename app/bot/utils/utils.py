@@ -4,7 +4,7 @@ from app.bot.keyboards.kbs import main_keyboard
 
 def get_about_us_text() -> str:
     return """
-    🌟 АНТЕННЫ И МОНТАЖ "Мир Антенн" 🌟
+    🌟 АНТЕННЫ И МОНТАЖ 'Мир Антенн' 🌟
 
     Добро пожаловать в мир надежных антенн и профессионального монтажа!
 
@@ -43,10 +43,11 @@ def get_about_us_text() -> str:
     📞 Свяжитесь с нами сегодня!
     • Получите бесплатную консультацию и подберите оптимальные решения для вашего проекта.
 
-    📡 Ваше качество – наш приоритет! 📡 или  Ваша связь — наша забота!
+    📡 Ваше качество – наш приоритет! 📡
+    или Ваша связь — наша забота! или что то своё) исправим!
 
-    # Антенны #Монтаж #Кронштейны #МобильнаяСвязь #Интернет #Бийск #АлтайскийКрай #РеспубликаАлтай 
-    """ # Тут мы можем добавить другие теги или ещё что то, ссылки на сайт и т.д
+    #Антенны #Монтаж #Кронштейны #МобильнаяСвязь #Интернет #Бийск #АлтайскийКрай #РеспубликаАлтай 
+    """  # Тут мы можем добавить другие теги или ещё что то, ссылки на сайт и т.д
 
 
 async def greet_user(message: Message, is_new_user: bool) -> None:
@@ -55,9 +56,9 @@ async def greet_user(message: Message, is_new_user: bool) -> None:
     """
     greeting = 'Добро пожаловать' if is_new_user else 'С возвращением'
     status = 'Вы успешно зарегистрированы!' if is_new_user else 'Рады видеть вас снова!'
+    first_name = message.from_user.full_name
+
     await message.answer(
-        f'{greeting}, <b>{message.from_user.full_name}</b>! {status}\n'
-        'Чем я могу помочь вам сегодня?',
-        reply_markup=main_keyboard(user_id=message.from_user.id,
-                                    first_name=message.from_user.first_name)
+        f'{greeting}, <b>{first_name}</b>! {status}\n' 'Чем я могу помочь вам сегодня?',
+        reply_markup=main_keyboard(user_id=message.from_user.id, first_name=message.from_user.first_name),
     )

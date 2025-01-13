@@ -5,7 +5,7 @@ from app.config import settings
 
 
 def main_keyboard(user_id: int, first_name: str) -> ReplyKeyboardMarkup:
-    kb = ReplyKeyboardMarkup()
+    kb = ReplyKeyboardBuilder()
     url_applications = f'{settings.BASE_SITE}/applications?user_id={user_id}'
     url_add_application = f'{settings.BASE_SITE}/form?user_id={user_id}&first_name={first_name}'
     kb.button(text='🌐 Мои заявки', web_app=WebAppInfo(url=url_applications))
@@ -14,7 +14,7 @@ def main_keyboard(user_id: int, first_name: str) -> ReplyKeyboardMarkup:
     if user_id in settings.ADMIN_IDS:
         kb.button(text='🔑 Админ панель')
     kb.adjust(1)
-    return kb.as_markup(resize_keyboard=True)
+    return kb.as_markup(resize_keyboard=True, one_time_keyboard=True)
 
 
 def back_keyboard() -> ReplyKeyboardMarkup:
@@ -22,6 +22,9 @@ def back_keyboard() -> ReplyKeyboardMarkup:
     kb.button(text='🔙 Назад')
     kb.adjust(1)
     return kb.as_markup(resize_keyboard=True)
+
+
+#-------------------------inline--------------------------
 
 
 def admin_keyboard(user_id: int) -> InlineKeyboardMarkup:
@@ -34,9 +37,10 @@ def admin_keyboard(user_id: int) -> InlineKeyboardMarkup:
     return kb.as_markup()
 
 
-def app_keyboard(user_id: int, first_name: str) -> InlineKeyboardMarkup:
+def app_keyboard() -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder()
-    url_add_application = f'{settings.BASE_SITE}/form?user_id={user_id}&first_name={first_name}'
-    kb.button(text='📝 Оставить заявку', web_app=WebAppInfo(url=url_add_application))
-    kb.adjust(1)
+    kb.button(text='Магазин на Васильева', callback_data='Васильева 75')
+    kb.button(text='Магазин в горном', callback_data='Горный Алтайская улица, 26Б')
+    kb.button(text='🏠 На главную', callback_data='user_back_home')
+    kb.adjust(2, 1)
     return kb.as_markup()

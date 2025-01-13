@@ -24,7 +24,7 @@ async def lifespan(app: FastAPI):
     await bot.set_webhook(
         url=webhook_url,
         allowed_updates=dp.resolve_used_update_types(),
-        drop_pending_updates=True
+        drop_pending_updates=True,
     )
     logging.info(f'Webhook set to {webhook_url}')
     yield
