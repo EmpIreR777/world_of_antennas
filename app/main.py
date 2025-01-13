@@ -1,11 +1,14 @@
 import logging
 from aiogram.types import Update
 from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 
 from app.bot.create_bot import bot, dp, stop_bot, start_bot
 from app.bot.handlers.user_router import router as user_router
 from app.bot.handlers.admin_router import router as admin_router
+from app.pages.router import router as router_pages
+
 
 from app.config import settings
 
@@ -36,6 +39,8 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+app.mount('/static', StaticFiles(directory='app/static'), name='static')
+
 
 @app.post('/webhook')
 async def webhook(request: Request) -> None:
@@ -43,3 +48,5 @@ async def webhook(request: Request) -> None:
     update = Update.model_validate(await request.json(), context={'bot': bot})
     await dp.feed_update(bot, update)
     logging.info('Update processed')
+
+app.include_router(router_pages)
