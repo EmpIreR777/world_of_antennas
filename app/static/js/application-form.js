@@ -1,4 +1,3 @@
-
 document.getElementById('applicationForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -121,10 +120,47 @@ styleSheet.insertRule(`
         transition: opacity 0.5s ease;
 `, styleSheet.cssRules.length);
 
-// Добавляем текущую дату в поле даты
-document.addEventListener('DOMContentLoaded', (event) => {
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('appointment_date').setAttribute('min', today);
+// Добавляем текущую дату и время в поле даты
+document.addEventListener('DOMContentLoaded', function() {
+    const now = new Date();
+    const currentDate = now.toISOString().split('T')[0];
+    const currentTime = now.toTimeString().slice(0,5);
+    
+    const dateInput = document.getElementById('appointment_date');
+    const timeInput = document.getElementById('appointment_time');
+
+    // Установка минимальной даты (сегодня)
+    dateInput.min = currentDate;
+    dateInput.value = currentDate;
+
+    // Установка максимальной даты (через три месяца)
+    const maxDate = new Date(now);
+    maxDate.setMonth(maxDate.getMonth() + 3);
+    // Обработка случая, когда текущая дата — 31-е, а целевой месяц меньше
+    const maxDateISO = maxDate.toISOString().split('T')[0];
+    dateInput.max = maxDateISO;
+
+    // Функция для обновления минимального времени
+    function updateMinTime() {
+        const selectedDate = dateInput.value;
+        if (selectedDate === currentDate) {
+            // Если выбрана сегодняшняя дата, установить минимальное время как текущее
+            timeInput.min = currentTime;
+        } else {
+            // Иначе установить минимальное время на начало дня
+            timeInput.min = '00:00';
+        }
+
+        // Опционально: установить текущее время как значение по умолчанию, если оно допустимо
+        // Проверяем, чтобы текущее время не позже максимального
+        if (selectedDate === currentDate && currentTime > timeInput.value) {
+            timeInput.value = currentTime;
+        }
+    }
+
+    // Изначально установить минимальное время
+    updateMinTime();
+
+    // Обновлять минимальное время при изменении даты
+    dateInput.addEventListener('change', updateMinTime);
 });
-
-

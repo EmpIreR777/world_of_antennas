@@ -13,6 +13,16 @@ router = APIRouter(prefix='/api', tags=['API'])
 
 @router.post('/appointment', response_class=JSONResponse)
 async def create_appointment(request: Request):
+
+    response = JSONResponse(content={"message": "test"})
+    print(f"Response: {response}")
+    print(f"Response content: {response.body}")
+    print(f"Response headers: {response.headers}")
+
+    print(f"Type: {type(JSONResponse)}")
+    print(f"MRO: {JSONResponse.__mro__}")
+    print(f"Attributes: {dir(JSONResponse)}")
+    print(request)
     try:
         # Получаем и валидируем JSON данные
         data = await request.json()
