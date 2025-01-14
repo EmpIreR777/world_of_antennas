@@ -108,6 +108,7 @@ class Application(Base):
     appointment_date: Mapped[Date] = mapped_column(Date, nullable=False)  # Дата заявки
     appointment_time: Mapped[Time] = mapped_column(Time, nullable=False)  # Время заявки
     client_name: Mapped[str] = mapped_column(String(50), nullable=False)  # Имя пользователя
+    address: Mapped[str] = mapped_column(String(255), nullable=False)  # Адрес
     status: Mapped[StatusEnum] = mapped_column(
         Enum(StatusEnum), default=StatusEnum.pending, nullable=False)
     comment: Mapped[str] = mapped_column(

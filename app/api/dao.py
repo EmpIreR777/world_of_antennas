@@ -56,6 +56,7 @@ class ApplicationDAO(BaseDAO):
                         'status': app.status.value,
                         'comment': app.comment,
                         'phone_number': app.phone_number,
+                        'address': app.address,
                     }
                     for app in applications
                 ]
@@ -94,6 +95,7 @@ class ApplicationDAO(BaseDAO):
                         'status': app.status.value,
                         'comment': app.comment,
                         'phone_number': app.phone_number,
+                        'address': app.address,
                     }
                     for app in applications
                 ]

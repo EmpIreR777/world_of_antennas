@@ -1,0 +1,130 @@
+
+document.getElementById('applicationForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById('client_name').value;
+    const serviceSelect = document.getElementById('service_id');
+    const serviceName = serviceSelect.options[serviceSelect.selectedIndex].text;
+    const date = document.getElementById('appointment_date').value;
+    const time = document.getElementById('appointment_time').value;
+
+    const popupMessage = `${name}, ваша заявка на ${serviceName.toLowerCase()} оформлена на ${date} в ${time}.`;
+    document.getElementById('popupMessage').textContent = popupMessage;
+
+    document.getElementById('popup').style.display = 'flex';
+});
+
+document.getElementById('closePopup').addEventListener('click', async function () {
+    const clientName = document.getElementById('client_name').value.trim();
+    const phoneNumber = document.getElementById('phone_number').value.trim();
+    const address = document.getElementById('address').value.trim();
+    const shop = document.getElementById('shop_id').value;
+    const service = document.getElementById('service_id').value;
+    const date = document.getElementById('appointment_date').value;
+    const time = document.getElementById('appointment_time').value;
+    const comment = document.getElementById('comment').value.trim();
+    const userId = document.getElementById('user_id').value;
+
+    // Проверка валидности полей
+    if (clientName.length < 2 || clientName.length > 50) {
+        alert("Имя должно быть от 2 до 50 символов.");
+        return;
+    }
+
+    if (phoneNumber && !phoneNumber.match(/^[0-9+]{10,15}$/)) {
+        alert("Введите корректный номер телефона.");
+        return;
+    }
+
+    if (address.length < 5 || address.length > 100) {
+        alert("Адрес должен быть от 5 до 100 символов.");
+        return;
+    }
+
+    if (!shop || !service) {
+        alert("Выберите магазин и услугу.");
+        return;
+    }
+
+    // Создаем объект с данными
+    const appointmentData = {
+        client_name: clientName,
+        phone_number: phoneNumber,
+        address: address,
+        shop: shop,
+        service: service,
+        appointment_date: date,
+        appointment_time: time,
+        comment: comment,
+        user_id: parseInt(userId)
+    };
+
+    // Преобразуем объект в JSON строку
+    const jsonData = JSON.stringify(appointmentData);
+
+    // Отправляем POST запрос
+    try {
+        const response = await fetch('/api/appointment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: jsonData
+        });
+        const result = await response.json();
+        console.log('Response from /form:', result);
+
+        setTimeout(() => {
+            window.Telegram.WebApp.close();
+        }, 100);
+    } catch (error) {
+        console.error('Error sending POST request:', error);
+    }
+});
+
+
+// Анимация и остальной код остается без изменений
+function animateElements() {
+    const elements = document.querySelectorAll('h1, .form-group, .btn');
+    elements.forEach((el, index) => {
+        setTimeout(() => {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+        }, 100 * index);
+    });
+}
+
+var styleSheet = document.styleSheets[0];
+styleSheet.insertRule(`
+    h1, .form-group, .btn {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+`, styleSheet.cssRules.length);
+
+styleSheet.insertRule(`
+    body {
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    }
+`, styleSheet.cssRules.length);
+
+// Плавное появление страницы при загрузке
+window.addEventListener('load', function () {
+    document.body.style.opacity = '1';
+    animateElements();
+});
+styleSheet.insertRule(`
+    body {
+        opacity: 0;
+        transition: opacity 0.5s ease;
+`, styleSheet.cssRules.length);
+
+// Добавляем текущую дату в поле даты
+document.addEventListener('DOMContentLoaded', (event) => {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('appointment_date').setAttribute('min', today);
+});
+
+
