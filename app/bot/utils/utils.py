@@ -4,7 +4,7 @@ from app.bot.keyboards.kbs import main_keyboard
 
 def get_about_us_text() -> str:
     return """
-    🌟 АНТЕННЫ И МОНТАЖ 'Мир Антенн' 🌟
+    🌟 АНТЕННЫ И МОНТАЖ 'МИР АНТЕНН' 🌟
 
     Добро пожаловать в мир надежных антенн и профессионального монтажа!
 

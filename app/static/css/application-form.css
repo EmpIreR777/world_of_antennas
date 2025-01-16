@@ -7,7 +7,7 @@ body, html {
     background-color: #0a0a0a;
     color: #fff;
     text-align: center;
-    background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 1)),
+    background-image: linear-gradient(rgba(0, 0, 0, 9), rgba(0, 0, 0, 9)),
     url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23222' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 60L60 0H30L0 30M60 60V30L30 60'/%3E%3C/g%3E%3C/svg%3E");
     background-attachment: fixed;
     min-height: 100vh;
@@ -314,32 +314,6 @@ h1 {
                  0 0 20px rgba(255, 255, 255, 0.2);
 }
 
-.popup {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-    animation: fadeIn 0.3s ease-out;
-}
-
-.popup-content {
-    background-color: rgba(0, 0, 0, 0.95);
-    color: #fff;
-    padding: 2.5rem;
-    border-radius: 15px;
-    text-align: center;
-    max-width: 90%;
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    animation: scaleIn 0.3s ease-out;
-}
-
 @keyframes scaleIn {
     from {
         transform: scale(0.9);
@@ -349,19 +323,6 @@ h1 {
         transform: scale(1);
         opacity: 1;
     }
-}
-
-.popup h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.8em;
-    margin-bottom: 1.5rem;
-    color: #fff;
-}
-
-.popup p {
-    margin-bottom: 1.5rem;
-    font-size: 1.1em;
-    line-height: 1.6;
 }
 
 @media (max-width: 768px) {
@@ -621,4 +582,77 @@ h1 {
 input[type="date"],
 input[type="time"] {
     color-scheme: dark;
+}
+
+
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.popup-content {
+    background-color: rgba(0, 0, 0, 0.95);
+    color: #fff;
+    padding: 2.5rem;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 90%;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3), /* Усиленная внешняя подсветка */
+                0 0 50px rgba(255, 255, 255, 0.2),
+                0 0 70px rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: scaleIn 0.3s ease-out;
+}
+
+.popup h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8em;
+    margin-bottom: 1.5rem;
+    color: #fff;
+}
+
+.popup p {
+    margin-bottom: 1.5rem;
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+/* Дополнительные стили для выделенного текста */
+.popup p strong {
+    font-weight: bold;
+    font-size: 1.3em; /* Увеличение на 20% от родительского размера */
+    color: #34ac6a; /* Можно добавить особый цвет для выделенного текста */
+}
+
+/* Добавляем анимацию свечения */
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 20px rgba(255, 107, 107, 0.3),
+                    0 0 30px rgba(78, 205, 196, 0.3),
+                    0 0 40px rgba(255, 107, 107, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(255, 107, 107, 0.5),
+                    0 0 40px rgba(78, 205, 196, 0.5),
+                    0 0 50px rgba(255, 107, 107, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 20px rgba(255, 107, 107, 0.3),
+                    0 0 30px rgba(78, 205, 196, 0.3),
+                    0 0 40px rgba(255, 107, 107, 0.3);
+    }
+}
+
+.popup-content {
+    animation: glow 2s infinite ease-in-out;
 }

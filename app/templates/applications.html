@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}
+Панель просмотра заявок
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="/static/css/applications.css">
+{% endblock %}
+
+{% block content %}
+<main>
+    <h1>{{ title_h1 }}</h1>
+
+    {% if access %}
+    <table id="appointments-table">
+        <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Время</th>
+            <th>Услуга</th>
+            <th>Мастер</th>
+            <th>Клиент</th>
+            <th>Телефон</th>
+            <th>Адрес</th>
+            <th>Статус</th>
+            <th>Комментарий</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for application in applications %}
+        <tr>
+            <td>{{ application.appointment_date }}</td>
+            <td>{{ application.appointment_time }}</td>
+            <td>{{ application.service.name }}</td>
+            <td>{{ application.master.first_name if application.master else 'Не назначен' }}</td>
+            <td>{{ application.client_name }}</td>
+            <td>{{ application.phone_number if application.phone_number else 'Не указан' }}</td>
+            <td>{{ application.address }}</td>
+            <td>{{ application.status.value }}</td>
+            <td>{{ application.comment if application.comment else '---' }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>{{ message }}</p>
+    {% endif %}
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/applications.js"></script>
+{% endblock %}

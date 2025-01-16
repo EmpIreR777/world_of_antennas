@@ -7,9 +7,9 @@ document.getElementById('applicationForm').addEventListener('submit', function (
     const date = document.getElementById('appointment_date').value;
     const time = document.getElementById('appointment_time').value;
 
-    const popupMessage = `${name}, ваша заявка на ${serviceName.toLowerCase()} оформлена на ${date} в ${time}.`;
-    document.getElementById('popupMessage').textContent = popupMessage;
-
+    const fullMessage = `${name}, ваша заявка на <strong>${serviceName.toLowerCase()}</strong> оформлена на ${date} в ${time}.\n Ожидайте звонка для уточнения деталей заявки`;
+    document.getElementById('popupMessage').style.whiteSpace = 'pre-line';
+    document.getElementById('popupMessage').innerHTML = fullMessage;
     document.getElementById('popup').style.display = 'flex';
 });
 
@@ -73,6 +73,7 @@ document.getElementById('closePopup').addEventListener('click', async function (
         const result = await response.json();
         console.log('Response from /form:', result);
 
+        // Закрываем Telegram WebApp через 100 мс
         setTimeout(() => {
             window.Telegram.WebApp.close();
         }, 100);
@@ -93,6 +94,7 @@ function animateElements() {
     });
 }
 
+// Стили для анимации
 var styleSheet = document.styleSheets[0];
 styleSheet.insertRule(`
     h1, .form-group, .btn {

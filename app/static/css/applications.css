@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@300;400;600&display=swap');
+
+:root {
+    --primary-bg: #000;
+    --text-color: #fff;
+    --accent-color: rgba(255, 255, 255, 0.05);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --transition-speed: 0.3s;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    text-align: center;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.95)),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23222' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 60L60 0H30L0 30M60 60V30L30 60'/%3E%3C/g%3E%3C/svg%3E");
+    background-attachment: fixed;
+    min-height: 100vh;
+    scroll-behavior: smooth;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 20px rgba(255, 107, 107, 0.3),
+                    0 0 30px rgba(78, 205, 196, 0.3),
+                    0 0 40px rgba(255, 107, 107, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(255, 107, 107, 0.5),
+                    0 0 40px rgba(78, 205, 196, 0.5),
+                    0 0 50px rgba(255, 107, 107, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 20px rgba(255, 107, 107, 0.3),
+                    0 0 30px rgba(78, 205, 196, 0.3),
+                    0 0 40px rgba(255, 107, 107, 0.3);
+    }
+}
+
+main {
+    width: 95%;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--accent-color);
+    border-radius: 15px;
+    box-shadow: 
+        0 8px 32px var(--shadow-color),
+        0 0 15px rgba(255, 255, 255, 0.1),
+        0 0 30px rgba(255, 255, 255, 0.05),
+        0 0 45px rgba(255, 255, 255, 0.025);
+    backdrop-filter: blur(10px);
+    transition: transform var(--transition-speed) ease;
+    animation: pulse 6s ease-in-out infinite;
+}
+
+/* main:hover {
+    transform: translateY(-5px);
+} */
+
+
+h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--text-color);
+    transition: width var(--transition-speed) ease;
+}
+
+h1:hover::after {
+    width: 120px;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 2rem;
+    background: var(--accent-color);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform var(--transition-speed) ease;
+}
+
+th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color var(--transition-speed) ease;
+}
+
+th {
+    background-color: rgba(255, 255, 255, 0.1);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+tr:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+}

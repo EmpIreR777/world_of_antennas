@@ -37,7 +37,8 @@ header::after {
             rgba(255, 255, 255, 0.153) 75%,
             rgba(255, 255, 255, 0) 100%);
     opacity: 0.5;
-    animation: shimmer 11s infinite; /* Увеличено с 6s до 12s */
+    animation: shimmer 11s infinite;
+    /* Увеличено с 6s до 12s */
     filter: blur(8px);
 }
 
@@ -45,9 +46,11 @@ header::after {
     0% {
         transform: translateX(-100%);
     }
+
     50% {
         transform: translateX(100%);
     }
+
     100% {
         transform: translateX(-100%);
     }
@@ -57,9 +60,11 @@ header::after {
     0% {
         box-shadow: 0 2px 15px rgba(255, 255, 255, 0.127);
     }
+
     50% {
         box-shadow: 0 2px 25px rgba(255, 255, 255, 0.475);
     }
+
     100% {
         box-shadow: 0 2px 15px rgba(255, 255, 255, 0.127);
     }
@@ -266,21 +271,38 @@ p {
     color: #0edbdf;
     display: inline-block;
     margin: 30px 0;
-    /* Добавлен отступ */
     text-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+    /* добавил ease для более плавной анимации */
     font-size: 55px;
-    /* размер в пикселях */
-
-    /* или */
     font-size: 175%;
-    /* относительный размер */
+    transform-origin: center center;
+    /* центр трансформации */
 }
 
 .glow-link:hover {
     color: #e93b28;
     text-shadow: 0 0 8px rgba(243, 81, 32, 0.875);
+    transform: scale(1.1);
+    /* увеличение на 10% */
+    animation: textPulse 0.3s ease-in-out;
+    /* добавляем анимацию */
 }
+
+@keyframes textPulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1.1);
+    }
+}
+
 
 /* Медиа-запрос для мобильных устройств */
 @media (max-width: 768px) {

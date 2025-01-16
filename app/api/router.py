@@ -33,6 +33,7 @@ async def create_appointment(request: Request):
 
         # Формируем сообщение для клиента
         message = (
+            f'(﹙˓ 📶 ˒﹚) <a href="https://mir-ant.ru/contacts/">МИР АНТЕНН</a> (﹙˓ 📶 ˒﹚)'
             f'🎉 <b>{validated_data.client_name}, ваша заявка успешно принята!</b>'
             f'💬 <b>Информация о вашей записи:</b>'
             f'👤 <b>Имя клиента:</b> {validated_data.client_name}'
@@ -50,14 +51,15 @@ async def create_appointment(request: Request):
         admin_message = (
             f'🔔 <b>Новая заявка!</b>'
             f'📄 <b>Детали заявки:</b>'
-            f'👤 Имя клиента: {validated_data.client_name}'
-            f'📞 Телефон: {validated_data.phone_number or "Не указан"}'
-            f'📍 Адрес: {validated_data.address}'
+            f'👤 <b>Имя клиента:</b> {validated_data.client_name}'
+            f'📞 <b>Телефон:</b> {validated_data.phone_number or "Не указан"}'
+            f'📍 <b>Адрес:</b> {validated_data.address}'
             f'🏪 <b>Магазин:</b> {validated_data.shop}'
             f'🔧 <b>Услуга:</b> {validated_data.service}'
-            f'📅 Дата: {validated_data.appointment_date}'
-            f'⏰ Время: {validated_data.appointment_time}'
-            f'💭 Комментарий: {validated_data.comment or "Нет комментария"}'
+            f'📅 <b>Дата:</b> {validated_data.appointment_date}'
+            f'⏰ <b>Время:</b> {validated_data.appointment_time}'
+            f'💭 <b>Комментарий:</b> {validated_data.comment or "Нет комментария"}'
+            f'📊 <b>Статус:</b> ⚠️ Не обработана'
         )
 
         # Добавление заявки в базу данных

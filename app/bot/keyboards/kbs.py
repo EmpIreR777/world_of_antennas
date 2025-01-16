@@ -13,7 +13,7 @@ def main_keyboard(user_id: int, first_name: str) -> ReplyKeyboardMarkup:
     kb.button(text='ℹ️ О нас')
     if user_id in settings.ADMIN_IDS:
         kb.button(text='🔑 Админ панель')
-    kb.adjust(1)
+    kb.adjust(2, 2)
     return kb.as_markup(resize_keyboard=True, one_time_keyboard=True)
 
 
