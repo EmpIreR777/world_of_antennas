@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from app.api.schemas import AppointmentData
 from app.bot.create_bot import bot
 from app.api.dao import ApplicationDAO
-from app.bot.keyboards.kbs import main_keyboard
+from app.bot.keyboards.kbs_user import main_keyboard
 from app.config import settings
 
 router = APIRouter(prefix='/api', tags=['API'])

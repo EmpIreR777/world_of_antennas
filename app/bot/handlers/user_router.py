@@ -4,7 +4,7 @@ from aiogram.filters import CommandStart
 from aiogram.types import Message, CallbackQuery
 
 from app.api.dao import UserDAO
-from app.bot.keyboards.kbs import app_keyboard, main_keyboard
+from app.bot.keyboards.kbs_user import app_keyboard, main_keyboard
 from app.bot.utils.utils import greet_user, get_about_us_text
 
 router = Router()
