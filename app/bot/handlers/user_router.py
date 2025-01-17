@@ -43,9 +43,9 @@ async def cmd_back_home(message: Message) -> None:
 @router.message(F.text == 'ℹ️ О нас')
 async def about_us(event: Union[Message, CallbackQuery]):
     if isinstance(event, CallbackQuery):
-        message = event.message
-        await send_message_with_delay(message=message)
-        await message.delete()  # Удаляем предыдущее сообщение если хотим TODO
+        call = event.message
+        await send_message_with_delay(message=call)
+        await call.delete()  # Удаляем предыдущее сообщение если хотим TODO
         await event.answer(text='Возвращаемся назад')
     else:
         # Если это обычное сообщение
@@ -82,7 +82,7 @@ async def process_shop_selection(call: CallbackQuery):
 @router.callback_query(F.data == 'user_back_home')
 async def cmd_back_home_admin(call: CallbackQuery):
     # Удаляем предыдущее сообщение с текстом "О нас" и инлайн кнопками
-    # await call.message.delete() # Удаляем предыдущее сообщение если хотим TODO
+    await call.message.delete() # Удаляем предыдущее сообщение если хотим TODO
     await send_message_with_delay(message=call.message)
     await call.answer(f'С возвращением, {call.from_user.full_name}!')
     await call.message.answer(

@@ -1,13 +1,58 @@
 import asyncio
+from datetime import datetime
+import logging
 from aiogram.types import Message
+from aiogram.exceptions import TelegramBadRequest
 from aiogram.utils.chat_action import ChatActionSender
 
 from app.bot.keyboards.kbs_user import main_keyboard
 
 
+async def check_user_availability(bot, telegram_id: int) -> bool:
+    """Проверяет доступность пользователя."""
+    try:
+        await bot.get_chat(chat_id=telegram_id)
+        return True
+    except TelegramBadRequest:
+        logging.info(f'Пользователь {telegram_id} заблокировал бота')
+        return False
+    except Exception as e:
+        logging.error(f'Ошибка при проверке пользователя {telegram_id}: {e}')
+        return False
+    
+
+def format_statistics_message(stats_people, stats_app, alive_users, not_alive_users) -> str:
+    """Форматирует сообщение со статистикой."""
+    current_time = datetime.now().strftime("%d.%m.%Y  %H:%M:%S")
+
+    return (
+        '📈 Статистика пользователей и заявок:\n\n'
+        f'👥 Всего пользователей: {stats_people["total_users"]} | Всего заявок: {stats_app["total_app"]}\n'
+        f'🆕 Новых за сегодня: {stats_people["new_today"]} | Всего заявок за сегодня: {stats_app["new_today_app"]}\n'
+        f'📅 Новых за неделю: {stats_people["new_week"]} | Всего заявок за неделю: {stats_app["new_week_app"]}\n'
+        f'📆 Новых за месяц: {stats_people["new_month"]} | Всего заявок за месяц: {stats_app["new_month_app"]}\n'
+        f'✅ Активные пользователи: {alive_users} | 🚫 Заблокировали бота: {not_alive_users}\n\n'
+        f'🕒 Данные актуальны на: {current_time}'
+    )
+
+
+def get_hello_admins(user_full_name: str) -> str:
+    return (
+        f'Здравствуйте, <b>{user_full_name}</b>!\n\n'
+        'Добро пожаловать в панель администратора. Здесь вы можете:\n'
+        '• Просматривать все текущие заявки\n'
+        '• Управлять статусами заявок\n'
+        '• Отправлять text:📝 video:🎥 audio:🎵 image:🖼️ всем пользователям или всем работникам\n'
+        '• Анализировать статистику\n\n'
+        'Для доступа к полному функционалу, пожалуйста, перейдите по ссылке ниже.\n'
+        'Мы постоянно работаем над улучшением и расширением возможностей панели.'
+    )
+
+
 def get_about_us_text() -> str:
     return """
-    🌟 АНТЕННЫ И МОНТАЖ 'МИР АНТЕНН' 🌟
+
+    🌟 АНТЕННЫ И МОНТАЖ <a href="https://mir-ant.ru/"> МИР АНТЕНН </a> 🌟
 
     Добро пожаловать в мир надежных антенн и профессионального монтажа!
 

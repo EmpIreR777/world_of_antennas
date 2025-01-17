@@ -1,7 +1,10 @@
+from typing import List
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.future import select
 from sqlalchemy import update as sqlalchemy_update, delete as sqlalchemy_delete
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.models import User
 from app.database import async_session_maker
 
 
@@ -41,7 +44,7 @@ class BaseDAO:
             return result.scalar_one_or_none()
 
     @classmethod
-    async def find_all(cls, **filter_by):
+    async def find_all(cls, session: AsyncSession, **filter_by) -> List[User]:
         """
         Асинхронно находит и возвращает все экземпляры модели, удовлетворяющие указанным критериям.
 
@@ -51,10 +54,10 @@ class BaseDAO:
         Возвращает:
             Список экземпляров модели.
         """
-        async with async_session_maker() as session:
-            query = select(cls.model).filter_by(**filter_by)
-            result = await session.execute(query)
-            return result.scalars().all()
+        
+        query = select(cls.model).filter_by(**filter_by)
+        result = await session.execute(query)
+        return result.scalars().all()
 
     @classmethod
     async def add(cls, **values):
