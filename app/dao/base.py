@@ -77,3 +77,61 @@ class BaseDAO:
                     await session.rollback()
                     raise e
                 return new_instance
+
+    @classmethod
+    async def add_many(cls, instances: list[dict]):
+        # Добавить несколько записей
+        async with async_session_maker() as session:
+            async with session.begin():
+                new_instances = [cls.model(**values) for values in instances]
+                session.add_all(new_instances)
+                try:
+                    await session.commit()
+                except SQLAlchemyError as e:
+                    await session.rollback()
+                    raise e
+                return new_instances
+
+    @classmethod
+    async def update(cls, filter_by, **values):
+        # Обновить записи по фильтру
+        async with async_session_maker() as session:
+            async with session.begin():
+                query = (
+                    sqlalchemy_update(cls.model)
+                    .where(*[getattr(cls.model, k) == v for k, v in filter_by.items()])
+                    .values(**values)
+                    .execution_options(synchronize_session="fetch")
+                )
+                result = await session.execute(query)
+                try:
+                    await session.commit()
+                except SQLAlchemyError as e:
+                    await session.rollback()
+                    raise e
+                return result.rowcount
+
+    @classmethod
+    async def delete(cls, delete_all: bool = False, **filter_by):
+        # Удалить записи по фильтру
+        if not delete_all and not filter_by:
+            raise ValueError("Нужен хотя бы один фильтр для удаления.")
+
+        async with async_session_maker() as session:
+            async with session.begin():
+                query = sqlalchemy_delete(cls.model).filter_by(**filter_by)
+                result = await session.execute(query)
+                try:
+                    await session.commit()
+                except SQLAlchemyError as e:
+                    await session.rollback()
+                    raise e
+                return result.rowcount
+
+    @classmethod
+    async def paginate(cls, page: int = 1, page_size: int = 10, **filter_by):
+        # Пагинация записей
+        async with async_session_maker() as session:
+            query = select(cls.model).filter_by(**filter_by)
+            result = await session.execute(query.offset((page - 1) * page_size).limit(page_size))
+            return result.scalars().all()

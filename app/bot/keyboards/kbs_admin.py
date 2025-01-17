@@ -7,8 +7,24 @@ from app.config import settings
 def admin_keyboard(user_id: int) -> InlineKeyboardMarkup:
     url_applications = f'{settings.BASE_SITE}/admin?ADMIN_IDS={user_id}'
     kb = InlineKeyboardBuilder()
-    kb.button(text='🏠 На главную', callback_data='back_home')
     kb.button(text='📝 Смотреть заявки', web_app=WebAppInfo(url=url_applications))
     kb.button(text='📊 Статистика', callback_data='statistic')
-    kb.adjust(1)
+    if user_id in settings.ADMIN_IDS:
+        kb.button(text='✉️ Отправить всем пользователям', callback_data='send_all')
+        kb.button(text='✉️ Отправить всем работникам', callback_data='send_roles')
+    kb.button(text='🏠 На главную', callback_data='back_home')
+    kb.adjust(2, 2, 1)
     return kb.as_markup()
+
+
+def send_message_keyboard(target: str) -> InlineKeyboardMarkup:
+    kb = InlineKeyboardBuilder()
+    kb.button(text='📄 Текст', callback_data=f'send_text_{target}')
+    kb.button(text='🎥 Видео', callback_data=f'send_video_{target}')
+    kb.button(text='🎵 Аудио', callback_data=f'send_audio_{target}')
+    kb.button(text='🖼 Изображение', callback_data=f'send_image_{target}')
+    kb.button(text='⬅️ Назад', callback_data='🔑 Админ панель')
+    kb.adjust(2)
+    return kb.as_markup()
+
+

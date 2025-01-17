@@ -1,4 +1,7 @@
+import asyncio
 from aiogram.types import Message
+from aiogram.utils.chat_action import ChatActionSender
+
 from app.bot.keyboards.kbs_user import main_keyboard
 
 
@@ -62,3 +65,25 @@ async def greet_user(message: Message, is_new_user: bool) -> None:
         f'{greeting}, <b>{first_name}</b>! {status}\n' 'Чем я могу помочь вам сегодня?',
         reply_markup=main_keyboard(user_id=message.from_user.id, first_name=message.from_user.first_name),
     )
+
+
+async def send_message_with_delay(
+    message: Message,
+    delay: int = 2,
+    action: str = 'typing',
+    # latitude: float = None,
+    # longitude: float = None,
+    ):
+    """Общая функция для отправки ответа с задержкой"""
+
+    async with ChatActionSender(
+        bot=message.bot, chat_id=message.chat.id, action=action
+        ):
+        await asyncio.sleep(delay)
+
+    # if latitude and longitude:
+    #     await message.bot.send_location(
+    #         message.chat.id,
+    #         latitude=latitude,
+    #         longitude=longitude
+    #     )

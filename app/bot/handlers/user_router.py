@@ -1,11 +1,12 @@
 import logging
+from typing import Union
 from aiogram import Router, F
 from aiogram.filters import CommandStart
 from aiogram.types import Message, CallbackQuery
 
 from app.api.dao import UserDAO
-from app.bot.keyboards.kbs_user import app_keyboard, main_keyboard
-from app.bot.utils.utils import greet_user, get_about_us_text
+from app.bot.keyboards.kbs_user import app_keyboard, home_user_keyboard, main_keyboard
+from app.bot.utils.utils import greet_user, get_about_us_text, send_message_with_delay
 
 router = Router()
 
@@ -35,50 +36,61 @@ async def cmd_back_home(message: Message) -> None:
     """
     Обрабатывает нажатие кнопки 'Назад'.
     """
+    await send_message_with_delay(message=message)
     await greet_user(message=message, is_new_user=False)
 
-
+@router.callback_query(F.data == 'back_about_us')
 @router.message(F.text == 'ℹ️ О нас')
-async def about_us(message: Message):
-    # Удаляем сообщение пользователя
-    await message.delete() # оставить кнопки или удалять? TODO
+async def about_us(event: Union[Message, CallbackQuery]):
+    if isinstance(event, CallbackQuery):
+        message = event.message
+        await send_message_with_delay(message=message)
+        await message.delete()  # Удаляем предыдущее сообщение если хотим TODO
+        await event.answer(text='Возвращаемся назад')
+    else:
+        # Если это обычное сообщение
+        message = event
+        # Можно удалить сообщение пользователя, если нужно
+        # await message.delete() # Удаляем предыдущее сообщение если хотим TODO
+    await send_message_with_delay(message=message)
     # Отправляем информацию "О нас"
-    await message.answer(get_about_us_text(), reply_markup=app_keyboard())
+    await message.answer(
+        get_about_us_text(),
+        reply_markup=app_keyboard()
+    )
 
 
 @router.callback_query(F.data.in_(['Васильева 75', 'Горный Алтайская улица, 26Б']))
-async def process_shop_selection(callback: CallbackQuery):
+async def process_shop_selection(call: CallbackQuery):
     # Удаляем предыдущее сообщение с текстом "О нас" и инлайн кнопками
-    await callback.message.delete() # оставить кнопки или удалять? TODO
-    from aiogram.utils.keyboard import InlineKeyboardBuilder
+    # await call.message.delete() # оставить кнопки или удалять? TODO
 
-    # Создаем клавиатуру только с кнопкой "На главную"
-    kb = InlineKeyboardBuilder()
-    kb.button(text='🏠 На главную', callback_data='user_back_home')
-
-    if callback.data == 'Васильева 75':
-        await callback.message.answer(
+    if call.data == 'Васильева 75':
+        await send_message_with_delay(message=call.message)
+        await call.message.edit_text(
             text='Информация о магазине на Васильева 75',
-            reply_markup=kb.as_markup()
+            reply_markup=home_user_keyboard()
         )
     else:
-        await callback.message.answer(
+        await send_message_with_delay(message=call.message)
+        await call.message.edit_text(
             text='Информация о магазине в Горном',
-            reply_markup=kb.as_markup()
+            reply_markup=home_user_keyboard()
         )
 
 
 @router.callback_query(F.data == 'user_back_home')
-async def cmd_back_home_admin(callback: CallbackQuery):
+async def cmd_back_home_admin(call: CallbackQuery):
     # Удаляем предыдущее сообщение с текстом "О нас" и инлайн кнопками
-    await callback.message.delete() # оставить кнопки или удалять? TODO
-    await callback.answer(f'С возвращением, {callback.from_user.full_name}!')
-    await callback.message.answer(
-        f'С возвращением, <b>{callback.from_user.full_name} </b>! '
+    # await call.message.delete() # Удаляем предыдущее сообщение если хотим TODO
+    await send_message_with_delay(message=call.message)
+    await call.answer(f'С возвращением, {call.from_user.full_name}!')
+    await call.message.answer(
+        f'С возвращением, <b>{call.from_user.full_name} </b>! '
         'Надеемся, что вы ознакомились и готовы написать нам или сделать заявку. '
         'Если у вас есть предложения по улучшению функционала, '
         'пожалуйста, сообщите нам. '
         'Чем еще я могу помочь вам сегодня?',
-        reply_markup=main_keyboard(user_id=callback.from_user.id,
-                                first_name=callback.from_user.first_name)
+        reply_markup=main_keyboard(user_id=call.from_user.id,
+                                first_name=call.from_user.first_name)
     )

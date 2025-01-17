@@ -1,5 +1,4 @@
-import asyncio
-from datetime import datetime, UTC, timedelta, timezone
+from datetime import datetime, UTC, timedelta
 import logging
 from sqlalchemy.future import select
 from sqlalchemy.exc import SQLAlchemyError
@@ -7,8 +6,6 @@ from sqlalchemy.orm import joinedload
 from sqlalchemy import select, func, case
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
-import matplotlib.pyplot as plt
-import io
 
 from app.dao.base import BaseDAO
 from app.api.models import User, Service, Application, Shop

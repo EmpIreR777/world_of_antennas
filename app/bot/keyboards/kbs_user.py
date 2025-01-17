@@ -26,8 +26,12 @@ def back_keyboard() -> ReplyKeyboardMarkup:
 
 #-------------------------inline--------------------------
 
-
-
+def home_user_keyboard() -> InlineKeyboardMarkup:
+    kb = InlineKeyboardBuilder()
+    kb.button(text='🏠 На главную', callback_data='user_back_home')
+    kb.button(text='🔙 Вернуться назад', callback_data='back_about_us')
+    kb.adjust(2)
+    return kb.as_markup()
 
 
 def app_keyboard() -> InlineKeyboardMarkup:
