@@ -12,7 +12,7 @@ from sqlalchemy import and_, select
 from app.api.dao import ApplicationDAO, UserDAO
 from app.api.models import User
 from app.bot.utils.utils import (
-    check_user_availability, format_statistics_message, get_hello_admins, send_message_with_delay)
+    check_user_availability, format_statistics_message, get_hello_admins_text, send_message_with_delay)
 from app.database import async_session_maker
 from app.bot.keyboards.kbs_user import main_keyboard
 from app.bot.keyboards.kbs_admin import admin_keyboard, send_message_keyboard
@@ -32,7 +32,7 @@ async def admin_panel(event: Union[Message, CallbackQuery]):
         await call.answer(text='Возвращаемся назад', show_alert=False)
         # Отправляем новое сообщение с информацией для админа
         await call.message.answer(
-            text=get_hello_admins(user_full_name=call.from_user.full_name),
+            text=get_hello_admins_text(user_full_name=call.from_user.full_name),
             reply_markup=admin_keyboard(user_id=call.from_user.id)
         )
     else:
@@ -41,7 +41,7 @@ async def admin_panel(event: Union[Message, CallbackQuery]):
         await send_message_with_delay(message=message)
         # Отправляем новое сообщение с информацией для админа
         await message.answer(
-            text=get_hello_admins(user_full_name=message.from_user.full_name),
+            text=get_hello_admins_text(user_full_name=message.from_user.full_name),
             reply_markup=admin_keyboard(user_id=message.from_user.id)
         )
 
@@ -244,7 +244,7 @@ async def handle_send_message(message: Message, state: FSMContext):
     await asyncio.gather(*tasks, return_exceptions=True)
 
     # Формирование ответа администратору
-    user_or_role = ['пользователям' if target == 'all' else 'работникам']
+    user_or_role = 'пользователям' if target == "all" else 'работникам'
     if failed_users:
         response = (
             f'✅ Сообщение отправлено всем {user_or_role}, кроме:\n' +

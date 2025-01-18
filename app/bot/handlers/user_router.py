@@ -6,7 +6,7 @@ from aiogram.types import Message, CallbackQuery
 
 from app.api.dao import UserDAO
 from app.bot.keyboards.kbs_user import app_keyboard, home_user_keyboard, main_keyboard
-from app.bot.utils.utils import greet_user, get_about_us_text, send_message_with_delay
+from app.bot.utils.utils import get_back_home_user_text, get_compliments, greet_user, get_about_us_text, send_message_with_delay
 
 router = Router()
 
@@ -80,17 +80,13 @@ async def process_shop_selection(call: CallbackQuery):
 
 
 @router.callback_query(F.data == 'user_back_home')
-async def cmd_back_home_admin(call: CallbackQuery):
+async def cmd_back_home_user(call: CallbackQuery):
     # Удаляем предыдущее сообщение с текстом "О нас" и инлайн кнопками
-    await call.message.delete() # Удаляем предыдущее сообщение если хотим TODO
+    await call.answer(f'{await get_compliments()} \n👤{call.from_user.full_name}!')
     await send_message_with_delay(message=call.message)
-    await call.answer(f'С возвращением, {call.from_user.full_name}!')
+    await call.message.delete() # Удаляем предыдущее сообщение если хотим TODO
     await call.message.answer(
-        f'С возвращением, <b>{call.from_user.full_name} </b>! '
-        'Надеемся, что вы ознакомились и готовы написать нам или сделать заявку. '
-        'Если у вас есть предложения по улучшению функционала, '
-        'пожалуйста, сообщите нам. '
-        'Чем еще я могу помочь вам сегодня?',
+        get_back_home_user_text(call.from_user.full_name),
         reply_markup=main_keyboard(user_id=call.from_user.id,
                                 first_name=call.from_user.first_name)
     )
