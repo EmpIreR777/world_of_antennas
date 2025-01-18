@@ -130,7 +130,7 @@ class ApplicationDAO(BaseDAO):
                     for app in applications
                 ]
             except SQLAlchemyError as e:
-                print(f'Error while fetching applications for user {user_id}: {e}')
+                logging.error(f'Ошибка при выборке приложений для пользователя {user_id}: {e}')
                 return None
 
     @classmethod
@@ -158,8 +158,8 @@ class ApplicationDAO(BaseDAO):
                         'user_id': app.user_id,
                         'service_name': app.service.service_name,
                         'address_name': app.shop.address_name,
-                        'appointment_date': app.appointment_date,
-                        'appointment_time': app.appointment_time,
+                        'appointment_date': app.appointment_date.strftime('%Y-%m-%d'),
+                        'appointment_time': app.appointment_time.strftime('%H:%M'),
                         'client_name': app.client_name,
                         'status': app.status.value,
                         'comment': app.comment,
@@ -169,5 +169,5 @@ class ApplicationDAO(BaseDAO):
                     for app in applications
                 ]
             except SQLAlchemyError as e:
-                print(f'Error while fetching all applications: {e}')
+                logging.error(f'Ошибка при загрузке всех приложений: {e}')
                 return None

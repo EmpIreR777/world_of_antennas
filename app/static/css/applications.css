@@ -1,28 +1,35 @@
+/* Импорт шрифтов с Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@300;400;600&display=swap');
 
+/* Определение CSS-переменных для консистентности цвета и анимаций */
 :root {
-    --primary-bg: #000;
-    --text-color: #fff;
-    --accent-color: rgba(255, 255, 255, 0.05);
-    --border-color: rgba(255, 255, 255, 0.1);
-    --shadow-color: rgba(0, 0, 0, 0.1);
-    --transition-speed: 0.3s;
+    --primary-bg: #000; /* Основной фон страницы */
+    --text-color: #fff; /* Цвет текста */
+    --accent-color: rgba(255, 255, 255, 0.05); /* Акцентный цвет для фона контента */
+    --border-color: rgba(255, 255, 255, 0.1); /* Цвет границ элементов */
+    --shadow-color: rgba(0, 0, 0, 0.1); /* Цвет теней */
+    --transition-speed: 0.3s; /* Скорость переходов для анимаций */
 }
 
+/* Стили для тела страницы и HTML-контейнера */
 body, html {
     margin: 0;
     padding: 0;
-    font-family: 'Montserrat', sans-serif;
-    background-color: var(--primary-bg);
-    color: var(--text-color);
-    text-align: center;
+    font-family: 'Montserrat', sans-serif; /* Основной шрифт */
+    background-color: var(--primary-bg); /* Установка основного фона */
+    color: var(--text-color); /* Установка цвета текста */
+    text-align: center; /* Выравнивание текста по центру */
+    /* Фон с градиентом и SVG-шаблоном */
     background-image: linear-gradient(rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.95)),
     url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23222' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 60L60 0H30L0 30M60 60V30L30 60'/%3E%3C/g%3E%3C/svg%3E");
-    background-attachment: fixed;
-    min-height: 100vh;
-    scroll-behavior: smooth;
+    background-attachment: fixed; /* Фиксирование фона при прокрутке */
+    min-height: 100vh; /* Минимальная высота страницы на весь экран */
+    scroll-behavior: smooth; /* Плавная прокрутка при переходах */
+    /* Разрешение масштабирования страницы пользователем */
+    /* Для этого нужно добавить мета-тег в HTML, но здесь CSS обеспечивает адаптивность */
 }
 
+/* Анимация пульсации для основного контента */
 @keyframes pulse {
     0% {
         box-shadow: 0 0 20px rgba(255, 107, 107, 0.3),
@@ -41,81 +48,235 @@ body, html {
     }
 }
 
+/* Стили для основного контейнера страницы */
 main {
-    width: 95%;
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: var(--accent-color);
-    border-radius: 15px;
+    width: 95%; /* Ширина контейнера */
+    max-width: 1200px; /* Максимальная ширина */
+    margin: 2rem auto; /* Отступы сверху/снизу и выравнивание по центру */
+    padding: 20px; /* Внутренние отступы */
+    background: var(--accent-color); /* Фон контейнера */
+    border-radius: 15px; /* Скругление углов */
     box-shadow: 
         0 8px 32px var(--shadow-color),
         0 0 15px rgba(255, 255, 255, 0.1),
         0 0 30px rgba(255, 255, 255, 0.05),
-        0 0 45px rgba(255, 255, 255, 0.025);
-    backdrop-filter: blur(10px);
-    transition: transform var(--transition-speed) ease;
-    animation: pulse 6s ease-in-out infinite;
+        0 0 45px rgba(255, 255, 255, 0.025); /* Тени */
+    backdrop-filter: blur(10px); /* Размытие фона за контейнером */
+    transition: transform var(--transition-speed) ease; /* Переходы для анимаций */
+    animation: pulse 6s ease-in-out infinite; /* Применение анимации пульсации */
+    overflow-x: auto; /* Горизонтальная прокрутка для узких экранов */
 }
 
-/* main:hover {
-    transform: translateY(-5px);
-} */
-
-
+/* Стили для заголовка страницы */
 h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2.5em;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-    margin-bottom: 2rem;
-    position: relative;
+    font-family: 'Cormorant Garamond', serif; /* Шрифт заголовка */
+    font-size: 2.5em; /* Размер шрифта */
+    font-weight: 700; /* Жирность */
+    text-transform: uppercase; /* Преобразование текста в верхний регистр */
+    letter-spacing: 3px; /* Интервал между буквами */
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5); /* Тень текста */
+    margin-bottom: 2rem; /* Нижний отступ */
+    position: relative; /* Относительное позиционирование для псевдоэлемента */
 }
 
+/* Псевдоэлемент для декоративной линии под заголовком */
 h1::after {
     content: '';
     position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: var(--text-color);
-    transition: width var(--transition-speed) ease;
+    bottom: -10px; /* Расположение ниже заголовка */
+    left: 50%; /* Центрирование по горизонтали */
+    transform: translateX(-50%); /* Корректировка центрирования */
+    width: 60px; /* Ширина линии */
+    height: 3px; /* Высота линии */
+    background: var(--text-color); /* Цвет линии */
+    transition: width var(--transition-speed) ease; /* Плавное изменение ширины при наведении */
 }
 
+/* Изменение ширины линии при наведении на заголовок */
 h1:hover::after {
     width: 120px;
 }
 
+/* Стили для таблицы */
 table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin-top: 2rem;
-    background: var(--accent-color);
-    border-radius: 15px;
-    overflow: hidden;
-    transition: transform var(--transition-speed) ease;
+    width: 100%; /* Ширина таблицы */
+    border-collapse: separate; /* Разделённые границы ячеек */
+    border-spacing: 0; /* Отсутствие промежутков между ячейками */
+    margin-top: 2rem; /* Верхний отступ */
+    background: var(--accent-color); /* Фон таблицы */
+    border-radius: 15px; /* Скругление углов таблицы */
+    overflow: hidden; /* Скрытие переполнения */
+    transition: transform var(--transition-speed) ease; /* Переходы для анимаций */
 }
 
+/* Стили для заголовков и ячеек таблицы */
 th, td {
-    padding: 1rem;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-    transition: background-color var(--transition-speed) ease;
+    padding: 1rem; /* Внутренние отступы */
+    text-align: left; /* Выравнивание текста по левому краю */
+    border-bottom: 1px solid var(--border-color); /* Нижняя граница ячеек */
+    transition: background-color var(--transition-speed) ease; /* Плавные переходы для фона */
 }
 
+/* Стили для заголовков таблицы */
 th {
-    background-color: rgba(255, 255, 255, 0.1);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    background-color: rgba(255, 255, 255, 0.1); /* Фон заголовков */
+    font-weight: 600; /* Жирность текста */
+    text-transform: uppercase; /* Верхний регистр текста */
+    letter-spacing: 2px; /* Интервал между буквами */
 }
 
+/* Изменение фона строки при наведении */
 tr:hover {
     background-color: rgba(255, 255, 255, 0.15);
-    cursor: pointer;
+    cursor: pointer; /* Курсор-указатель */
+}
+
+/* Дополнительные стили для таблицы с ID "appointments-table" */
+#appointments-table th,
+#appointments-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #675e5e;
+}
+
+/* Стили для статусов (предполагается, что это 7-й столбец) */
+#appointments-table td:nth-child(7) {
+    font-weight: bold;
+}
+
+/* Стили для номера клиента (элемент с классом "copy-phone") */
+.copy-phone {
+    color: #66a7eb; /* Синий цвет текста */
+    text-decoration: none; /* Без подчеркивания */
+    cursor: pointer; /* Курсор-указатель */
+}
+
+/* Подчеркивание при наведении на номер телефона */
+.copy-phone:hover {
+    text-decoration: underline;
+}
+
+/* Стили для уведомления при копировании номера */
+.copy-notification {
+    animation: fadeIn 0.3s; /* Анимация появления */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Тень */
+}
+
+/* Анимация плавного появления */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 20px); /* Начальная позиция */
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0); /* Конечная позиция */
+    }
+}
+
+/* Стили для селекта статуса заявки */
+.status-select {
+    padding: 5px; /* Внутренние отступы */
+    border-radius: 4px; /* Скругление углов */
+    border: 1px solid #311313; /* Граница */
+    background-color: #333; /* Тёмный фон */
+    color: #fff; /* Белый текст */
+}
+
+/* Стили для опций внутри селекта */
+.status-select option {
+    background-color: #333; /* Тёмный фон опций */
+    color: #fff; /* Белый текст */
+}
+
+/* Изменение фона опций при наведении */
+.status-select option:hover {
+    background-color: #444;
+}
+
+/* Стили при фокусе на селекте */
+.status-select:focus {
+    outline: none; /* Убираем стандартную обводку */
+    border-color: #555; /* Цвет границы при фокусе */
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.2); /* Тень при фокусе */
+}
+
+/* Изменение фона и границы селекта при наведении */
+.status-select:hover {
+    background-color: #444;
+    border-color: #666;
+}
+
+/* Адаптивные стили для экранов размером до 1024px */
+@media (max-width: 1024px) {
+    main {
+        padding: 18px; /* Уменьшение внутренних отступов */
+    }
+}
+
+/* Адаптивные стили для экранов размером до 768px */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2em; /* Уменьшение размера заголовка */
+    }
+    
+    th, td {
+        padding: 0.8rem; /* Уменьшение внутренних отступов */
+    }
+    
+    .status-select {
+        padding: 4px; /* Уменьшение внутренних отступов селекта */
+        font-size: 0.9em; /* Уменьшение размера шрифта селекта */
+    }
+}
+
+/* Адаптивные стили для экранов размером до 600px */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.8em; /* Дополнительное уменьшение заголовка */
+    }
+    
+    th, td {
+        padding: 0.6rem; /* Дополнительное уменьшение отступов */
+        font-size: 0.9em; /* Уменьшение размера шрифта */
+    }
+    
+    main {
+        padding: 15px; /* Ещё меньше отступов */
+        margin: 1rem auto; /* Уменьшение внешних отступов */
+    }
+    
+    table {
+        display: block; /* Скрываем стандартное поведение таблицы */
+        overflow-x: auto; /* Горизонтальная прокрутка для таблицы */
+        -webkit-overflow-scrolling: touch; /* Плавная прокрутка на iOS */
+    }
+    
+    th, td {
+        white-space: nowrap; /* Избегаем переносов текста */
+    }
+}
+
+/* Адаптивные стили для экранов размером до 480px */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5em; /* Еще меньше заголовок */
+    }
+    
+    th, td {
+        padding: 0.5rem; /* Минимальные отступы */
+        font-size: 0.8em; /* Минимальный размер шрифта */
+    }
+}
+
+/* Адаптивные стили для экранов размером до 360px */
+@media (max-width: 360px) {
+    h1 {
+        font-size: 1.3em; /* Минимальный заголовок */
+    }
+    
+    th, td {
+        padding: 0.4rem; /* Минимальные отступы */
+        font-size: 0.75em; /* Минимальный размер шрифта */
+    }
 }

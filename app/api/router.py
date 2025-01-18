@@ -1,7 +1,10 @@
-from fastapi import APIRouter
+from aiohttp import request
+from fastapi import APIRouter, Depends
 from fastapi.requests import Request
 from fastapi.responses import JSONResponse
+from sqlalchemy import select
 
+from app.api.models import Application, User
 from app.api.schemas import AppointmentData
 from app.bot.create_bot import bot
 from app.api.dao import ApplicationDAO
@@ -88,4 +91,55 @@ async def create_appointment(request: Request):
         return JSONResponse(
             status_code=400,
             content={'error': str(e)}
+        )
+
+@router.post('/api/update-application-status', response_class=JSONResponse)
+async def update_application_status(
+    data: dict,
+    current_user: User =  select(User).where(User.role == User.RoleEnum.USER)
+):
+    if current_user.role == User.RoleEnum.USER:
+        return JSONResponse(
+            status_code=403,
+            content={'success': False, 'message': 'Недостаточно прав'}
+        )
+
+    try:
+        application_id = int(data.get('application_id'))
+        new_status = data.get('status')
+
+        if not application_id or not new_status:
+            return JSONResponse(
+                status_code=400,
+                content={'success': False, 'message': 'Неверные параметры запроса'}
+            )
+
+        # Проверяем существует ли такой статус
+        try:
+            status_enum = Application.StatusEnum(new_status)
+        except ValueError:
+            return JSONResponse(
+                status_code=400,
+                content={'success': False, 'message': 'Некорректный статус'}
+            )
+
+        # Обновление статуса и master_id заявки
+        rows_updated = await ApplicationDAO.update(
+            filter_by={'id': application_id},
+            status=status_enum,
+            master_id=current_user.telegram_id
+        )
+
+        if rows_updated == 0:
+            return JSONResponse(
+                status_code=404,
+                content={'success': False, 'message': 'Заявка не найдена'}
+            )
+
+        return JSONResponse(content={'success': True})
+
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={'success': False, 'message': str(e)}
         )

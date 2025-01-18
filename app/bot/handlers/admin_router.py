@@ -59,7 +59,7 @@ async def admin_statistic(call: CallbackQuery):
         async with async_session_maker() as session:
             stats_people = await UserDAO.get_statistics(session=session)
             stats_app = await ApplicationDAO.get_statistics_applications(session=session)
-            users = await UserDAO.find_all(session=session)
+            users = await UserDAO.find_all() # TODO спросить про сессии где лучше
 
         # Проверка доступности пользователей батчами
         telegram_ids = [user.telegram_id for user in users]

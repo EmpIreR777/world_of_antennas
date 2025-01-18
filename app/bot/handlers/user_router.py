@@ -16,8 +16,7 @@ async def cmd_start(message: Message) -> None:
     """
     Обрабатывает команду /start.
     """
-    logging.info(f'Searching for user with telegram_id: {message.from_user.id}')
-
+    logging.info(f'Поиск пользователя с помощью telegram_id: {message.from_user.id}')
     user = await UserDAO.find_one_or_none(telegram_id=message.from_user.id)
     try:
         if not user:
@@ -27,7 +26,7 @@ async def cmd_start(message: Message) -> None:
                 username=message.from_user.username
             )
     except Exception as e:
-       logging.error(f'Error adding user: {str(e)}')
+       logging.error(f'Ошибка при добавлении пользователя: {str(e)}')
     await greet_user(message=message, is_new_user=not user)
 
 
@@ -82,7 +81,7 @@ async def process_shop_selection(call: CallbackQuery):
 @router.callback_query(F.data == 'user_back_home')
 async def cmd_back_home_user(call: CallbackQuery):
     # Удаляем предыдущее сообщение с текстом "О нас" и инлайн кнопками
-    await call.answer(f'{await get_compliments()} \n👤{call.from_user.full_name}!')
+    await call.answer(f'{await get_compliments()} \n {call.from_user.full_name}👤!')
     await send_message_with_delay(message=call.message)
     await call.message.delete() # Удаляем предыдущее сообщение если хотим TODO
     await call.message.answer(

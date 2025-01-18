@@ -44,7 +44,7 @@ class BaseDAO:
             return result.scalar_one_or_none()
 
     @classmethod
-    async def find_all(cls, session: AsyncSession, **filter_by) -> List[User]:
+    async def find_all(cls, **filter_by) -> List[User]:
         """
         Асинхронно находит и возвращает все экземпляры модели, удовлетворяющие указанным критериям.
 
@@ -54,10 +54,10 @@ class BaseDAO:
         Возвращает:
             Список экземпляров модели.
         """
-        
-        query = select(cls.model).filter_by(**filter_by)
-        result = await session.execute(query)
-        return result.scalars().all()
+        async with async_session_maker() as session:
+            query = select(cls.model).filter_by(**filter_by)
+            result = await session.execute(query)
+            return result.scalars().all()
 
     @classmethod
     async def add(cls, **values):
@@ -133,8 +133,30 @@ class BaseDAO:
 
     @classmethod
     async def paginate(cls, page: int = 1, page_size: int = 10, **filter_by):
-        # Пагинация записей
+        """
+        Получение пагинированных записей из базы данных.
+        
+        :param page: Номер текущей страницы
+        :param page_size: Количество записей на странице
+        :param filter_by: Фильтры для запроса
+        :return: Список записей на текущей странице
+        """
         async with async_session_maker() as session:
             query = select(cls.model).filter_by(**filter_by)
-            result = await session.execute(query.offset((page - 1) * page_size).limit(page_size))
+            result = await session.execute(
+                query.offset((page - 1) * page_size).limit(page_size)
+            )
             return result.scalars().all()
+
+    @classmethod
+    async def count(cls, **filter_by):
+        """
+        Получение общего количества записей, соответствующих фильтрам.
+        
+        :param filter_by: Фильтры для запроса
+        :return: Общее количество записей
+        """
+        async with async_session_maker() as session:
+            query = select(cls.model).filter_by(**filter_by)
+            result = await session.execute(query)
+            return result.scalar_one_or_none() or 0
