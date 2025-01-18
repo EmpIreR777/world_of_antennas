@@ -54,6 +54,23 @@ class ServiceDAO(BaseDAO):
 class ShopDAO(BaseDAO):
     model = Shop
 
+    @classmethod
+    async def get_shop_count_app(cls, session: AsyncSession):
+        """
+        Метод для получения списка магазинов вместе с количеством их заявок.
+        """
+        try:
+            query = select(
+                cls.model.address_name, func.count(Application.id).label(
+                    'application_count')).outerjoin(
+                    Application, Shop.shop_id == Application.shop_id).group_by(Shop.address_name)
+            results = await session.execute(query)
+            logging.info(f'Статистика успешно получена: {results}')
+            return results.all()
+        except SQLAlchemyError as e:
+            logging.error(f'Ошибка при получении статистики: {e}')
+            raise
+
 
 class ApplicationDAO(BaseDAO):
     model = Application

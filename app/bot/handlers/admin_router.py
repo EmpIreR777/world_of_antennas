@@ -9,7 +9,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.filters import StateFilter
 from sqlalchemy import and_, select
 
-from app.api.dao import ApplicationDAO, UserDAO
+from app.api.dao import ApplicationDAO, ShopDAO, UserDAO
 from app.api.models import User
 from app.bot.utils.utils import (
     check_user_availability, format_statistics_message, get_hello_admins_text, send_message_with_delay)
@@ -54,11 +54,11 @@ async def admin_statistic(call: CallbackQuery):
     """
     try:
         await call.answer('📊 Собираем статистику...')
-        
         # Создаем отдельные сессии для каждого запроса
         async with async_session_maker() as session:
             stats_people = await UserDAO.get_statistics(session=session)
             stats_app = await ApplicationDAO.get_statistics_applications(session=session)
+            shop_app_counts =  await ShopDAO.get_shop_count_app(session=session)
             users = await UserDAO.find_all() # TODO спросить про сессии где лучше
 
         # Проверка доступности пользователей батчами
@@ -81,7 +81,8 @@ async def admin_statistic(call: CallbackQuery):
             stats_people, 
             stats_app, 
             alive_users, 
-            not_alive_users
+            not_alive_users,
+            shop_app_counts
         )
         # Отправляем сообщение с задержкой
         await send_message_with_delay(message=call.message)

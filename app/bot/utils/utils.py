@@ -22,16 +22,24 @@ async def check_user_availability(bot, telegram_id: int) -> bool:
         return False
     
 
-def format_statistics_message(stats_people, stats_app, alive_users, not_alive_users) -> str:
+def format_statistics_message(stats_people, stats_app, alive_users, not_alive_users, shop_app_counts) -> str:
     """Форматирует сообщение со статистикой."""
-    current_time = datetime.now().strftime("%d.%m.%Y  %H:%M:%S")
-
+    current_time = datetime.now().strftime("%d.%m.%Y %H:%M:%S")
+    
+    # Формируем словарь с количеством заявок в каждом магазине
+    shop_application_counts = {address: count for address, count in shop_app_counts}
+    
+    # Формируем строку со статистикой по магазинам
+    shops_stats_list = [f'• {shop_name}: Количество заявок: {count}' for shop_name, count in shop_application_counts.items()]
+    shops_stats = '🛒 Заявки по магазинам:\n' + '\n'.join(shops_stats_list)
+    
     return (
         '📈 Статистика пользователей и заявок:\n\n'
-        f'👥 Всего пользователей: {stats_people["total_users"]} | Всего заявок: {stats_app["total_app"]}\n'
+        f'👥 Всего пользователей: {stats_people["total_users"]} | Всего заявок: {stats_app["total_app"]}\n\n'
         f'🆕 Новых за сегодня: {stats_people["new_today"]} | Всего заявок за сегодня: {stats_app["new_today_app"]}\n'
         f'📅 Новых за неделю: {stats_people["new_week"]} | Всего заявок за неделю: {stats_app["new_week_app"]}\n'
-        f'📆 Новых за месяц: {stats_people["new_month"]} | Всего заявок за месяц: {stats_app["new_month_app"]}\n'
+        f'📆 Новых за месяц: {stats_people["new_month"]} | Всего заявок за месяц: {stats_app["new_month_app"]}\n\n'
+        f'{shops_stats}\n\n'
         f'✅ Активные пользователи: {alive_users} | 🚫 Заблокировали бота: {not_alive_users}\n\n'
         f'🕒 Данные актуальны на: {current_time}'
     )
