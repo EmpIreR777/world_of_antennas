@@ -135,10 +135,11 @@ class ApplicationDAO(BaseDAO):
                 return [
                     {
                         'application_id': app.id,
+                        'client_name': app.client_name,
                         'service_name': app.service.service_name,
                         'address_name': app.shop.address_name,
-                        'appointment_date': app.appointment_date,
-                        'appointment_time': app.appointment_time,
+                        'appointment_date': app.appointment_date.strftime('%Y-%m-%d'),
+                        'appointment_time': app.appointment_time.strftime('%H:%M'),
                         'status': app.status.value,
                         'comment': app.comment,
                         'phone_number': app.phone_number,

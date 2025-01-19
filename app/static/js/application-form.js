@@ -7,7 +7,7 @@ document.getElementById('applicationForm').addEventListener('submit', function (
     const date = document.getElementById('appointment_date').value;
     const time = document.getElementById('appointment_time').value;
 
-    const fullMessage = `${name}, ваша заявка на <strong>${serviceName.toLowerCase()}</strong> оформлена на ${date} в ${time}.\n Ожидайте звонка для уточнения деталей заявки`;
+    const fullMessage = `${name}, ваша заявка на <strong>${serviceName.toLowerCase()}</strong> оформлена ${date} в ${time}.\n Ожидайте звонка для уточнения деталей заявки`;
     document.getElementById('popupMessage').style.whiteSpace = 'pre-line';
     document.getElementById('popupMessage').innerHTML = fullMessage;
     document.getElementById('popup').style.display = 'flex';

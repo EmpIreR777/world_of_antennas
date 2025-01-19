@@ -130,6 +130,7 @@ class SendMessage(StatesGroup):
 async def handle_admin_keyboard_callbacks(callback: CallbackQuery, state: FSMContext):
     data = callback.data
     target = 'all' if data == 'send_all' else 'roles'
+    await send_message_with_delay(message=callback.message)
     await callback.message.edit_text(
         'Выберите тип сообщения для отправки :',
         reply_markup=send_message_keyboard(target)
@@ -144,6 +145,7 @@ async def handle_admin_keyboard_callbacks(callback: CallbackQuery, state: FSMCon
 )
 async def handle_media_type_selection(callback: CallbackQuery, state: FSMContext):
     match = re.match(r'^send_(text|video|audio|image)_(all|roles)$', callback.data)
+    await send_message_with_delay(message=callback.message)
     if not match:
         await callback.answer('❗️Некорректные данные.')
         return
@@ -227,12 +229,16 @@ async def handle_send_message(message: Message, state: FSMContext):
         async with semaphore:
             try:
                 if media_type == 'text':
+                    await send_message_with_delay(message=message)
                     await message.bot.send_message(chat_id=user.telegram_id, text=content)
                 elif media_type == 'video':
+                    await send_message_with_delay(message=message, action='upload_video')
                     await message.bot.send_video(chat_id=user.telegram_id, video=content)
                 elif media_type == 'audio':
+                    await send_message_with_delay(message=message, action='upload_audio')
                     await message.bot.send_audio(chat_id=user.telegram_id, audio=content)
                 elif media_type == 'image':
+                    await send_message_with_delay(message=message, action='upload_photo')
                     await message.bot.send_photo(chat_id=user.telegram_id, photo=content, caption=caption)
             except Exception as e:
                 logging.error(f'❌ Не удалось отправить сообщение пользователю {user.telegram_id}: {e}')

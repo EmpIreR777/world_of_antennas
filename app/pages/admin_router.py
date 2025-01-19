@@ -18,7 +18,7 @@ async def read_root(request: Request, admin_id: int = None):
     """
     data_page = {'request': request, 'access': False,
                   'title_h1': 'Панель работников магазина'}
-    if False:
+    if False: # admin_id is None or admin_id != settings.ADMIN_ID:
         data_page['message'] = 'У вас не прав для получения информации о заявках!'
         return templates.TemplateResponse('applications.html', data_page)
     else:

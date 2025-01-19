@@ -27,6 +27,7 @@ async def cmd_start(message: Message) -> None:
             )
     except Exception as e:
        logging.error(f'Ошибка при добавлении пользователя: {str(e)}')
+    await send_message_with_delay(message=message)
     await greet_user(message=message, is_new_user=not user)
 
 

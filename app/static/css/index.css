@@ -1,5 +1,11 @@
+/* Импорт шрифтов Google: Cormorant Garamond и Montserrat */
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@300;400;600&display=swap');
 
+/* 
+  Базовые стили для всего документа.
+  Сбрасывает отступы и поля, применяет шрифт Montserrat,
+  устанавливает цвет фона и изображение, а также центрирует текст.
+*/
 body,
 html {
     margin: 0;
@@ -13,16 +19,25 @@ html {
     background-attachment: fixed;
 }
 
+/* 
+  Стили для секции заголовка.
+  Включает отступы, внешние отступы, позиционирование, градиентный фон и анимацию свечения тени.
+*/
 header {
     color: white;
-    padding: 60px 0;
-    margin-bottom: 40px;
+    padding: 4rem 0;
+    /* Использование относительных единиц */
+    margin-bottom: 2.5rem;
     position: relative;
     overflow: hidden;
     background: linear-gradient(1deg, #000000, #1a1a1a);
     animation: shadowGlow 6s infinite;
 }
 
+/* 
+  Псевдоэлемент для заголовка для создания эффекта мерцания.
+  Абсолютно позиционирован с градиентным фоном и анимацией мерцания.
+*/
 header::after {
     content: '';
     position: absolute;
@@ -38,10 +53,14 @@ header::after {
             rgba(255, 255, 255, 0) 100%);
     opacity: 0.5;
     animation: shimmer 11s infinite;
-    /* Увеличено с 6s до 12s */
+    /* Увеличена длительность для более плавного эффекта */
     filter: blur(8px);
 }
 
+/* 
+  Ключевые кадры для анимации мерцания.
+  Перемещает мерцание слева направо и обратно.
+*/
 @keyframes shimmer {
     0% {
         transform: translateX(-100%);
@@ -56,44 +75,68 @@ header::after {
     }
 }
 
+/* 
+  Ключевые кадры для анимации свечения тени на заголовке.
+  Создает пульсирующий эффект теневого свечения.
+*/
 @keyframes shadowGlow {
     0% {
-        box-shadow: 0 2px 15px rgba(255, 255, 255, 0.127);
+        box-shadow: 0 0.125rem 0.9375rem rgba(255, 255, 255, 0.127);
     }
 
     50% {
-        box-shadow: 0 2px 25px rgba(255, 255, 255, 0.475);
+        box-shadow: 0 0.125rem 1.5625rem rgba(255, 255, 255, 0.475);
     }
 
     100% {
-        box-shadow: 0 2px 15px rgba(255, 255, 255, 0.127);
+        box-shadow: 0 0.125rem 0.9375rem rgba(255, 255, 255, 0.127);
     }
 }
 
-
-
+/* 
+  Стили для списка преимуществ.
+  Убирает стандартные стили списка и отступы.
+*/
 .advantages-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
+/* 
+  Стили для каждого элемента списка преимуществ.
+  Добавляет отступ слева для пользовательской галочки и нижний отступ.
+*/
 .advantages-list li {
     position: relative;
-    padding-left: 25px;
-    margin-bottom: 15px;
-    / Дополнительные стили /
+    /* Относительное позиционирование для псевдоэлемента */
+    padding-left: 1.25rem;
+    /* Уменьшенный отступ для приближения галочки к тексту */
+    margin-bottom: 0.9375rem;
+    /* Дополнительные стили можно добавить здесь */
 }
 
+/* 
+  Псевдоэлемент для элементов списка для отображения пользовательской галочки.
+  Абсолютно позиционирован слева от элемента списка.
+*/
 .advantages-list li::before {
-    content: '✔️ ';/ Или другой символ/иконка / position: absolute;
+    content: '✔️';
+    /* Можно заменить на другой символ или иконку */
+
     left: 0;
-    top: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    /* Центрирование по вертикали */
     color: #28a745;
-    font-size: 18px;
+    font-size: 1.125rem;
     line-height: 1;
 }
 
+/* 
+  Контейнер для содержимого заголовка.
+  Центрирует содержимое как по вертикали, так и по горизонтали.
+*/
 .header-content {
     display: flex;
     flex-direction: column;
@@ -103,6 +146,10 @@ header::after {
     z-index: 2;
 }
 
+/* 
+  Стили для фонового изображения заголовка.
+  Обеспечивает покрытие всего заголовка изображением и применяет фильтры.
+*/
 .header-image {
     position: absolute;
     top: 0;
@@ -115,54 +162,65 @@ header::after {
     filter: grayscale(100%) contrast(120%);
 }
 
+/* 
+  Стили для основного заголовка (h1).
+  Применяет шрифтовые стили, размер, теневое оформление для акцента.
+*/
 h1 {
-    margin: 30px 0;
+    margin: 1.875rem 0;
     font-family: 'Cormorant Garamond', serif;
     font-size: 3em;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 3px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.1875em;
+    text-shadow: 0.125rem 0.125rem 0.25rem rgba(0, 0, 0, 0.5);
 }
 
+/* 
+  Стили для основной области контента.
+  Устанавливает максимальную ширину и центрирует контент с авто-отступами.
+*/
 main {
-    max-width: 800px;
-    margin: 60px auto;
-    padding: 0 20px;
+    max-width: 50em;
+    /* Примерно 800px */
+    margin: 3.75rem auto;
+    padding: 0 1.25rem;
 }
 
-/* Добавьте эти классы к основным стилям для дополнительных эффектов */
-
+/* 
+  Стили для кнопок.
+  Включает отступы, шрифтовые стили, градиентный фон, скругление углов, тень и эффекты перехода.
+  Использует относительные единицы для обеспечения адаптивности.
+*/
 .btn {
-    padding: 15px 30px;
-    font-size: 18px;
+    padding: 0.9375rem 1.875rem;
+    /* 15px 30px */
+    font-size: 1.125rem;
+    /* 18px */
     font-weight: 600;
     color: #ffffff;
-    background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
-    border: none;
-    margin: 20px 0;
-    /* Добавлен отступ */
-    display: inline-block;
-    /* Для корректного отображения отступов */
-    border-radius: 50px;
-    cursor: pointer;
-    text-decoration: none;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    transition: all 0.5s ease;
-    /* увеличено с 0.3s до 0.5s */
-    /* или */
-    transition: all 0.5s ease;
-    /* совсем медленно */
-}
-
-.btn {
-
     background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #FF6B6B);
     background-size: 200% 200%;
     animation: gradient 3s ease infinite;
-    /* анимация на 3 секунды */
+    /* 3-секундная анимация градиента */
+    border: none;
+    margin: 1.25rem 0;
+    /* Добавлен отступ для пространства */
+    display: inline-block;
+    /* Обеспечивает правильное отображение отступов */
+    border-radius: 3.125rem;
+    /* 50px */
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 0.25rem 0.9375rem rgba(0, 0, 0, 0.2);
+    transition: all 0.5s ease;
+    /* Плавные переходы */
 }
 
+/* 
+  Ключевые кадры для анимации градиента.
+  Перемещает позицию фона для создания эффекта плавного потока градиента.
+*/
 @keyframes gradient {
     0% {
         background-position: 0% 50%;
@@ -177,11 +235,10 @@ main {
     }
 }
 
-
-
-
-
-
+/* 
+  Ключевые кадры для пульсирующей анимации.
+  Можно применить к элементам для создания эффекта пульсации.
+*/
 @keyframes pulse {
     0% {
         transform: scale(1);
@@ -199,96 +256,192 @@ main {
     }
 }
 
-
-
+/* 
+  Стили для иконки ножниц.
+  Устанавливает размер, цвет, тень и нижний отступ.
+*/
 .scissors {
-    width: 80px;
-    height: 80px;
+    width: 5rem;
+    /* 80px */
+    height: 5rem;
+    /* 80px */
     fill: white;
-    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
-    margin-bottom: 20px;
+    filter: drop-shadow(0.125rem 0.125rem 0.125rem rgba(0, 0, 0, 0.3));
+    margin-bottom: 1.25rem;
+    /* 20px */
 }
 
+/* 
+  Стили для второстепенных заголовков (h2).
+  Применяет шрифтовые стили, размер, отступы и цвет.
+*/
 h2 {
     font-family: 'Cormorant Garamond', serif;
     font-size: 2.2em;
     font-weight: 600;
-    margin: 40px 0 20px 0;
+    margin: 2.5rem 0 1.25rem 0;
     color: #fff;
 }
 
+/* 
+  Стили для параграфного текста.
+  Устанавливает размер шрифта, межстрочный интервал, отступы и цвет.
+*/
 p {
     font-size: 1.1em;
     line-height: 1.8;
-    margin-bottom: 30px;
-    margin: 20px 0;
+    margin: 1.25rem 0;
+    /* Унифицированный отступ для консистентности */
     color: #ccc;
 }
 
+/* 
+  Стили для выделенного текста внутри параграфов или заголовков.
+  Изменяет цвет и толщину шрифта.
+*/
 .highlight {
     color: #fff;
     font-weight: 600;
 }
 
+/* 
+  Стили для разделительной линии.
+  Устанавливает ширину, высоту, цвет фона и центрирует с отступами.
+*/
 .divider {
-    width: 50px;
-    height: 2px;
+    width: 3.125rem;
+    /* 50px */
+    height: 0.125rem;
+    /* 2px */
     background-color: #fff;
-    margin: 40px auto;
+    margin: 2.5rem auto;
 }
 
+/* 
+  Стили для кнопки бронирования.
+  Изменяет курсор на указатель при наведении.
+*/
 #book-button {
     cursor: pointer;
-    /* Изменяет курсор на указатель при наведении */
+    /* Указывает на кликабельный элемент */
 }
 
+/* 
+  Адаптивные стили для устройств с максимальной шириной 768px.
+  Регулирует размеры шрифтов, иконок, кнопок и отступов для лучшего отображения на мобильных устройствах.
+*/
 @media (max-width: 768px) {
+
+    /* Корректировка размера заголовка */
     h1 {
-        font-size: 2.2em;
+        font-size: 6.2em;
     }
 
+    /* Корректировка размера иконки ножниц */
     .scissors {
-        width: 60px;
-        height: 60px;
+        width: 3.75rem;
+        /* 60px */
+        height: 3.75rem;
+        /* 60px */
     }
 
+    /* Корректировка размера и шрифта кнопки */
     .btn {
-        font-size: 15em;
-        padding: 12px 24px;
+        font-size: 1rem;
+        /* 16px */
+        padding: 0.75rem 1.5rem;
+        /* 12px 24px */
+        border-radius: 2rem;
+        /* 32px для более подходящего скругления на мобильных */
+        width: 80%;
+        /* Сделать кнопку шире для удобства нажатия */
+        max-width: 300px;
+        /* Максимальная ширина кнопки */
+        margin: 1rem auto;
+        /* Центрирование кнопки */
+        display: block;
+        /* Обеспечивает правильное центрирование */
     }
 
+    /* Корректировка размера второстепенного заголовка */
     h2 {
         font-size: 1.8em;
     }
 
+    /* Корректировка размера шрифта параграфа */
     p {
         font-size: 1em;
     }
+
+    /* Корректировка отступов заголовка */
+    header {
+        padding: 2.5rem 0;
+    }
+
+    /* Корректировка отступов основного контента */
+    main {
+        margin: 2.5rem auto;
+        padding: 0 0.75rem;
+        /* Уменьшение горизонтального отступа */
+    }
+
+    /* Корректировка размера шрифта для ссылок со свечением на мобильных устройствах */
+    .glow-link {
+        font-size: 1.5rem;
+        /* Уменьшен для лучшего размещения на меньших экранах */
+    }
+
+    /* Дополнительные стили для улучшения мобильного опыта */
+    .advantages-list li {
+        padding-left: 1rem;
+        /* Корректируем отступ для мобильных */
+        font-size: 0.95em;
+    }
+
+    .divider {
+        width: 2.5rem;
+        /* 40px */
+        height: 0.1rem;
+        /* 1.6px */
+    }
 }
 
+/* 
+  Стили для ссылок со свечением.
+  Применяет декорирование текста, цвет, свойства отображения, отступы, теневое оформление текста, переходы и размер шрифта.
+*/
 .glow-link {
     text-decoration: none;
     color: #0edbdf;
     display: inline-block;
-    margin: 30px 0;
-    text-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
+    margin: 1.875rem 0;
+    /* 30px */
+    text-shadow: 0 0 0.0625rem rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
-    /* добавил ease для более плавной анимации */
-    font-size: 55px;
-    font-size: 175%;
+    /* Плавный переход для эффектов при наведении */
+    font-size: 1.75rem;
+    /* 175% */
     transform-origin: center center;
-    /* центр трансформации */
+    /* Устанавливает точку происхождения для трансформаций */
 }
 
+/* 
+  Эффекты при наведении для ссылок со свечением.
+  Изменяет цвет, добавляет более сильное теневое оформление текста, масштабирует ссылку и запускает анимацию пульсации текста.
+*/
 .glow-link:hover {
     color: #e93b28;
-    text-shadow: 0 0 8px rgba(243, 81, 32, 0.875);
+    text-shadow: 0 0 0.5rem rgba(243, 81, 32, 0.875);
     transform: scale(1.1);
-    /* увеличение на 10% */
+    /* Масштабирует ссылку на 10% */
     animation: textPulse 0.3s ease-in-out;
-    /* добавляем анимацию */
+    /* Запускает анимацию пульсации текста */
 }
 
+/* 
+  Ключевые кадры для анимации пульсации текста.
+  Масштабирует текст от нормального до 110% и обратно.
+*/
 @keyframes textPulse {
     0% {
         transform: scale(1);
@@ -300,22 +453,5 @@ p {
 
     100% {
         transform: scale(1.1);
-    }
-}
-
-
-/* Медиа-запрос для мобильных устройств */
-@media (max-width: 768px) {
-    header {
-        padding: 40px 0;
-    }
-
-    main {
-        margin: 40px auto;
-    }
-
-    .glow-link {
-        font-size: 40px;
-        /* Уменьшен размер шрифта для мобильных */
     }
 }

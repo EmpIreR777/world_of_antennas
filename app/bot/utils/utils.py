@@ -36,9 +36,9 @@ def format_statistics_message(stats_people, stats_app, alive_users, not_alive_us
     return (
         '📈 Статистика пользователей и заявок:\n\n'
         f'👥 Всего пользователей: {stats_people["total_users"]} | Всего заявок: {stats_app["total_app"]}\n\n'
-        f'🆕 Новых за сегодня: {stats_people["new_today"]} | Всего заявок за сегодня: {stats_app["new_today_app"]}\n'
-        f'📅 Новых за неделю: {stats_people["new_week"]} | Всего заявок за неделю: {stats_app["new_week_app"]}\n'
-        f'📆 Новых за месяц: {stats_people["new_month"]} | Всего заявок за месяц: {stats_app["new_month_app"]}\n\n'
+        f'🆕 Новых людей за сегодня: {stats_people["new_today"]} | Всего заявок за сегодня: {stats_app["new_today_app"]}\n'
+        f'📅 Новых людей за неделю: {stats_people["new_week"]} | Всего заявок за неделю: {stats_app["new_week_app"]}\n'
+        f'📆 Новых людей за месяц: {stats_people["new_month"]} | Всего заявок за месяц: {stats_app["new_month_app"]}\n\n'
         f'{shops_stats}\n\n'
         f'✅ Активные пользователи: {alive_users} | 🚫 Заблокировали бота: {not_alive_users}\n\n'
         f'🕒 Данные актуальны на: {current_time}'
