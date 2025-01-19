@@ -158,8 +158,25 @@ tr:hover {
 
 /* Стили для уведомления при копировании номера */
 .copy-notification {
-    animation: fadeIn 0.3s; /* Анимация появления */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Тень */
+    position: fixed;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: linear-gradient(45deg, rgba(255,107,107,0.5), rgba(78,205,196,0.5));
+    color: #ffffff;
+    padding: 15px 30px;
+    font-size: 16px;
+    border-radius: 20px; /* Увеличенный радиус для более закругленного вида */
+    z-index: 9999;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    opacity: 0;
+    pointer-events: none; /* Чтобы уведомление не блокировало взаимодействие с элементами под ним */
+}
+
+@media (max-width: 768px) {
+    .copy-notification {
+        padding: 20px 40px;
+        font-size: 18px;
+    }
 }
 
 /* Анимация плавного появления */

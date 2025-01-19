@@ -8,12 +8,49 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.dao.base import BaseDAO
-from app.api.models import User, Service, Application, Shop
+from app.api.models import InventoryItem, User, Service, Application, Shop
 from app.database import async_session_maker
 
 
 class UserDAO(BaseDAO):
     model = User
+
+    @classmethod
+    async def get_all_applications(cls):
+        """
+        Возвращает всех пользователей, кроме роли User, и их предметы, 
+        которые они записали на себя.
+        """
+        async with async_session_maker() as session:
+            try:
+                query = (
+                    select(cls.model)
+                    .options(joinedload(cls.model.inventory_items))
+                    .where(cls.model.role != cls.model.RoleEnum.USER)
+                )
+                result = await session.execute(query)
+                users = result.scalars().all()
+                return [
+                    {
+                        'telegram_id': user.telegram_id,
+                        'first_name': user.first_name,
+                        'username': user.username,
+                        'role': user.role.value,
+                        'inventory_items': [
+                            {
+                                'item_name': item.item_name,
+                                'quantity': item.quantity,
+                                'unit_type': item.unit_type.value,
+                                'comment': item.comment,
+                            }
+                            for item in user.inventory_items]
+                    }
+                    for user in users
+                ]
+            except SQLAlchemyError as e:
+                logging.error(f'Ошибка при загрузке всех приложений: {e}')
+                return None
+
 
     @classmethod
     async def get_statistics(cls, session: AsyncSession):
@@ -29,22 +66,25 @@ class UserDAO(BaseDAO):
                 func.sum(case((cls.model.create_at >= now - timedelta(days=7), 1), else_=0)).label('new_week'),
                 func.sum(case((cls.model.create_at >= now - timedelta(days=30), 1), else_=0)).label('new_month')
             )
-
             result = await session.execute(query)
             stats = result.fetchone()
-
             statistics = {
                 'total_users': stats.total_users,
                 'new_today': stats.new_today,
                 'new_week': stats.new_week,
                 'new_month': stats.new_month
             }
-
             logging.info(f'Статистика успешно получена: {statistics}')
             return statistics
         except SQLAlchemyError as e:
             logging.error(f'Ошибка при получении статистики: {e}')
             raise
+
+
+# class InventoryItemDAO(BaseDAO):
+#     model = InventoryItem
+
+
 
 
 class ServiceDAO(BaseDAO):
@@ -79,7 +119,7 @@ class ApplicationDAO(BaseDAO):
     @classmethod
     async def get_statistics_applications(cls, session: AsyncSession):
         """
-        Метод собирает данные о количестве пользователей,
+        Метод собирает данные о количестве заявок,
         зарегистрированных за различные временные периоды.
         """
         try:
@@ -90,7 +130,6 @@ class ApplicationDAO(BaseDAO):
                 func.sum(case((cls.model.create_at >= now - timedelta(days=7), 1), else_=0)).label('new_week_app'),
                 func.sum(case((cls.model.create_at >= now - timedelta(days=30), 1), else_=0)).label('new_month_app')
             )
-
             result = await session.execute(query)
             stats = result.fetchone()
 
@@ -100,7 +139,6 @@ class ApplicationDAO(BaseDAO):
                 'new_week_app': stats.new_week_app,
                 'new_month_app': stats.new_month_app
             }
-
             logging.info(f'Статистика успешно получена: {statistics}')
             return statistics
         except SQLAlchemyError as e:
@@ -125,7 +163,10 @@ class ApplicationDAO(BaseDAO):
                 # Используем joinedload для ленивой загрузки связанных объектов
                 query = (
                     select(cls.model)
-                    .options(joinedload(cls.model.shop), joinedload(cls.model.service))
+                    .options(joinedload(cls.model.shop),
+                            joinedload(cls.model.service),
+                            joinedload(cls.model.master)
+                            )
                     .filter_by(user_id=user_id)
                 )
                 result = await session.execute(query)
@@ -144,6 +185,7 @@ class ApplicationDAO(BaseDAO):
                         'comment': app.comment,
                         'phone_number': app.phone_number,
                         'address': app.address,
+                        'master_name': app.master.first_name if app.master else 'Мастер не назначен',
                     }
                     for app in applications
                 ]
@@ -164,11 +206,13 @@ class ApplicationDAO(BaseDAO):
                 # Используем joinedload для загрузки связанных данных
                 query = (
                     select(cls.model)
-                    .options(joinedload(cls.model.shop), joinedload(cls.model.service))
+                    .options(joinedload(cls.model.shop),
+                            joinedload(cls.model.service),
+                            joinedload(cls.model.master)
+                            )
                 )
                 result = await session.execute(query)
                 applications = result.scalars().all()
-
                 # Возвращаем список словарей с нужными полями
                 return [
                     {
@@ -183,6 +227,7 @@ class ApplicationDAO(BaseDAO):
                         'comment': app.comment,
                         'phone_number': app.phone_number,
                         'address': app.address,
+                        'master_name': app.master.first_name if app.master else 'Мастер не назначен',
                     }
                     for app in applications
                 ]

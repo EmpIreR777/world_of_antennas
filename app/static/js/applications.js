@@ -119,21 +119,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const notification = document.createElement('div');
         notification.className = 'copy-notification';
         notification.textContent = 'Номер скопирован';
-        
+
+        // Установка позиции через inline-стили
         Object.assign(notification.style, {
-            position: 'fixed',
             top: `${y - 70}px`,
             left: `${x}px`,
-            transform: 'translate(-50%, -50%) scale(0.9)',
-            background: 'linear-gradient(45deg, rgba(255,107,107,0.5), rgba(78,205,196,0.5))',
-            color: '#ffffff',
-            padding: window.innerWidth <= 768 ? '20px 40px' : '15px 30px',
-            fontSize: window.innerWidth <= 768 ? '18px' : '16px',
-            borderRadius: '10px',
-            zIndex: '9999',
-            transition: 'all 0.3s ease',
-            boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
-            opacity: '0'
+            position: 'fixed',
         });
 
         document.body.appendChild(notification);
@@ -155,14 +146,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const handleCopy = async (e) => {
         e.preventDefault();
         const phone = e.currentTarget.dataset.phone;
-        const x = e.type === 'click' ? e.clientX : e.changedTouches[0].clientX;
-        const y = e.type === 'click' ? e.clientY : e.changedTouches[0].clientY;
+        // Определение координат клика или касания
+        let x, y;
+        if (e.type === 'click') {
+            x = e.clientX;
+            y = e.clientY;
+        } else if (e.type === 'touchend' && e.changedTouches.length > 0) {
+            x = e.changedTouches[0].clientX;
+            y = e.changedTouches[0].clientY;
+        } else {
+            // Если координаты определить невозможно, установить центр окна
+            x = window.innerWidth / 2;
+            y = window.innerHeight / 2;
+        }
 
         try {
             await navigator.clipboard.writeText(phone);
             createNotification(x, y);
         } catch (err) {
             console.error('Ошибка копирования:', err);
+            // Альтернативное уведомление при ошибке копирования
+            alert('Не удалось скопировать номер.');
         }
     };
 
@@ -172,6 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
         );
     });
 });
+
 
 
 

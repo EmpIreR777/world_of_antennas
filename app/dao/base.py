@@ -9,18 +9,14 @@ from app.database import async_session_maker
 
 
 class BaseDAO:
-    model = None # Устанавливается в дочернем классе
+    model = None
 
     @classmethod
     async def find_one_or_none_by_id(cls, data_id: int):
         """
         Асинхронно находит и возвращает один экземпляр модели по указанным критериям или None.
-
-        Аргументы:
-            data_id: Критерии фильтрации в виде идентификатора записи.
-
-        Возвращает:
-            Экземпляр модели или None, если ничего не найдено.
+        Аргументы: data_id: Критерии фильтрации в виде идентификатора записи.
+        Возвращает: Экземпляр модели или None, если ничего не найдено.
         """
         async with async_session_maker() as session:
             query = select(cls.model).filter_by(id=data_id)
@@ -31,12 +27,8 @@ class BaseDAO:
     async def find_one_or_none(cls, **filter_by):
         """
         Асинхронно находит и возвращает один экземпляр модели по указанным критериям или None.
-
-        Аргументы:
-            **filter_by: Критерии фильтрации в виде именованных параметров.
-
-        Возвращает:
-            Экземпляр модели или None, если ничего не найдено.
+        Аргументы: **filter_by: Критерии фильтрации в виде именованных параметров.
+        Возвращает: Экземпляр модели или None, если ничего не найдено.
         """
         async with async_session_maker() as session:
             query = select(cls.model).filter_by(**filter_by)
@@ -47,12 +39,8 @@ class BaseDAO:
     async def find_all(cls, **filter_by) -> List[User]:
         """
         Асинхронно находит и возвращает все экземпляры модели, удовлетворяющие указанным критериям.
-
-        Аргументы:
-            **filter_by: Критерии фильтрации в виде именованных параметров.
-
-        Возвращает:
-            Список экземпляров модели.
+        Аргументы: **filter_by: Критерии фильтрации в виде именованных параметров.
+        Возвращает: Список экземпляров модели.
         """
         async with async_session_maker() as session:
             query = select(cls.model).filter_by(**filter_by)
@@ -63,12 +51,8 @@ class BaseDAO:
     async def add(cls, **values):
         """
         Асинхронно создает новый экземпляр модели с указанными значениями.
-
-        Аргументы:
-            **values: Именованные параметры для создания нового экземпляра модели.
-
-        Возвращает:
-            Созданный экземпляр модели.
+        Аргументы: **values: Именованные параметры для создания нового экземпляра модели.
+        Возвращает: Созданный экземпляр модели.
         """
         async with async_session_maker() as session:
             async with session.begin():
@@ -83,7 +67,11 @@ class BaseDAO:
 
     @classmethod
     async def add_many(cls, instances: list[dict]):
-        # Добавить несколько записей
+        """
+        Добавляет несколько записей в базу данных.
+        instances: Список словарей, каждый из которых содержит данные для создания нового экземпляра модели.
+        return: Список созданных экземпляров модели.
+        """
         async with async_session_maker() as session:
             async with session.begin():
                 new_instances = [cls.model(**values) for values in instances]
@@ -97,7 +85,11 @@ class BaseDAO:
 
     @classmethod
     async def update(cls, filter_by, **values):
-        # Обновить записи по фильтру
+        """
+        Добавляет несколько записей в базу данных.
+        param instances: Список словарей, каждый из которых содержит данные для создания нового экземпляра модели.
+        return: Список созданных экземпляров модели.
+        """
         async with async_session_maker() as session:
             async with session.begin():
                 query = (
@@ -116,7 +108,13 @@ class BaseDAO:
 
     @classmethod
     async def delete(cls, delete_all: bool = False, **filter_by):
-        # Удалить записи по фильтру
+        """
+        Удаляет записи из базы данных на основе заданных критериев фильтрации или удаляет все записи.
+        param delete_all: Если True, удаляет все записи в таблице модели.
+        param filter_by: Ключевые аргументы, представляющие критерии фильтрации для удаления записей.
+        return: Количество удаленных записей.
+        raises ValueError: Если не указан ни один фильтр при попытке удалить частично.
+        """
         if not delete_all and not filter_by:
             raise ValueError("Нужен хотя бы один фильтр для удаления.")
 

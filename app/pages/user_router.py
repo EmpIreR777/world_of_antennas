@@ -42,7 +42,7 @@ async def read_root(request: Request, user_id: int = None):
         return templates.TemplateResponse('applications.html', data_page)
     else:
         applications = await ApplicationDAO.get_applications_by_user(user_id=user_id)
-        print("Applications:", applications)  # Добавьте этот вывод
+
         data_page['access'] = True
         data_page['user_role'] = user_check.role != User.RoleEnum.USER
 

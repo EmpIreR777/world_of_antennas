@@ -22,6 +22,7 @@
                 <th>Адрес клиента</th>
                 <th>Телефон</th>
                 <th>Статус</th>
+                <th>Специалист</th>
                 <th>Комментарий</th>
                 <th>Адрес магазина</th>
             </tr>
@@ -60,6 +61,7 @@
                     {{ application.status }}
                     {% endif %}
                 </td>
+                <td>{{ application.master_name }}</td>
                 <td>{{ application.comment if application.comment else '---' }}</td>
                 <td>{{ application.address_name }}</td>
             </tr>

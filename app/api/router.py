@@ -103,7 +103,6 @@ async def update_application_status(
             status_code=403,
             content={'success': False, 'message': 'Недостаточно прав'}
         )
-
     try:
         application_id = int(data.get('application_id'))
         new_status = data.get('status')
@@ -113,7 +112,6 @@ async def update_application_status(
                 status_code=400,
                 content={'success': False, 'message': 'Неверные параметры запроса'}
             )
-
         # Проверяем существует ли такой статус
         try:
             status_enum = Application.StatusEnum(new_status)
@@ -122,22 +120,18 @@ async def update_application_status(
                 status_code=400,
                 content={'success': False, 'message': 'Некорректный статус'}
             )
-
         # Обновление статуса и master_id заявки
         rows_updated = await ApplicationDAO.update(
             filter_by={'id': application_id},
             status=status_enum,
             master_id=current_user.telegram_id
         )
-
         if rows_updated == 0:
             return JSONResponse(
                 status_code=404,
                 content={'success': False, 'message': 'Заявка не найдена'}
             )
-
         return JSONResponse(content={'success': True})
-
     except Exception as e:
         return JSONResponse(
             status_code=500,
