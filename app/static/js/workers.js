@@ -1,14 +1,26 @@
 // Функция для переключения отображения формы добавления товара
-function toggleAddItemForm(workerId) {
+function toggleAddItemForm(workerId, button) {
     const form = document.getElementById(`add-item-form-${workerId}`);
+    
+    // Проверяем, отображена ли форма
     if (form.style.display === 'none' || !form.style.display) {
-        // Закрываем все открытые формы
+        // Закрываем все открытые формы и показываем соответствующие кнопки
         document.querySelectorAll('.add-item-form').forEach(openForm => {
             openForm.style.display = 'none';
         });
+        document.querySelectorAll('.add-item-btn').forEach(btn => {
+            btn.style.display = 'inline-block'; // Возвращаем отображение кнопок
+        });
+        
+        // Скрываем текущую кнопку "Добавить товар"
+        button.style.display = 'none';
+        
+        // Показываем форму
         form.style.display = 'block';
     } else {
+        // Если форма уже открыта, закрываем её и показываем кнопку
         form.style.display = 'none';
+        button.style.display = 'inline-block';
     }
 }
 
@@ -26,8 +38,14 @@ function clearAddItemForm(workerId) {
                 input.value = ''; // Сбрасываем текстовые поля и textarea
             }
         });
-        // Закрываем форму, скрывая ее
+        // Закрываем форму, скрывая её
         form.style.display = 'none';
+        
+        // Показываем кнопку "Добавить товар"
+        const button = document.querySelector(`button.add-item-btn[onclick*="'${workerId}'"]`);
+        if (button) {
+            button.style.display = 'inline-block';
+        }
     }
 }
 
