@@ -1,7 +1,13 @@
 /* Импорт шрифтов с Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@300;400;600&display=swap');
 
-/* Определение CSS-переменных для консистентности цвета и анимаций */
+/* Глобальные стили и переменные */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 :root {
     --primary-bg: #000; /* Основной фон страницы */
     --text-color: #fff; /* Цвет текста */
@@ -9,7 +15,7 @@
     --border-color: rgba(255, 255, 255, 0.1); /* Цвет границ элементов */
     --shadow-color: rgba(0, 0, 0, 0.1); /* Цвет теней */
     --button-bg: #2da69e; /* Фон кнопок */
-    --button-hover-bg: #218838;; /* Фон кнопок при наведении */
+    --button-hover-bg: #218838; /* Фон кнопок при наведении */
     --button-delete-bg: #ff6b6b; /* Фон кнопок удаления */
     --button-delete-hover-bg: #ff8787; /* Фон кнопок удаления при наведении */
     --transition-speed: 0.3s; /* Скорость переходов для анимаций */
@@ -19,7 +25,8 @@
 }
 
 /* Стили для тела страницы и HTML-контейнера */
-body, html {
+body,
+html {
     margin: 0;
     padding: 0;
     font-family: 'Montserrat', sans-serif; /* Основной шрифт */
@@ -27,7 +34,7 @@ body, html {
     color: var(--text-color); /* Установка цвета текста */
     text-align: center; /* Выравнивание текста по центру */
     background-image: linear-gradient(rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.95)),
-    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23222' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 60L60 0H30L0 30M60 60V30L30 60'/%3E%3C/g%3E%3C/svg%3E");
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23222' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 60L60 0H30L0 30M60 60V30L30 60'/%3E%3C/g%3E%3C/svg%3E");
     background-attachment: fixed;
     min-height: 100vh;
     scroll-behavior: smooth;
@@ -37,18 +44,30 @@ body, html {
 @keyframes pulse {
     0% {
         box-shadow: 0 0 20px rgba(255, 107, 107, 0.3),
-                    0 0 30px rgba(78, 205, 196, 0.3),
-                    0 0 40px rgba(255, 107, 107, 0.3);
+            0 0 30px rgba(78, 205, 196, 0.3),
+            0 0 40px rgba(255, 107, 107, 0.3);
     }
     50% {
         box-shadow: 0 0 30px rgba(255, 107, 107, 0.5),
-                    0 0 40px rgba(78, 205, 196, 0.5),
-                    0 0 50px rgba(255, 107, 107, 0.5);
+            0 0 40px rgba(78, 205, 196, 0.5),
+            0 0 50px rgba(255, 107, 107, 0.5);
     }
     100% {
         box-shadow: 0 0 20px rgba(255, 107, 107, 0.3),
-                    0 0 30px rgba(78, 205, 196, 0.3),
-                    0 0 40px rgba(255, 107, 107, 0.3);
+            0 0 30px rgba(78, 205, 196, 0.3),
+            0 0 40px rgba(255, 107, 107, 0.3);
+    }
+}
+
+/* Анимация плавного появления */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
@@ -77,8 +96,7 @@ h1 {
     font-size: 2.5em;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 3px;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+    letter-spacing: 3px;text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
     margin-bottom: 2rem;
     position: relative;
 }
@@ -153,11 +171,11 @@ button:active {
     transform: scale(0.95);
 }
 
-.delete-item-btn {
+button.delete-item-btn {
     background-color: var(--button-delete-bg);
 }
 
-.delete-item-btn:hover {
+button.delete-item-btn:hover {
     background-color: var(--button-delete-hover-bg);
 }
 
@@ -174,6 +192,7 @@ button[type="button"] {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     transition: max-height var(--transition-speed) ease, opacity var(--transition-speed) ease;
+    overflow: hidden;
 }
 
 .add-item-form.active {
@@ -182,7 +201,7 @@ button[type="button"] {
 }
 
 /* Стили для общей формы */
-.form-group{
+.form-group {
     margin-bottom: 1rem;
     text-align: left;
 }
@@ -193,7 +212,8 @@ button[type="button"] {
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
     width: 100%;
     padding: 8px 10px;
     border: 1px solid var(--border-color);
@@ -201,11 +221,41 @@ button[type="button"] {
     background: transparent;
     color: var(--text-color);
     transition: border-color var(--transition-speed) ease, background-color var(--transition-speed) ease;
+    font-size: 1em;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .form-group input:focus,
 .form-group textarea:focus,
-.quantity-input:focus {
+.form-group select:focus {
+    outline: none;
+    border-color: var(--button-bg);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.form-group select {
+    appearance: none; /* Убирает стандартный вид select в разных браузерах */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: calc(100% - 12px) center;
+    padding-right: 35px;
+}
+
+.form-group select option {
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    padding: 8px;
+}
+
+.form-group select:hover,
+.form-group select:focus {
     outline: none;
     border-color: var(--button-bg);
     background-color: rgba(255, 255, 255, 0.2);
@@ -218,7 +268,7 @@ button[type="button"] {
     border-spacing: 0;
     margin-top: 1rem;
     background: var(--accent-color);
-    border-radius: 10px;
+    border-radius:10px;
     overflow: hidden;
 }
 
@@ -242,7 +292,8 @@ button[type="button"] {
 
 /* Стили для инпутов количества */
 .quantity-input {
-    width: 80px;
+    width: 100%;
+    max-width: 80px;
     padding: 5px 10px;
     border: 1px solid var(--border-color);
     border-radius: 5px;
@@ -260,32 +311,23 @@ button[type="button"] {
     box-shadow: 0 0 5px var(--button-bg);
 }
 
-/* Анимация плавного появления */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+/* Адаптивные стили */
 
-/* Адаптивные стили для экранов размером до 1024px */
+/* До 1024px */
 @media (max-width: 1024px) {
     main {
         padding: 18px;
     }
 }
 
-/* Адаптивные стили для экранов размером до 768px */
+/* До 768px */
 @media (max-width: 768px) {
     h1 {
         font-size: 2em;
     }
-    
-    th, td {
+
+    thead th,
+    tbody td {
         padding: 0.8rem;
     }
 
@@ -295,22 +337,23 @@ button[type="button"] {
     }
 }
 
-/* Адаптивные стили для экранов размером до 600px */
+/* До 600px */
 @media (max-width: 600px) {
     h1 {
         font-size: 1.8em;
     }
-    
-    th, td {
+
+    thead th,
+    tbody td {
         padding: 0.6rem;
         font-size: 0.9em;
     }
-    
+
     main {
         padding: 15px;
         margin: 1rem auto;
     }
-    
+
     table {
         display: block;
         overflow-x: auto;
@@ -322,103 +365,63 @@ button[type="button"] {
     }
 }
 
-/* Адаптивные стили для экранов размером до 480px */
+/* До 480px */
 @media (max-width: 480px) {
     h1 {
         font-size: 1.5em;
     }
-    
-    th, td {
+
+    thead th,
+    tbody td {
         padding: 0.5rem;
         font-size: 0.8em;
     }
-    
+
     button {
         padding: 6px 12px;
         font-size: 0.8em;
     }
 
     .quantity-input {
-        width: 60px;
+        max-width: 60px;
         padding: 4px 8px;
         font-size: 0.8em;
     }
-}
 
-/* Адаптивные стили для экранов размером до 360px */
-@media (max-width: 360px) {
-    h1 {
-        font-size: 1.3em;
-    }
-    
-    th, td {
-        padding: 0.4rem;
-        font-size: 0.75em;
-    }
-    
-    button {
-        padding: 5px 10px;
-        font-size: 0.75em;
-    }
-
-    .quantity-input {
-        width: 50px;
-        padding: 3px 6px;
-        font-size: 0.75em;
-    }
-}
-
-/* Адаптивные стили для select на маленьких экранах */
-@media (max-width: 480px) {
     .form-group select {
         font-size: 0.8em;
         padding: 6px 8px;
     }
 }
 
+/* До 360px */
 @media (max-width: 360px) {
+    h1 {
+        font-size: 1.3em;
+    }
+
+    thead th,
+    tbody td {
+        padding: 0.4rem;
+        font-size: 0.75em;
+    }
+
+    button {
+        padding: 5px 10px;
+        font-size: 0.75em;
+    }
+
+    .quantity-input {
+        max-width: 50px;
+        padding: 3px 6px;
+        font-size: 0.75em;
+    }
+
     .form-group select {
         font-size: 0.75em;
         padding: 5px 6px;
     }
 }
-
-
-.form-group select {
-    width: 100%;
-    padding: 8px 10px;
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-    background: transparent;
-    color: var(--text-color);
-    transition: border-color var(--transition-speed) ease, background-color var(--transition-speed) ease;
-    appearance: none; /* Убирает стандартный вид select в разных браузерах */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    cursor: pointer;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1em;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: calc(100% - 12px) center;
-    padding-right: 35px;
-}
-
-/* Стили для options внутри select */
-.form-group select option {
-    background-color: var(--primary-bg);
-    color: var(--text-color);
-    padding: 8px;
-}
-
-/* Стили при наведении и фокусе */
-.form-group select:hover,
-.form-group select:focus {
-    outline: none;
-    border-color: var(--button-bg);
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
 /* Стили для options внутри select */
 .form-group select option {
     background-color: gray; /* Серый фон для опций */
@@ -427,13 +430,57 @@ button[type="button"] {
 }
 
 
-
-/*  для замены кнопок */
-
-/* .hidden {
-    display: none;
+/* Контейнер для строки формы */
+.form-row {
+    display: flex;
+    flex-wrap: wrap; /* Позволяет переносить элементы на новую строку при нехватке места */
+    align-items: center; /* Вертикальное выравнивание по центру */
+    gap: 1rem; /* Расстояние между элементами */
+    margin-bottom: 1rem; /* Отступ снизу для разделения строк формы */
 }
 
-.save-cancel-buttons button {
-    margin-right: 10px;
-} */
+/* Стиль для группы формы */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Позволяет элементам гибко занимать доступное пространство */
+    min-width: 150px; /* Минимальная ширина для предотвращения слишком малого размера на узких экранах */
+}
+
+/* Стиль для меток */
+.form-group label {
+    margin-bottom: 0.3rem;
+    font-size: 0.9em;
+}
+
+/* Стиль для инпутов и селектов внутри .form-group */
+.quantity-input,
+.form-group select {
+    padding: 5px 8px;
+    font-size: 0.9em;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+    transition: border-color var(--transition-speed) ease, background-color var(--transition-speed) ease;
+}
+
+/* Дополнительные стили при фокусе */
+.quantity-input:focus,
+.form-group select:focus {
+    border-color: var(--button-bg);
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 5px var(--button-bg);
+}
+
+/* Адаптивность для небольших экранов */
+@media (max-width: 600px) {
+    .form-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .form-group {
+        min-width: 100%;
+    }
+}

@@ -30,33 +30,41 @@
                             <td>{{ worker.username }}</td>
                             <td>{{ worker.role }}</td>
                             <td>
-                                <button class="add-item-btn" onclick="toggleAddItemForm('{{ worker.id }}')">
-                                    Добавить товар
-                                </button>
-                                <div id="add-item-form-{{ worker.id }}" class="add-item-form">
-                                    <form onsubmit="submitNewItem(event, '{{ worker.id }}')">
-                                        <div class="form-group">
-                                            <label for="item_name_{{ worker.id }}">Название товара:</label>
-                                            <input type="text" id="item_name_{{ worker.id }}" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="quantity_{{ worker.id }}">Количество:</label>
-                                            <input type="number" id="quantity_{{ worker.id }}" required min="0">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="unit_type_{{ worker.id }}">Ед. измерения:</label>
-                                            <select id="unit_type_{{ worker.id }}" required>
-                                                <option value="шт.">шт.</option>
-                                                <option value="м.">м.</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="comment_{{ worker.id }}">Комментарий:</label>
-                                            <textarea id="comment_{{ worker.id }}"></textarea>
-                                        </div>
-                                        <button type="submit">Сохранить</button>
-                                        <button type="button" onclick="clearAddItemForm('{{ worker.id }}')">Отмена</button>
-                                    </form>
+                                <div class="add-item-container">
+                                    <button class="add-item-btn" onclick="toggleAddItemForm('{{ worker.id }}', this)">
+                                        Добавить товар
+                                    </button>
+                                
+                                    <!-- Форма добавления товара, изначально скрыта -->
+                                    <div id="add-item-form-{{ worker.id }}" class="add-item-form" style="display: none;">
+                                        <form onsubmit="submitNewItem(event, '{{ worker.id }}')" class="add-item-form__form">
+                                            <div class="form-group">
+                                                <label for="item_name_{{ worker.id }}">Название товара:</label>
+                                                <input type="text" id="item_name_{{ worker.id }}" required maxlength="100">
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label for="quantity_{{ worker.id }}">Количество:</label>
+                                                    <input type="number" id="quantity_{{ worker.id }}" required min="0" class="quantity-input">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="unit_type_{{ worker.id }}">Ед. измерения:</label>
+                                                    <select id="unit_type_{{ worker.id }}" required>
+                                                        <option value="шт.">шт.</option>
+                                                        <option value="м.">м.</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="comment_{{ worker.id }}">Комментарий:</label>
+                                                <textarea id="comment_{{ worker.id }}" maxlength="200"></textarea>
+                                            </div>
+                                            <div class="form-buttons">
+                                                <button type="submit" class="save-btn">Сохранить</button>
+                                                <button type="button" class="cancel-btn" onclick="clearAddItemForm('{{ worker.id }}')">Отмена</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
 
                                 {% if worker.inventory_items %}

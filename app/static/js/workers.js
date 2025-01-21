@@ -1,14 +1,14 @@
 // Функция для переключения отображения формы добавления товара
 function toggleAddItemForm(workerId) {
     const form = document.getElementById(`add-item-form-${workerId}`);
-    if (form.classList.contains('active')) {
-        form.classList.remove('active');
-    } else {
+    if (form.style.display === 'none' || !form.style.display) {
         // Закрываем все открытые формы
-        document.querySelectorAll('.add-item-form.active').forEach(openForm => {
-            openForm.classList.remove('active');
+        document.querySelectorAll('.add-item-form').forEach(openForm => {
+            openForm.style.display = 'none';
         });
-        form.classList.add('active');
+        form.style.display = 'block';
+    } else {
+        form.style.display = 'none';
     }
 }
 
@@ -16,22 +16,20 @@ function toggleAddItemForm(workerId) {
 function clearAddItemForm(workerId) {
     const form = document.getElementById(`add-item-form-${workerId}`);
     if (form) {
-
-        const inputs = form.querySelectorAll('input, textarea');
+        const inputs = form.querySelectorAll('input, textarea, select');
         inputs.forEach(input => {
             if (input.type === 'number') {
-                input.value = input.min || 0; // Устанавливаем в минимальное значение или 0
-            // } else if (input.tagName.toLowerCase() === 'select') {
-            //     input.selectedIndex = 0; // Сбрасываем выбор к первому варианту
+                input.value = input.min || 0; // Устанавливаем минимальное значение или 0
+            } else if (input.tagName.toLowerCase() === 'select') {
+                input.selectedIndex = 0; // Сбрасываем выбор к первому варианту
             } else {
                 input.value = ''; // Сбрасываем текстовые поля и textarea
             }
         });
-        // Закрываем форму, удаляя класс 'active'
-        // form.classList.remove('active');
+        // Закрываем форму, скрывая ее
+        form.style.display = 'none';
     }
 }
-
 
 // Функция для отправки нового товара с валидацией
 async function submitNewItem(event, workerId) {
