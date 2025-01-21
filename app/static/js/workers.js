@@ -12,18 +12,17 @@ function toggleAddItemForm(workerId) {
     }
 }
 
-
 // Функция для очистки полей формы и закрытия формы
 function clearAddItemForm(workerId) {
     const form = document.getElementById(`add-item-form-${workerId}`);
     if (form) {
-        // Очистка всех полей формы
-        const inputs = form.querySelectorAll('input, select, textarea');
+
+        const inputs = form.querySelectorAll('input, textarea');
         inputs.forEach(input => {
             if (input.type === 'number') {
                 input.value = input.min || 0; // Устанавливаем в минимальное значение или 0
-            } else if (input.tagName.toLowerCase() === 'select') {
-                input.selectedIndex = 0; // Сбрасываем выбор к первому варианту
+            // } else if (input.tagName.toLowerCase() === 'select') {
+            //     input.selectedIndex = 0; // Сбрасываем выбор к первому варианту
             } else {
                 input.value = ''; // Сбрасываем текстовые поля и textarea
             }

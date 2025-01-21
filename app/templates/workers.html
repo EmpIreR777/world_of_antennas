@@ -33,8 +33,6 @@
                                 <button class="add-item-btn" onclick="toggleAddItemForm('{{ worker.id }}')">
                                     Добавить товар
                                 </button>
-                                <button type="submit">Сохранить</button>
-                                <button type="button" onclick="clearAddItemForm('{{ worker.id }}')">Очистить</button>
                                 <div id="add-item-form-{{ worker.id }}" class="add-item-form">
                                     <form onsubmit="submitNewItem(event, '{{ worker.id }}')">
                                         <div class="form-group">
@@ -56,6 +54,8 @@
                                             <label for="comment_{{ worker.id }}">Комментарий:</label>
                                             <textarea id="comment_{{ worker.id }}"></textarea>
                                         </div>
+                                        <button type="submit">Сохранить</button>
+                                        <button type="button" onclick="clearAddItemForm('{{ worker.id }}')">Отмена</button>
                                     </form>
                                 </div>
 
