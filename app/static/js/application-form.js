@@ -153,8 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
             timeInput.min = '00:00';
         }
 
-        // Опционально: установить текущее время как значение по умолчанию, если оно допустимо
-        // Проверяем, чтобы текущее время не позже максимального
+        // Установка текущего времени как значения поля, если оно допустимо
         if (selectedDate === currentDate && currentTime > timeInput.value) {
             timeInput.value = currentTime;
         }
@@ -163,6 +162,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Изначально установить минимальное время
     updateMinTime();
 
-    // Обновлять минимальное время при изменении даты
-    dateInput.addEventListener('change', updateMinTime);
+    dateInput.addEventListener('change', function() {
+        if (dateInput.value < currentDate) {
+            alert("Выберите дату сегодня или в будущем.");
+            dateInput.value = currentDate; // Сбрасываем на минимальную дату
+        } else {
+            updateMinTime(); // Обновляем минимальное время
+        }
+    });
 });

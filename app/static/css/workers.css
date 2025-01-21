@@ -1,0 +1,431 @@
+/* Импорт шрифтов с Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@300;400;600&display=swap');
+
+/* Определение CSS-переменных для консистентности цвета и анимаций */
+:root {
+    --primary-bg: #000; /* Основной фон страницы */
+    --text-color: #fff; /* Цвет текста */
+    --accent-color: rgba(255, 255, 255, 0.05); /* Акцентный цвет для фона контента */
+    --border-color: rgba(255, 255, 255, 0.1); /* Цвет границ элементов */
+    --shadow-color: rgba(0, 0, 0, 0.1); /* Цвет теней */
+    --button-bg: #2da69e; /* Фон кнопок */
+    --button-hover-bg: #218838;; /* Фон кнопок при наведении */
+    --button-delete-bg: #ff6b6b; /* Фон кнопок удаления */
+    --button-delete-hover-bg: #ff8787; /* Фон кнопок удаления при наведении */
+    --transition-speed: 0.3s; /* Скорость переходов для анимаций */
+    --select-bg: rgba(255, 255, 255, 0.1); /* Фон для select элемента */
+    --select-hover-bg: rgba(255, 255, 255, 0.15); /* Фон при наведении на select */
+    --select-option-bg: rgba(255, 255, 255, 0.2); /* Фон для опций внутри select */
+}
+
+/* Стили для тела страницы и HTML-контейнера */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif; /* Основной шрифт */
+    background-color: var(--primary-bg); /* Установка основного фона */
+    color: var(--text-color); /* Установка цвета текста */
+    text-align: center; /* Выравнивание текста по центру */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.95)),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23222' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 60L60 0H30L0 30M60 60V30L30 60'/%3E%3C/g%3E%3C/svg%3E");
+    background-attachment: fixed;
+    min-height: 100vh;
+    scroll-behavior: smooth;
+}
+
+/* Анимация пульсации для основного контента */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 20px rgba(255, 107, 107, 0.3),
+                    0 0 30px rgba(78, 205, 196, 0.3),
+                    0 0 40px rgba(255, 107, 107, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(255, 107, 107, 0.5),
+                    0 0 40px rgba(78, 205, 196, 0.5),
+                    0 0 50px rgba(255, 107, 107, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 20px rgba(255, 107, 107, 0.3),
+                    0 0 30px rgba(78, 205, 196, 0.3),
+                    0 0 40px rgba(255, 107, 107, 0.3);
+    }
+}
+
+/* Стили для основного контейнера страницы */
+main {
+    width: 95%;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 20px;
+    background: var(--accent-color);
+    border-radius: 15px;
+    box-shadow: 
+        0 8px 32px var(--shadow-color),
+        0 0 15px rgba(255, 255, 255, 0.1),
+        0 0 30px rgba(255, 255, 255, 0.05),
+        0 0 45px rgba(255, 255, 255, 0.025);
+    backdrop-filter: blur(10px);
+    transition: transform var(--transition-speed) ease;
+    animation: pulse 6s ease-in-out infinite;
+    overflow-x: auto;
+}
+
+/* Стили для заголовка страницы */
+h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--text-color);
+    transition: width var(--transition-speed) ease;
+}
+
+h1:hover::after {
+    width: 120px;
+}
+
+/* Стили для таблицы */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 2rem;
+    background: var(--accent-color);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform var(--transition-speed) ease;
+}
+
+thead th {
+    background-color: rgba(255, 255, 255, 0.1);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+tbody td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+tr:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+}
+
+/* Стили для кнопок */
+button {
+    padding: 10px 20px;
+    background-color: var(--button-bg);
+    color: var(--text-color);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+    font-size: 1em;
+    margin: 5px;
+}
+
+button:hover {
+    background-color: var(--button-hover-bg);
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+.delete-item-btn {
+    background-color: var(--button-delete-bg);
+}
+
+.delete-item-btn:hover {
+    background-color: var(--button-delete-hover-bg);
+}
+
+button[type="submit"],
+button[type="button"] {
+    margin-right: 10px;
+}
+
+/* Стили для формы добавления товара */
+.add-item-form {
+    display: none;
+    margin-top: 1rem;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    transition: max-height var(--transition-speed) ease, opacity var(--transition-speed) ease;
+}
+
+.add-item-form.active {
+    display: block;
+    animation: fadeIn 0.5s forwards;
+}
+
+/* Стили для общей формы */
+.form-group{
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background: transparent;
+    color: var(--text-color);
+    transition: border-color var(--transition-speed) ease, background-color var(--transition-speed) ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.quantity-input:focus {
+    outline: none;
+    border-color: var(--button-bg);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Стили для таблицы инвентаря */
+.inventory-items-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 1rem;
+    background: var(--accent-color);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.inventory-items-table th,
+.inventory-items-table td {
+    padding: 0.8rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.inventory-items-table th {
+    background-color: rgba(255, 255, 255, 0.1);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.inventory-items-table tr:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Стили для инпутов количества */
+.quantity-input {
+    width: 80px;
+    padding: 5px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+    text-align: center;
+    transition: border-color var(--transition-speed) ease, background-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+    font-size: 1em;
+}
+
+.quantity-input:hover,
+.quantity-input:focus {
+    border-color: var(--button-bg);
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 5px var(--button-bg);
+}
+
+/* Анимация плавного появления */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Адаптивные стили для экранов размером до 1024px */
+@media (max-width: 1024px) {
+    main {
+        padding: 18px;
+    }
+}
+
+/* Адаптивные стили для экранов размером до 768px */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2em;
+    }
+    
+    th, td {
+        padding: 0.8rem;
+    }
+
+    button {
+        padding: 8px 16px;
+        font-size: 0.9em;
+    }
+}
+
+/* Адаптивные стили для экранов размером до 600px */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.8em;
+    }
+    
+    th, td {
+        padding: 0.6rem;
+        font-size: 0.9em;
+    }
+    
+    main {
+        padding: 15px;
+        margin: 1rem auto;
+    }
+    
+    table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .form-group {
+        margin-bottom: 0.8rem;
+    }
+}
+
+/* Адаптивные стили для экранов размером до 480px */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5em;
+    }
+    
+    th, td {
+        padding: 0.5rem;
+        font-size: 0.8em;
+    }
+    
+    button {
+        padding: 6px 12px;
+        font-size: 0.8em;
+    }
+
+    .quantity-input {
+        width: 60px;
+        padding: 4px 8px;
+        font-size: 0.8em;
+    }
+}
+
+/* Адаптивные стили для экранов размером до 360px */
+@media (max-width: 360px) {
+    h1 {
+        font-size: 1.3em;
+    }
+    
+    th, td {
+        padding: 0.4rem;
+        font-size: 0.75em;
+    }
+    
+    button {
+        padding: 5px 10px;
+        font-size: 0.75em;
+    }
+
+    .quantity-input {
+        width: 50px;
+        padding: 3px 6px;
+        font-size: 0.75em;
+    }
+}
+
+/* Адаптивные стили для select на маленьких экранах */
+@media (max-width: 480px) {
+    .form-group select {
+        font-size: 0.8em;
+        padding: 6px 8px;
+    }
+}
+
+@media (max-width: 360px) {
+    .form-group select {
+        font-size: 0.75em;
+        padding: 5px 6px;
+    }
+}
+
+
+.form-group select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background: transparent;
+    color: var(--text-color);
+    transition: border-color var(--transition-speed) ease, background-color var(--transition-speed) ease;
+    appearance: none; /* Убирает стандартный вид select в разных браузерах */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1em;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: calc(100% - 12px) center;
+    padding-right: 35px;
+}
+
+/* Стили для options внутри select */
+.form-group select option {
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    padding: 8px;
+}
+
+/* Стили при наведении и фокусе */
+.form-group select:hover,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--button-bg);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Стили для options внутри select */
+.form-group select option {
+    background-color: gray; /* Серый фон для опций */
+    color: var(--text-color);
+    padding: 8px;
+}
+
+
+
+/*  для замены кнопок */

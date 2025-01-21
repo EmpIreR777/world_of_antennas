@@ -9,6 +9,7 @@ from app.bot.handlers.user_router import router as user_router
 from app.bot.handlers.admin_router import router as admin_router
 from app.pages.user_router import router as user_router_pages
 from app.pages.admin_router import router as admin_router_pages
+from app.pages.master_inventory_router import router as workers_router_pages
 
 
 from app.config import settings
@@ -52,3 +53,4 @@ async def webhook(request: Request) -> None:
 
 app.include_router(user_router_pages)
 app.include_router(admin_router_pages)
+app.include_router(workers_router_pages)

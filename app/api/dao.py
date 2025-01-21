@@ -8,7 +8,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.dao.base import BaseDAO
-from app.api.models import InventoryItem, User, Service, Application, Shop
+from app.api.models import User, Service, Application, Shop
 from app.database import async_session_maker
 
 
@@ -16,7 +16,7 @@ class UserDAO(BaseDAO):
     model = User
 
     @classmethod
-    async def get_all_applications(cls):
+    async def get_all_items_worker_list(cls):
         """
         Возвращает всех пользователей, кроме роли User, и их предметы, 
         которые они записали на себя.
@@ -29,10 +29,12 @@ class UserDAO(BaseDAO):
                     .where(cls.model.role != cls.model.RoleEnum.USER)
                 )
                 result = await session.execute(query)
-                users = result.scalars().all()
+                users = result.unique().scalars().all()  # добавлен unique()
+                
+                if not users:
+                    return []
                 return [
                     {
-                        'telegram_id': user.telegram_id,
                         'first_name': user.first_name,
                         'username': user.username,
                         'role': user.role.value,
@@ -43,14 +45,14 @@ class UserDAO(BaseDAO):
                                 'unit_type': item.unit_type.value,
                                 'comment': item.comment,
                             }
-                            for item in user.inventory_items]
+                            for item in user.inventory_items
+                        ]
                     }
                     for user in users
                 ]
             except SQLAlchemyError as e:
-                logging.error(f'Ошибка при загрузке всех приложений: {e}')
-                return None
-
+                logging.error(f'Ошибка при загрузке всех работников: {e}')
+                raise  # выбрасываем ошибку вместо возврата None
 
     @classmethod
     async def get_statistics(cls, session: AsyncSession):

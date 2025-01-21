@@ -509,7 +509,6 @@ h1 {
     animation: selectOpen 0.3s ease forwards;
 }
 
-
 /* Оптимизация для экранов меньше 768 пикселей */
 @media (max-width: 768px) {
     main {

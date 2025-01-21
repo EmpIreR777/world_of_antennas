@@ -9,9 +9,9 @@ from app.database import Base
 
 class User(Base):
     class RoleEnum(enum.Enum):
-        SUPERUSER = 'Супер Пользователь'
+        SUPERUSER = 'Администратор'
         MASTER = 'Мастер'
-        OPERATOR = 'Оператор'
+        OPERATOR = 'Продавец'
         USER = 'Пользователь'
 
     telegram_id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
