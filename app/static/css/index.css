@@ -14,7 +14,7 @@ html {
     background-color: #000;
     color: #fff;
     text-align: center;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)),
         url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23222' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 60L60 0H30L0 30M60 60V30L30 60'/%3E%3C/g%3E%3C/svg%3E");
     background-attachment: fixed;
 }
@@ -128,7 +128,7 @@ header::after {
     top: 50%;
     transform: translateY(-50%);
     /* Центрирование по вертикали */
-    color: #28a745;
+    color: #506655;
     font-size: 1.125rem;
     line-height: 1;
 }
@@ -159,7 +159,7 @@ header::after {
     object-fit: cover;
     opacity: 0.4;
     z-index: 1;
-    filter: grayscale(100%) contrast(120%);
+    filter: grayscale(50%) contrast(120%); /* регулировка была 100 */
 }
 
 /* 
@@ -169,12 +169,15 @@ header::after {
 h1 {
     margin: 1.875rem 0;
     font-family: 'Cormorant Garamond', serif;
-    font-size: 3em;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1875em;
     text-shadow: 0.125rem 0.125rem 0.25rem rgba(0, 0, 0, 0.5);
+    
+    /* Адаптивный размер шрифта: минимальный, предпочтительный, максимальный */
+    font-size: clamp(2em, 5vw, 3.5em);
 }
+
 
 /* 
   Стили для основной области контента.
@@ -332,10 +335,7 @@ p {
 */
 @media (max-width: 768px) {
 
-    /* Корректировка размера заголовка */
-    h1 {
-        font-size: 6.2em;
-    }
+
 
     /* Корректировка размера иконки ножниц */
     .scissors {

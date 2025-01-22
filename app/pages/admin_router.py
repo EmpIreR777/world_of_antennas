@@ -4,7 +4,7 @@ from fastapi.requests import Request
 from fastapi.responses import HTMLResponse
 
 from app.config import settings
-from app.api.dao import ShopDAO, ServiceDAO, ApplicationDAO, UserDAO
+from app.api.dao import ApplicationDAO
 
 
 router = APIRouter(prefix='', tags=['frontend admin'])

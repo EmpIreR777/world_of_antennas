@@ -12,14 +12,14 @@ class BaseDAO:
     model = None
 
     @classmethod
-    async def find_one_or_none_by_id(cls, data_id: int):
+    async def find_one_or_none_by_id(cls, **kwargs):
         """
         Асинхронно находит и возвращает один экземпляр модели по указанным критериям или None.
         Аргументы: data_id: Критерии фильтрации в виде идентификатора записи.
         Возвращает: Экземпляр модели или None, если ничего не найдено.
         """
         async with async_session_maker() as session:
-            query = select(cls.model).filter_by(id=data_id)
+            query = select(cls.model).filter_by(**kwargs)
             result = await session.execute(query)
             return result.scalar_one_or_none()
 
@@ -55,15 +55,20 @@ class BaseDAO:
         Возвращает: Созданный экземпляр модели.
         """
         async with async_session_maker() as session:
-            async with session.begin():
-                new_instance = cls.model(**values)
-                session.add(new_instance)
-                try:
-                    await session.commit()
-                except SQLAlchemyError as e:
-                    await session.rollback()
-                    raise e
-                return new_instance
+            new_instance = cls.model(**values)
+            session.add(new_instance)
+            await session.commit()
+            return new_instance
+            # async with session.begin():
+            #     new_instance = cls.model(**values)
+            #     session.add(new_instance)
+            #     try:
+            #         await session.commit()
+            #     except SQLAlchemyError as e:
+            #         await session.rollback()
+            #         raise e
+            #     return new_instance
+
 
     @classmethod
     async def add_many(cls, instances: list[dict]):

@@ -33,7 +33,7 @@
             <select id="shop_id" name="shop_id" required>
                 <option value="" disabled selected>Выберите магазин</option>
                 {% for shop in shops %}
-                <option value="{{ shop.shop_id }}_{{ shop.shop_name }}">{{ shop.address_name }}</option>
+                <option value="{{ shop.shop_id }}">{{ shop.address_name }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -43,7 +43,7 @@
             <select id="service_id" name="service_id" required>
                 <option value="" disabled selected>Выберите услугу</option>
                 {% for service in services %}
-                <option value="{{ service.service_id }}_{{ service.service_name }}">{{ service.service_name }}</option>
+                <option value="{{ service.service_id }}">{{ service.service_name }}</option>
                 {% endfor %}
             </select>
         </div>

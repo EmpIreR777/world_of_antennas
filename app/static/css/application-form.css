@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@300;400;600&display=swap');
 
+/* Общие стили для body и html */
 body, html {
     margin: 0;
     padding: 0;
@@ -7,8 +8,9 @@ body, html {
     background-color: #0a0a0a;
     color: #fff;
     text-align: center;
-    background-image: linear-gradient(rgba(0, 0, 0, 9), rgba(0, 0, 0, 9)),
-    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23222' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 60L60 0H30L0 30M60 60V30L30 60'/%3E%3C/g%3E%3C/svg%3E");
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 1)),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23222' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 60L60 0H30L0 30M60 60V30L30 60'/%3E%3C/g%3E%3C/svg%3E");
     background-attachment: fixed;
     min-height: 100vh;
     display: flex;
@@ -16,6 +18,7 @@ body, html {
     align-items: center;
 }
 
+/* Основной контейнер */
 main {
     width: 90%;
     max-width: 500px;
@@ -23,8 +26,11 @@ main {
     animation: fadeIn 0.8s ease-out;
 }
 
+/* Анимации */
+
+/* Свечение для формы и всплывающих окон */
 @keyframes glowing {
-    0% {
+    0%, 100% {
         box-shadow: 0 0 20px rgba(255, 107, 107, 0.3),
                     0 0 30px rgba(78, 205, 196, 0.3),
                     0 0 40px rgba(255, 107, 107, 0.3);
@@ -34,33 +40,24 @@ main {
                     0 0 40px rgba(78, 205, 196, 0.5),
                     0 0 50px rgba(255, 107, 107, 0.5);
     }
-    100% {
-        box-shadow: 0 0 20px rgba(255, 107, 107, 0.3),
-                    0 0 30px rgba(78, 205, 196, 0.3),
-                    0 0 40px rgba(255, 107, 107, 0.3);
-    }
 }
 
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Анимация градиента */
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
+/* Пульсация кнопки */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
         opacity: 1;
-        transform: translateY(0);
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.5;
     }
 }
 
@@ -69,26 +66,27 @@ form {
     background: rgba(255, 255, 255, 0.05);
     padding: 2.5rem;
     border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.307);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     transition: all 0.4s ease;
     animation: glowing 3s infinite;
     position: relative;
 }
 
-/* Добавляем дополнительный эффект при наведении */
+/* Добавляем дополнительный эффект при наведении  на форму*/
 form:hover {
     transform: translateY(-5px) scale(1.02);
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 0 40px rgba(78, 205, 196, 0.2);
 }
 
+/* Группы элементов формы */
 .form-group {
     margin-bottom: 1.5rem;
     text-align: left;
     opacity: 0;
-    animation: fadeInUp 0.5s forwards;
 }
 
+/* Метки формы */
 label {
     display: block;
     margin-bottom: 0.5rem;
@@ -98,6 +96,7 @@ label {
     transition: color 0.3s ease;
 }
 
+/* Поля ввода, селекты и текстовые области */
 input, select, textarea {
     width: 100%;
     padding: 12px;
@@ -110,15 +109,18 @@ input, select, textarea {
     box-sizing: border-box;
 }
 
+/* Текстовые области */
 textarea {
     resize: vertical;
     min-height: 100px;
 }
 
+/* Плейсхолдеры */
 input::placeholder, select::placeholder, textarea::placeholder {
     color: rgba(255, 255, 255, 0.5);
 }
 
+/* Фокус на полях ввода */
 input:focus, select:focus, textarea:focus {
     outline: none;
     border-color: rgba(255, 255, 255, 0.5);
@@ -126,16 +128,21 @@ input:focus, select:focus, textarea:focus {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
+/* Наведение на полях ввода */
 input:hover, select:hover, textarea:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-input[type="date"], input[type="time"] {
+/* Убираем стандартное оформление для дат и времени */
+input[type="date"],
+input[type="time"] {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+    color-scheme: dark;
 }
 
+/* Индикаторы календаря и времени */
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
@@ -176,6 +183,158 @@ select option {
 .form-group:nth-child(2) { animation-delay: 0.2s; }
 .form-group:nth-child(3) { animation-delay: 0.3s; }
 .form-group:nth-child(4) { animation-delay: 0.4s; }
+
+/* Стили для кастомного селекта */
+.custom-select {
+    position: relative;
+    width: 100%;
+}
+
+.select-selected {
+    background-color: rgba(255, 255, 255, 0.07);
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.select-selected:after {
+    content: '';
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    width: 8px;
+    height: 8px;
+    border: 2px solid #fff;
+    border-top: 0;
+    border-left: 0;
+    transition: transform 0.3s ease;
+}
+
+.select-selected.select-arrow-active:after {
+    transform: translateY(-50%) rotate(-135deg);
+}
+
+.select-items {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    margin-top: 5px;
+    background: rgba(26, 26, 26, 0.95);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-height: 300px;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.select-items.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    animation: selectOpen 0.3s ease forwards;
+}
+
+.select-items div {
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.select-items div:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Стилизация скроллбара */
+.select-items::-webkit-scrollbar {
+    width: 8px;
+}
+
+.select-items::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.select-items::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.select-items::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Анимация появления элементов списка */
+.select-items div {
+    padding: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: itemFadeIn 0.3s forwards;
+}
+.select-items div:nth-child(1) { animation-delay: 0.05s; }
+.select-items div:nth-child(2) { animation-delay: 0.1s; }
+.select-items div:nth-child(3) { animation-delay: 0.15s; }
+/* и так далее для остальных элементов */
+
+/* Стили при фокусе */
+.select-selected:focus,
+.select-selected:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 15px rgba(78, 205, 196, 0.3);
+}
+
+/* Стили для активного элемента */
+.same-as-selected {
+    background-color: rgba(78, 205, 196, 0.2);
+}
+
+/* Анимация появления элементов списка */
+@keyframes itemFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Анимация при открытии/закрытии */
+@keyframes selectOpen {
+    from {
+        transform: scaleY(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+}
 
 /* Добавьте эти классы к основным стилям для дополнительных эффектов */
 
@@ -262,26 +421,6 @@ select option {
     }
 }
 
-.btn:hover {
-    animation: pulse 1.5s infinite;
-}
-
-
-@keyframes gradient {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-
 @keyframes pulse {
     0% {
         transform: scale(1);
@@ -314,6 +453,7 @@ h1 {
                  0 0 20px rgba(255, 255, 255, 0.2);
 }
 
+/* Анимация всплывающего окна */
 @keyframes scaleIn {
     from {
         transform: scale(0.9);
@@ -362,151 +502,6 @@ h1 {
         font-size: 1.5em;
         margin-bottom: 1.5rem;
     }
-}
-/* Стили для кастомного селекта */
-.custom-select {
-    position: relative;
-    width: 100%;
-}
-
-.select-selected {
-    background-color: rgba(255, 255, 255, 0.07);
-    padding: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.select-selected:after {
-    content: '';
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 8px;
-    height: 8px;
-    border: 2px solid #fff;
-    border-top: 0;
-    border-left: 0;
-    transform: translateY(-50%) rotate(45deg);
-    transition: transform 0.3s ease;
-}
-
-.select-selected.select-arrow-active:after {
-    transform: translateY(-50%) rotate(-135deg);
-}
-
-.select-items {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    z-index: 99;
-    margin-top: 5px;
-    background: rgba(26, 26, 26, 0.95);
-    border-radius: 8px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    max-height: 300px;
-    overflow-y: auto;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-}
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-.select-items.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.select-items div {
-    padding: 12px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.select-items div:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Стилизация скроллбара */
-.select-items::-webkit-scrollbar {
-    width: 8px;
-}
-
-.select-items::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 4px;
-}
-
-.select-items::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-}
-
-.select-items::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
-}
-
-/* Анимация появления элементов списка */
-.select-items div {
-    opacity: 0;
-    transform: translateY(10px);
-    animation: itemFadeIn 0.3s ease forwards;
-}
-
-@keyframes itemFadeIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.select-items div:nth-child(1) { animation-delay: 0.05s; }
-.select-items div:nth-child(2) { animation-delay: 0.1s; }
-.select-items div:nth-child(3) { animation-delay: 0.15s; }
-/* и так далее для остальных элементов */
-
-/* Стили при фокусе */
-.select-selected:focus,
-.select-selected:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 15px rgba(78, 205, 196, 0.3);
-}
-
-/* Стили для активного элемента */
-.same-as-selected {
-    background-color: rgba(78, 205, 196, 0.2);
-}
-
-/* Анимация при открытии/закрытии */
-@keyframes selectOpen {
-    from {
-        transform: scaleY(0.9);
-        opacity: 0;
-    }
-    to {
-        transform: scaleY(1);
-        opacity: 1;
-    }
-}
-
-.select-items.show {
-    animation: selectOpen 0.3s ease forwards;
 }
 
 /* Оптимизация для экранов меньше 768 пикселей */
@@ -585,6 +580,7 @@ input[type="time"] {
 
 
 
+/* Попап окно */
 .popup {
     display: none;
     position: fixed;
@@ -606,11 +602,11 @@ input[type="time"] {
     border-radius: 15px;
     text-align: center;
     max-width: 90%;
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3), /* Усиленная внешняя подсветка */
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3),
                 0 0 50px rgba(255, 255, 255, 0.2),
                 0 0 70px rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    animation: scaleIn 0.3s ease-out;
+    animation: scaleIn 0.3s ease-out, glowing 2s infinite ease-in-out;
 }
 
 .popup h2 {
@@ -654,4 +650,116 @@ input[type="time"] {
 
 .popup-content {
     animation: glow 2s infinite ease-in-out;
+}
+
+/* Для экранов с шириной до 768px */
+@media (max-width: 768px) {
+    main {
+        width: 95%;
+        margin: 1rem auto;
+    }
+
+    form {
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+
+    .btn {
+        padding: 12px;
+        font-size: 1em;
+    }
+
+    table {
+        font-size: 0.9em;
+    }
+
+    th, td {
+        padding: 0.5rem 0.25rem;
+    }
+
+    th {
+        font-size: 0.8em;
+    }
+
+    td {
+        font-size: 0.9em;
+    }
+}
+
+/* Для экранов с высотой до 700px */
+@media (max-height: 700px) {
+    form {
+        padding: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    input, select, .btn {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+        margin-bottom: 1.5rem;
+    }
+
+    table, th, td {
+        font-size: 0.8em;
+        padding: 0.4rem 0.2rem;
+    }
+
+    table {
+        width: 100%;
+        min-width: unset;
+    }
+}
+
+/* Для экранов с шириной до 500px */
+@media (max-width: 500px) {
+    body, html {
+        font-size: 90%;
+    }
+
+    h1 {
+        font-size: 1.2em;
+    }
+
+    main {
+        padding: 0.5rem;
+    }
+
+    table, th, td {
+        font-size: 0.8em;
+    }
+
+    th, td {
+        padding: 0.4rem 0.2rem;
+    }
+}
+
+/* Оптимизация селектов */
+.select-items div {
+    animation: itemFadeIn 0.3s forwards;
+}
+
+.select-items div:nth-child(n) { /* Убедитесь, что здесь нет ограничений на количество детей */
+    animation-delay: calc(0.05s * var(--i));
+}
+
+/* Общие улучшения */
+
+@keyframes selectOpen {
+    from {
+        transform: scaleY(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scaleY(1);
+        opacity: 1;
+    }
 }

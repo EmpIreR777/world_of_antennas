@@ -12,7 +12,16 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+// document.addEventListener('DOMContentLoaded', function () {
+//     const user = Telegram.WebApp.initDataUnsafe.user;
 
+//     const bookButton = document.getElementById('contact-button');
+
+//     bookButton.addEventListener('click', function () {
+//         // Если пользователь существует, добавляем его user_id и first_name в URL, иначе редирект без него
+//         window.location.href = '/form?user_id=124124125&first_name=irst_name';
+//     });
+// });
 // document.addEventListener('DOMContentLoaded', function () {
 //     const user = Telegram.WebApp.initDataUnsafe.user;
 //     const contactButton = document.getElementById('contact-button');

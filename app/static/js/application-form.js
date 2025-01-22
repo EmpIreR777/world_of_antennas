@@ -17,8 +17,8 @@ document.getElementById('closePopup').addEventListener('click', async function (
     const clientName = document.getElementById('client_name').value.trim();
     const phoneNumber = document.getElementById('phone_number').value.trim();
     const address = document.getElementById('address').value.trim();
-    const shop = document.getElementById('shop_id').value;
-    const service = document.getElementById('service_id').value;
+    const shop_id = document.getElementById('shop_id').value;
+    const service_id = document.getElementById('service_id').value;
     const date = document.getElementById('appointment_date').value;
     const time = document.getElementById('appointment_time').value;
     const comment = document.getElementById('comment').value.trim();
@@ -40,7 +40,7 @@ document.getElementById('closePopup').addEventListener('click', async function (
         return;
     }
 
-    if (!shop || !service) {
+    if (!shop_id || !service_id) {
         alert("Выберите магазин и услугу.");
         return;
     }
@@ -50,14 +50,14 @@ document.getElementById('closePopup').addEventListener('click', async function (
         client_name: clientName,
         phone_number: phoneNumber,
         address: address,
-        shop: shop,
-        service: service,
+        shop_id: shop_id,
+        service_id: service_id,
         appointment_date: date,
         appointment_time: time,
         comment: comment,
         user_id: parseInt(userId)
     };
-
+    console.log(appointmentData)
     // Преобразуем объект в JSON строку
     const jsonData = JSON.stringify(appointmentData);
 

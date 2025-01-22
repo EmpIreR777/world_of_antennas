@@ -34,7 +34,7 @@ class UserDAO(BaseDAO):
                 if not users:
                     return []
                 return [
-                    {
+                    {   'id': user.telegram_id,
                         'first_name': user.first_name,
                         'username': user.username,
                         'role': user.role.value,

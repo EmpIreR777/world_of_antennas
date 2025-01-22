@@ -260,7 +260,8 @@ async def handle_send_message(message: Message, state: FSMContext):
     else:
         response = f'✅ Сообщение успешно отправлено всем {user_or_role}.'
     
-    await message.answer(response, reply_markup=admin_keyboard(user_id=message.from_user.id))
+    await message.answer(
+        response, reply_markup=admin_keyboard(user_id=message.from_user.id))
     await state.clear()
 
-# <-----------------------------------------end_send_media----------------------------------------->
+# <-----------------------------------end_send_media------------------------------------>

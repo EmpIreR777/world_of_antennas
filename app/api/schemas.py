@@ -6,11 +6,12 @@ from pydantic import BaseModel, Field
 
 
 class AppointmentData(BaseModel):
+    user_id: int = Field(..., description='id клиента')
     client_name: str = Field(..., min_length=1, max_length=50, description='Имя клиента')
     phone_number: Optional[str] = Field(None, max_length=20, description='Номер телефона')
     address: str = Field(..., min_length=5, max_length=255, description='Адрес')
-    shop: int = Field(..., description='ID магазина')
-    service: int = Field(..., description='ID услуги')
+    shop_id: int = Field(..., description='ID магазина')
+    service_id: int = Field(..., description='ID услуги')
     appointment_date: date = Field(..., description='Дата заявки')
     appointment_time: time = Field(..., description='Время заявки')
     comment: Optional[str] = Field(None, max_length=255, description='Комментарий к заявке')

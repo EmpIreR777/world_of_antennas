@@ -1,22 +1,22 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 import httpx
 from urllib.parse import unquote
 
-app = FastAPI()
+router = APIRouter()
 
 # Настройка CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# router.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 YANDEX_API_KEY = "8866969e-a8bc-408e-abd5-3991ce7a0b33"
 
-@app.get("/suggest-address/{query}")
+@router.get("/suggest-address/")
 async def suggest_address(query: str):
     decoded_query = unquote(query)
     print(f"Received query: {query}") 
