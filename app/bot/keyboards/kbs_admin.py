@@ -5,10 +5,13 @@ from app.config import settings
 
 
 def admin_keyboard(user_id: int) -> InlineKeyboardMarkup:
-    url_applications = f'{settings.BASE_SITE}/admin?ADMIN_IDS={user_id}'
-    url_worker_items = f'{settings.BASE_SITE}/worker_list?ADMIN_IDS={user_id}'
+    """
+    Клавиатура для администратора, отправка медиа всем пользователям и всем работникам.
+    """
+    url_applications_admin = f'{settings.BASE_SITE}/admin?worker_id={user_id}'
+    url_worker_items = f'{settings.BASE_SITE}/worker_list?worker_id={user_id}'
     kb = InlineKeyboardBuilder()
-    kb.button(text='📝 Смотреть заявки', web_app=WebAppInfo(url=url_applications))
+    kb.button(text='📝 Смотреть заявки', web_app=WebAppInfo(url=url_applications_admin))
     kb.button(text='💱 Смотреть задолженности', web_app=WebAppInfo(url=url_worker_items))
     if user_id in settings.ADMIN_IDS:
         kb.button(text='✉️ Отправить всем пользователям', callback_data='send_all')
@@ -20,6 +23,9 @@ def admin_keyboard(user_id: int) -> InlineKeyboardMarkup:
 
 
 def send_message_keyboard(target: str) -> InlineKeyboardMarkup:
+    """
+    Клавиатура для выбора отправки медиа.
+    """
     kb = InlineKeyboardBuilder()
     kb.button(text='📄 Текст', callback_data=f'send_text_{target}')
     kb.button(text='🎥 Видео', callback_data=f'send_video_{target}')

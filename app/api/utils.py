@@ -1,46 +1,70 @@
-from fastapi import FastAPI, HTTPException, APIRouter
-from fastapi.middleware.cors import CORSMiddleware
+import logging
+from fastapi import HTTPException, APIRouter
 import httpx
 from urllib.parse import unquote
 
+from app.config import settings
+
+
 router = APIRouter()
 
-# Настройка CORS
-# router.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+YANDEX_API_KEY = settings.get_key_yandex_geo()
 
-YANDEX_API_KEY = "8866969e-a8bc-408e-abd5-3991ce7a0b33"
 
-@router.get("/suggest-address/")
+@router.get('/suggest-address/')
 async def suggest_address(query: str):
     decoded_query = unquote(query)
-    print(f"Received query: {query}") 
-    url = "https://geocode-maps.yandex.ru/1.x/"
+
+    # Добавляем "Алтайский край" к запросу
+    if "алтайский край" not in decoded_query.lower():
+        search_query = f"{decoded_query}, Алтайский край"
+    else:
+        search_query = decoded_query
+
+    url = 'https://geocode-maps.yandex.ru/1.x/'
     params = {
-        "apikey": YANDEX_API_KEY,
-        "format": "json",
-        "geocode": query
+        'apikey': YANDEX_API_KEY,
+        'format': 'json',
+        'geocode': search_query,
+        'kind': 'house',
+        'results': 20,  # Увеличиваем количество результатов
+        'bbox': '77.88,50.93~87.36,54.59'  # Ограничивающий прямоугольник для Алтайского края
     }
-    
+
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(url, params=params)
             response.raise_for_status()
             data = response.json()
-        
+
         suggestions = []
         features = data['response']['GeoObjectCollection']['featureMember']
-        
+
         for feature in features:
-            address = feature['GeoObject']['metaDataProperty']['GeocoderMetaData']['text']
-            suggestions.append({"address": address})
-            
-        return suggestions[:5]
-        
+            geo_object = feature['GeoObject']
+            address_details = geo_object['metaDataProperty']['GeocoderMetaData']
+
+            # Проверяем, находится ли адрес в Алтайском крае
+            address_components = address_details['Address'].get('Components', [])
+            is_altai_krai = any(
+                component['name'].lower() == "алтайский край"
+                for component in address_components
+            )
+
+            if is_altai_krai:
+                address = address_details['text']
+                pos = geo_object['Point']['pos']
+                longitude, latitude = map(float, pos.split())
+                suggestions.append({
+                    "address": address,
+                    "latitude": latitude,
+                    "longitude": longitude
+                })
+                if len(suggestions) >= 5:  # Ограничиваем до 5 результатов
+                    break
+
+        return suggestions
+
     except Exception as e:
+        logging.error(f'Error: {e}')
         raise HTTPException(status_code=500, detail=str(e))

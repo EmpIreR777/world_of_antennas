@@ -106,7 +106,7 @@ async function submitNewItem(event, workerId) {
     };
 
     try {
-        const response = await fetch('/api/create_worker_items', {
+        const response = await fetch('/worker/create_worker_items', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -134,7 +134,7 @@ async function updateQuantity(input) {
     const newQuantity = input.value;
 
     try {
-        const response = await fetch('/api/update_quantity', {
+        const response = await fetch('/worker/update_worker_quantity', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -164,7 +164,7 @@ async function deleteItem(workerId, itemId) {
     }
 
     try {
-        const response = await fetch('/api/delete_item', {
+        const response = await fetch('/worker/delete_worker_item', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

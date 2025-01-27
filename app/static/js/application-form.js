@@ -13,6 +13,56 @@ document.getElementById('applicationForm').addEventListener('submit', function (
     document.getElementById('popup').style.display = 'flex';
 });
 
+
+// Добавьте этот код для поля адреса
+document.getElementById('address').addEventListener('input', async function(e) {
+    const query = e.target.value;
+    // Если введено менее 3 символов, не делаем запрос
+    if (query.length < 3) return;
+    try {
+        const response = await fetch(`/suggest-address/?query=${encodeURIComponent(query)}`);
+        const suggestions = await response.json();
+        // Создаем и показываем выпадающий список с подсказками
+        let datalist = document.getElementById('address-suggestions');
+        if (!datalist) {
+            const newDatalist = document.createElement('datalist');
+            newDatalist.id = 'address-suggestions';
+            document.body.appendChild(newDatalist);
+            datalist = newDatalist;
+        }
+        // Очищаем старые подсказки
+        datalist.innerHTML = '';
+        // Добавляем новые подсказки
+        suggestions.forEach(suggestion => {const option = document.createElement('option');
+            option.value = suggestion.address;
+            option.dataset.latitude = suggestion.latitude;
+            option.dataset.longitude = suggestion.longitude;
+            datalist.appendChild(option);
+        });
+        // Связываем datalist с input
+        e.target.setAttribute('list', 'address-suggestions');
+        
+    } catch (error) {
+        console.error('Error fetching address suggestions:', error);
+    }
+});
+
+
+// Добавьте обработчик выбора адреса
+document.getElementById('address').addEventListener('change', function(e) {
+    const datalist = document.getElementById('address-suggestions');
+    const selectedOption = Array.from(datalist.options).find(
+        option => option.value === e.target.value
+    );
+    
+    if (selectedOption) {
+        document.getElementById('latitude').value = selectedOption.dataset.latitude;
+        document.getElementById('longitude').value = selectedOption.dataset.longitude;
+    }
+});
+
+
+// Обработчик отправки формы
 document.getElementById('closePopup').addEventListener('click', async function () {
     const clientName = document.getElementById('client_name').value.trim();
     const phoneNumber = document.getElementById('phone_number').value.trim();
@@ -30,7 +80,7 @@ document.getElementById('closePopup').addEventListener('click', async function (
         return;
     }
 
-    if (phoneNumber && !phoneNumber.match(/^[0-9+]{10,15}$/)) {
+    if (phoneNumber && !phoneNumber.match(/^(?:7|8)d{10}$|^+7d{10}$/)) {
         alert("Введите корректный номер телефона.");
         return;
     }
@@ -45,6 +95,16 @@ document.getElementById('closePopup').addEventListener('click', async function (
         return;
     }
 
+    // Проверка наличия координат
+    const latitude = parseFloat(document.getElementById('latitude').value);
+    const longitude = parseFloat(document.getElementById('longitude').value);
+
+    // Проверка широты и долготы
+    if (isNaN(latitude) || isNaN(longitude)) {
+        alert("Пожалуйста, выберите адрес из списка подсказок.");
+        return;
+    }
+
     // Создаем объект с данными
     const appointmentData = {
         client_name: clientName,
@@ -55,23 +115,22 @@ document.getElementById('closePopup').addEventListener('click', async function (
         appointment_date: date,
         appointment_time: time,
         comment: comment,
-        user_id: parseInt(userId)
+        user_id: parseInt(userId),
+        latitude: latitude,
+        longitude: longitude,
     };
-    console.log(appointmentData)
-    // Преобразуем объект в JSON строку
-    const jsonData = JSON.stringify(appointmentData);
 
-    // Отправляем POST запрос
+    // Преобразуем объект в JSON строку и отправляем POST запрос
     try {
         const response = await fetch('/api/appointment', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: jsonData
+            body: JSON.stringify(appointmentData)
         });
         const result = await response.json();
-        console.log('Response from /form:', result);
+        console.log('Response from /api/appointment:', result);
 
         // Закрываем Telegram WebApp через 100 мс
         setTimeout(() => {

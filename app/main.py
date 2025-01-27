@@ -2,8 +2,12 @@ import logging
 from aiogram.types import Update
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
+from sqladmin import Admin # Админка
 from contextlib import asynccontextmanager
 
+from app.api.admin_panel import ApplicationAdmin, InventoryItemAdmin, ServiceAdmin, ShopAdmin, UserAdmin
+from app.database import engine
 from app.bot.create_bot import bot, dp, stop_bot, start_bot
 from app.bot.handlers.user_router import router as user_router
 from app.bot.handlers.admin_router import router as admin_router
@@ -44,6 +48,28 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 app.mount('/static', StaticFiles(directory='app/static'), name='static')
+
+
+admin = Admin(app=app, engine=engine)
+
+admin.add_view(UserAdmin)
+admin.add_view(ShopAdmin)
+admin.add_view(ServiceAdmin)
+admin.add_view(ApplicationAdmin)
+admin.add_view(InventoryItemAdmin)
+admin.title = 'Панель Администратора'
+
+
+
+
+# Настройка CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.post('/webhook')

@@ -2,6 +2,7 @@ import asyncio
 from datetime import datetime
 import logging
 import random
+from aiogram import Bot
 from aiogram.types import Message
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.utils.chat_action import ChatActionSender
@@ -202,8 +203,8 @@ async def send_message_with_delay(
     message: Message,
     delay: int = 2,
     action: str = 'typing',
-    # latitude: float = None,
-    # longitude: float = None,
+    latitude: float = None,
+    longitude: float = None,
     ):
     """Общая функция для отправки ответа с задержкой"""
 
@@ -211,10 +212,32 @@ async def send_message_with_delay(
         bot=message.bot, chat_id=message.chat.id, action=action
         ):
         await asyncio.sleep(delay)
+    # Отправка карты пользователя
+    if latitude and longitude:
+        await message.bot.send_location(
+            message.chat.id,
+            latitude=latitude,
+            longitude=longitude
+        )
 
-    # if latitude and longitude:
-    #     await message.bot.send_location(
-    #         message.chat.id,
-    #         latitude=latitude,
-    #         longitude=longitude
-    #     )
+
+async def send_message_add_user_workers(
+       bot: Bot,
+       chat_id: int,
+       text: str,
+       delay: int = 2,
+       action: str = 'typing',
+       latitude: float = None,
+       longitude: float = None,
+   ):
+       """Общая функция для отправки ответа с задержкой."""
+       # Эмуляция действия (например, набор текста)
+       await bot.send_chat_action(chat_id=chat_id, action=action)
+       await asyncio.sleep(delay)
+
+       # Отправка текста сообщения
+       await bot.send_message(chat_id=chat_id, text=text, parse_mode='HTML')
+
+       # Отправка геолокации, если предоставлены широта и долгота
+       if latitude is not None and longitude is not None:
+           await bot.send_location(chat_id=chat_id, latitude=latitude, longitude=longitude)

@@ -1,8 +1,8 @@
 from typing import Optional
 from datetime import date, time
-
 from pydantic import BaseModel, Field
 
+from .models import Application
 
 
 class AppointmentData(BaseModel):
@@ -15,7 +15,8 @@ class AppointmentData(BaseModel):
     appointment_date: date = Field(..., description='Дата заявки')
     appointment_time: time = Field(..., description='Время заявки')
     comment: Optional[str] = Field(None, max_length=255, description='Комментарий к заявке')
-
+    latitude: float | None = Field(..., description='Широта')
+    longitude: float | None = Field(..., description='Долгота')
 
     class Config:
         from_attributes = True  # Для совместимости с SQLAlchemy
@@ -32,3 +33,13 @@ class AppointmentData(BaseModel):
                 'phone_number': '+7(999)123-45-67'
             }
         }
+
+
+class AppointmentUpdateStatusData(BaseModel):
+    application_id: int = Field(..., alias='application_id')
+    master_id: int = Field(..., alias='master_id')
+    status: Application.StatusEnum = Field(..., alias='status')
+
+    class Config:
+        allow_population_by_field_name = True
+        use_enum_values = True

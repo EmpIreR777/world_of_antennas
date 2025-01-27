@@ -54,20 +54,17 @@ class BaseDAO:
         Аргументы: **values: Именованные параметры для создания нового экземпляра модели.
         Возвращает: Созданный экземпляр модели.
         """
+        # Добавить одну запись
         async with async_session_maker() as session:
-            new_instance = cls.model(**values)
-            session.add(new_instance)
-            await session.commit()
-            return new_instance
-            # async with session.begin():
-            #     new_instance = cls.model(**values)
-            #     session.add(new_instance)
-            #     try:
-            #         await session.commit()
-            #     except SQLAlchemyError as e:
-            #         await session.rollback()
-            #         raise e
-            #     return new_instance
+            async with session.begin():
+                new_instance = cls.model(**values)
+                session.add(new_instance)
+                try:
+                    await session.commit()
+                except SQLAlchemyError as e:
+                    await session.rollback()
+                    raise e
+                return new_instance
 
 
     @classmethod
@@ -91,9 +88,11 @@ class BaseDAO:
     @classmethod
     async def update(cls, filter_by, **values):
         """
-        Добавляет несколько записей в базу данных.
-        param instances: Список словарей, каждый из которых содержит данные для создания нового экземпляра модели.
-        return: Список созданных экземпляров модели.
+        Обновляет записи в базе данных по заданным условиям.
+        Args: filter_by (dict): Словарь с условиями фильтрации {column_name: value}
+        **values: Значения для обновления в формате column_name=value
+        Returns: int: Количество обновленных записей
+        Raises: SQLAlchemyError: При ошибке обновления данных
         """
         async with async_session_maker() as session:
             async with session.begin():
@@ -101,10 +100,10 @@ class BaseDAO:
                     sqlalchemy_update(cls.model)
                     .where(*[getattr(cls.model, k) == v for k, v in filter_by.items()])
                     .values(**values)
-                    .execution_options(synchronize_session="fetch")
+                    .execution_options(synchronize_session='fetch')
                 )
-                result = await session.execute(query)
                 try:
+                    result = await session.execute(query)
                     await session.commit()
                 except SQLAlchemyError as e:
                     await session.rollback()

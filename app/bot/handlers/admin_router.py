@@ -28,8 +28,8 @@ async def admin_panel(event: Union[Message, CallbackQuery]):
     if isinstance(event, CallbackQuery):
         call = event
         await send_message_with_delay(message=call.message)
-        await call.message.delete() # Удаляем предыдущее сообщение, если нужно TODO
         await call.answer(text='Возвращаемся назад', show_alert=False)
+        await call.message.delete() # Удаляем предыдущее сообщение, если нужно TODO
         # Отправляем новое сообщение с информацией для админа
         await call.message.answer(
             text=get_hello_admins_text(user_full_name=call.from_user.full_name),

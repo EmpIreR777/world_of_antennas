@@ -14,6 +14,9 @@ templates = Jinja2Templates(directory='app/templates')
 
 @router.get('/', response_class=HTMLResponse)
 async def read_root(request: Request):
+    """
+    Обработчик маршрута / главная страница.
+    """
     return templates.TemplateResponse(
         'index.html', {'request': request, 'title': 'Мир Антенн'}
     )
@@ -21,6 +24,9 @@ async def read_root(request: Request):
 
 @router.get('/form', response_class=HTMLResponse)
 async def read_root(request: Request, user_id: int = None, first_name: str = None):
+    """
+    Обработчик маршрута /form для регистрации заявки.
+    """
     shops = await ShopDAO.find_all()
     services = await ServiceDAO.find_all()
     data_page = {'request': request,
@@ -34,9 +40,12 @@ async def read_root(request: Request, user_id: int = None, first_name: str = Non
 
 @router.get('/applications', response_class=HTMLResponse)
 async def read_root(request: Request, user_id: int = None):
+    print(user_id)
+    """
+    Обработчик маршрута /applications{user_id} для отображения заявок с пагинацией.
+    """
     data_page = {'request': request, 'access': False, 'title_h1': 'Мои заявки'}
     user_check = await UserDAO.find_one_or_none(telegram_id=user_id)
-    
     if user_id is None or user_check is None:
         data_page['message'] = 'Пользователь, по которому нужно отобразить заявки, не указан или не найден в базе данных'
         return templates.TemplateResponse('applications.html', data_page)

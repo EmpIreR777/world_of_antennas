@@ -56,7 +56,7 @@ class User(Base):
         return f'{self.first_name} ({self.username})' if self.first_name and self.username else self.first_name or self.username
 
     def __repr__(self) -> str:
-        return f'User(telegram_id={self.telegram_id}, username={self.username})'
+        return f'Username: {self.username}, telegram_id: {self.telegram_id}'
 
 
 class InventoryItem(Base):
@@ -79,10 +79,16 @@ class InventoryItem(Base):
 
     def __repr__(self) -> str:
         return (
-            f'InventoryItem(id={self.id}, '
-            f'Название товара="{self.item_name}", '
+            f'Задолженность: id={self.id}, '
+            f'Название товара={self.item_name}, '
             f'количество={self.quantity} {self.unit_type.value})'
         )
+
+    @validates('quantity')
+    def validate_quantity(self, key, quantity):
+        if quantity < 0:
+            raise ValueError('Количество не может быть отрицательным')
+        return quantity
 
 
 # Вспомогательная таблица для связи многие-ко-многим между Shop и Service
@@ -113,7 +119,7 @@ class Shop(Base):
     )
 
     def __repr__(self) -> str:
-        return f'Shop(Адрес магазина="{self.address_name}")'
+        return f'Магазин: {self.address_name}'
 
 
 class Service(Base):
@@ -131,7 +137,7 @@ class Service(Base):
     )
 
     def __repr__(self) -> str:
-        return f'Service(Название услуги="{self.service_name}")'
+        return f'Услуга: {self.service_name}'
 
 
 class Application(Base):
@@ -181,9 +187,9 @@ class Application(Base):
                 master = session.query(User).filter_by(telegram_id=master_id).first()
                 if not master:
                     raise ValueError('Назначенный мастер не найден')
-                if master.role != User.RoleEnum.MASTER:
-                    raise ValueError('Назначенный пользователь должен быть мастером')
+                if master.role == User.RoleEnum.USER:
+                    raise ValueError('Назначенный пользователь не имеет право')
         return master_id
 
     def __repr__(self) -> str:
-        return f'Application(Имя клиента="{self.client_name}", статус={self.status})'
+        return f'Заявка: Имя клиента={self.client_name}, статус={self.status})'

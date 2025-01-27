@@ -178,45 +178,88 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+document.addEventListener('DOMContentLoaded', () => {
+    const masterId = userIdElement ? userIdElement.value : null;
 
+    if (!masterId) {
+        console.error('Не удалось получить master_id текущего пользователя.');
+        return;
+    }
 
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.status-select').forEach(function(select) {
-        // Сохраняем начальное значение
-        select.setAttribute('data-previous-value', select.value);
+    const statusSelects = document.querySelectorAll('.status-select');
 
-        select.addEventListener('change', async function() {
-            const applicationId = this.dataset.applicationId;
-            const newStatus = this.value;
-            const previousValue = this.getAttribute('data-previous-value');
+    statusSelects.forEach(select => {
+        select.addEventListener('change', async (event) => {
+            const newStatus = event.target.value;
+            const row = event.target.closest('tr');
+            const applicationId = row.getAttribute('data-application-id');
+
+            const payload = {
+                application_id: parseInt(applicationId),
+                status: newStatus,
+                master_id: parseInt(masterId)
+            };
+
+            console.log("Отправляемый JSON:", JSON.stringify(payload));
 
             try {
                 const response = await fetch('/api/update-application-status', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json'
                     },
-                    body: JSON.stringify({
-                        application_id: parseInt(applicationId),
-                        status: newStatus
-                    })
+                    body: JSON.stringify(payload)
                 });
 
-                const data = await response.json();
-
-                if (data.success) {
-                    this.setAttribute('data-previous-value', newStatus);
-                    alert('Статус успешно обновлен');
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        alert('Статус обновлен успешно.');
+                    } else {
+                        alert('Ошибка при обновлении статуса: ' + result.message);
+                        // Опционально: восстановить предыдущее значение
+                    }
                 } else {
-                    this.value = previousValue;
-                    alert(data.message || 'Ошибка при обновлении статуса');
+                    const errorText = await response.text();
+                    alert('Ошибка сервера: ' + errorText);
                 }
             } catch (error) {
-                console.error('Ошибка:', error);
-                this.value = previousValue;
-                alert('Произошла ошибка при обновлении статуса');
+                console.error('Ошибка при отправке запроса:', error);
+                alert('Произошла ошибка при отправке запроса.');
             }
         });
     });
 });
+
+    // // Функция для отображения уведомлений (пример)
+    // function showNotification(message, type) {
+    //     // Реализация уведомлений зависит от вашей библиотеки или подхода
+    //     // Например, можно использовать alert или более сложные решения
+    //     alert(\${type.toUpperCase()}: ${message}');
+    // }
+
+    // /**
+    //  * Функция для отображения уведомлений пользователю.
+    //  * Можно заменить на любой другой метод отображения уведомлений.
+    //  * @param {string} message - Текст сообщения
+    //  * @param {string} type - Тип сообщения ('success' или 'error')
+    //  */
+    
+    // function showNotification(message, type) {
+    //     // Создать элемент уведомления
+    //     const notification = document.createElement('div');
+    //     notification.className = `notification ${type}`;
+    //     notification.innerText = message;
+
+    //     // Добавить уведомление в DOM (например, в начало <main>)
+    //     const main = document.querySelector('main');
+    //     if (main) {
+    //         main.prepend(notification);
+    //     }
+
+    //     // Автоматически удалить уведомление через 3 секунды
+    //     setTimeout(() => {
+    //         notification.remove();
+    //     }, 3000);
+    // }
+// });

@@ -50,7 +50,6 @@ async def about_us(event: Union[Message, CallbackQuery]):
     else:
         # Если это обычное сообщение
         message = event
-        # Можно удалить сообщение пользователя, если нужно
         # await message.delete() # Удаляем предыдущее сообщение если хотим TODO
     await send_message_with_delay(message=message)
     # Отправляем информацию "О нас"

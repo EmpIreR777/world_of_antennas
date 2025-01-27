@@ -11,8 +11,8 @@
 {% block content %}
 <main>
     <h1>{{ title_h1 }}</h1>
-
     {% if access %}
+    <input type="hidden" id="current-user-id" value="{{ current_user_id }}">
     <table id="appointments-table">
         <thead>
             <tr>
@@ -29,7 +29,7 @@
         </thead>
         <tbody>
         {% for application in applications %}
-            <tr data-application-id="{{ application.id }}">
+            <tr data-application-id="{{ application.application_id }}">
                 <td>
                     <div class="datetime">
                         <span class="date">{{ application.appointment_date }}</span>

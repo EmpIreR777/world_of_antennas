@@ -1,11 +1,10 @@
 from datetime import datetime, UTC, timedelta
 import logging
-from sqlalchemy.future import select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import joinedload
-from sqlalchemy import select, func, case
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import and_, select, func, case
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import update as sqlalchemy_update
 
 from app.dao.base import BaseDAO
 from app.api.models import User, Service, Application, Shop
@@ -29,7 +28,7 @@ class UserDAO(BaseDAO):
                     .where(cls.model.role != cls.model.RoleEnum.USER)
                 )
                 result = await session.execute(query)
-                users = result.unique().scalars().all()  # добавлен unique()
+                users = result.unique().scalars().all()
                 
                 if not users:
                     return []
@@ -82,6 +81,20 @@ class UserDAO(BaseDAO):
             logging.error(f'Ошибка при получении статистики: {e}')
             raise
 
+    @classmethod
+    async def find_one_or_none_by_roles(cls, telegram_id: int, excluded_roles=None):
+        """
+        Асинхронно находит пользователя по telegram_id, исключая определенные роли
+        """
+        async with async_session_maker() as session:
+            query = select(cls.model).where(
+                and_(
+                    cls.model.telegram_id == telegram_id,
+                    cls.model.role != User.RoleEnum.USER  # Исключаем роль USER
+                )
+            )
+            result = await session.execute(query)
+            return result.scalar_one_or_none()
 
 # class InventoryItemDAO(BaseDAO):
 #     model = InventoryItem
@@ -219,12 +232,11 @@ class ApplicationDAO(BaseDAO):
                 return [
                     {
                         'application_id': app.id,
-                        'user_id': app.user_id,
+                        'client_name': app.client_name,
                         'service_name': app.service.service_name,
                         'address_name': app.shop.address_name,
                         'appointment_date': app.appointment_date.strftime('%Y-%m-%d'),
                         'appointment_time': app.appointment_time.strftime('%H:%M'),
-                        'client_name': app.client_name,
                         'status': app.status.value,
                         'comment': app.comment,
                         'phone_number': app.phone_number,
@@ -236,3 +248,31 @@ class ApplicationDAO(BaseDAO):
             except SQLAlchemyError as e:
                 logging.error(f'Ошибка при загрузке всех приложений: {e}')
                 return None
+
+    # @classmethod
+    # async def update(cls, filter_by: dict, **values):
+    #     """
+    #     Обновляет записи в базе данных по заданным условиям.
+    #     Args:
+    #         filter_by (dict): Словарь с условиями фильтрации {column_name: value}
+    #         **values: Значения для обновления в формате column_name=value
+    #     Returns:
+    #         int: Количество обновленных записей
+    #     Raises:
+    #         SQLAlchemyError: При ошибке обновления данных
+    #     """
+    #     async with async_session_maker() as session:
+    #         async with session.begin():
+    #             stmt = (
+    #                 sqlalchemy_update(cls)
+    #                 .where(*[getattr(cls, k) == v for k, v in filter_by.items()])
+    #                 .values(**values)
+    #                 .execution_options(synchronize_session='fetch')
+    #             )
+    #             try:
+    #                 result = await session.execute(stmt)
+    #                 await session.commit()
+    #                 return result.rowcount
+    #             except SQLAlchemyError as e:
+    #                 await session.rollback()
+    #                 raise e

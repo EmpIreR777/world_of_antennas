@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     BASE_SITE: str
     ADMIN_IDS: List[int]
     DATABASE_URL: str
+    YANDEX_API_KEY: str
 
     model_config = SettingsConfigDict(
         env_file=env_file_path
@@ -28,5 +29,8 @@ class Settings(BaseSettings):
         """Возвращает путь к базе данных"""
         return self.DATABASE_URL
 
+    def get_key_yandex_geo(self) -> str:
+        """Возвращает токен Геокодер яндекс. https://developer.tech.yandex.ru/services"""
+        return self.YANDEX_API_KEY
 
 settings = Settings()
