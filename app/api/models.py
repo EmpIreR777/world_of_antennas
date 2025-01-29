@@ -3,12 +3,14 @@ from sqlalchemy import Column, String, BigInteger, Integer, Date, Table, \
       Text, Time, ForeignKey, Enum
 from sqlalchemy.orm import validates
 from sqlalchemy.orm import Mapped, mapped_column, relationship, object_session
+from fastapi_storages.integrations.sqlalchemy import FileType
 
+from app.config import settings
 from app.database import Base
 
 
 class User(Base):
-    class RoleEnum(enum.Enum):
+    class RoleEnum(enum.StrEnum):
         SUPERUSER = 'Администратор'
         MASTER = 'Мастер'
         OPERATOR = 'Продавец'
@@ -61,7 +63,7 @@ class User(Base):
 
 class InventoryItem(Base):
 
-    class UnitType(enum.Enum):
+    class UnitType(enum.StrEnum):
         PIECES = 'шт.' # штуки
         METERS = 'м.' # метры
 
@@ -109,7 +111,12 @@ class Shop(Base):
         String(100), nullable=True)  # Часы работы
     coordinates: Mapped[str] = mapped_column(
         String(50), nullable=True)  # Координаты для карты
-    image_url: Mapped[str] = mapped_column(String(255), nullable=True)  # URL изображения
+    # image_url: Mapped[str] = mapped_column(String(255), nullable=True)  # URL изображения
+    image_url: Mapped[FileType | None] = mapped_column(
+        FileType(storage=settings.STORAGES['image']),
+        default='',
+        nullable=True,
+    )
     applications: Mapped[list['Application']] = relationship('Application', back_populates='shop')
     # Связь многие-ко-многим с услугами через вспомогательную таблицу
     services: Mapped[list['Service']] = relationship(
@@ -141,7 +148,7 @@ class Service(Base):
 
 
 class Application(Base):
-    class StatusEnum(enum.Enum):
+    class StatusEnum(enum.StrEnum):
         PENDING = 'Не обработана'
         ACCEPTED = 'Принята'
         COMPLETED = 'Выполнена'

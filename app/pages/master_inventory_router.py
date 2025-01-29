@@ -9,6 +9,7 @@ from app.api.dao import UserDAO, UserDAO
 
 
 router = APIRouter(prefix='/worker', tags=['frontend worker'])
+
 templates = Jinja2Templates(directory='app/templates')
 
 
@@ -29,7 +30,7 @@ async def get_worker_list_and_items_lists(request: Request, worker_id: int = Non
         if not items_workers:
             data_page['message'] = 'В базе данных нет работников с задолженностями'
     except Exception as e:
-        logging.error(f"Ошибка при получении списка работников: {e}")
+        logging.error(f'Ошибка при получении списка работников: {e}')
         data_page['message'] = 'Произошла ошибка при получении данных'
         data_page['items_workers'] = []
     

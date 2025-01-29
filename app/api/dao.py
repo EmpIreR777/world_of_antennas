@@ -237,7 +237,7 @@ class ApplicationDAO(BaseDAO):
                         'address_name': app.shop.address_name,
                         'appointment_date': app.appointment_date.strftime('%Y-%m-%d'),
                         'appointment_time': app.appointment_time.strftime('%H:%M'),
-                        'status': app.status.value,
+                        'status': app.status,
                         'comment': app.comment,
                         'phone_number': app.phone_number,
                         'address': app.address,

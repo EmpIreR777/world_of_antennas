@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    const masterId = userIdElement ? userIdElement.value : null;
+    const masterId = document.getElementById('worker_id').getAttribute('value');
 
     if (!masterId) {
         console.error('Не удалось получить master_id текущего пользователя.');
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("Отправляемый JSON:", JSON.stringify(payload));
 
             try {
-                const response = await fetch('/api/update-application-status', {
+                const response = await fetch('/update-application-status', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -1,14 +1,28 @@
-from fastapi import APIRouter
+import logging
+from fastapi import APIRouter, HTTPException, status
 from fastapi.templating import Jinja2Templates
 from fastapi.requests import Request
+from fastapi.responses import JSONResponse
 from fastapi.responses import HTMLResponse
+from sqlalchemy.exc import SQLAlchemyError
 
-from app.api.models import User
+from app.api.models import Application, User
 from app.config import settings
 from app.api.dao import ApplicationDAO, UserDAO
 
 
+
+from app.api.models import Application, User
+from app.api.schemas import AppointmentUpdateStatusData, AppointmentData
+from app.bot.create_bot import bot
+from app.api.dao import ApplicationDAO, ServiceDAO, ShopDAO
+from app.bot.keyboards.kbs_user import main_keyboard
+from app.config import settings
+from app.bot.utils.utils import send_message_add_user_workers
+
+
 router = APIRouter(prefix='', tags=['frontend admin'])
+
 templates = Jinja2Templates(directory='app/templates')
 
 
@@ -25,7 +39,8 @@ async def read_works(request: Request, worker_id: int = None):
         return templates.TemplateResponse('applications.html', data_page)
     else:
         applications = await ApplicationDAO.get_all_applications()
-        print(applications)
+        data_page['worker_id'] = worker_id
+        data_page['statuses'] = Application.StatusEnum
         data_page['access'] = True
         data_page['user_role'] = True
 
@@ -35,5 +50,27 @@ async def read_works(request: Request, worker_id: int = None):
         else:
             data_page['message'] = 'У вас нет заявок!'
             return templates.TemplateResponse('applications.html', data_page)
+
+
+@router.post('/update-application-status', response_class=JSONResponse)
+async def update_application_status(data: AppointmentUpdateStatusData):
+    try:
+        # Обновление записи в базе данных
+        updated_count= await ApplicationDAO.update(
+            filter_by={'id': data.application_id},
+            status=data.status,
+            master_id=data.master_id
+        )
+
+        if updated_count == 0:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Заявка не найдена или не была обновлена.')
+
+        return JSONResponse(content={'success': True})
+
+    except SQLAlchemyError as e:
+        # Логирование ошибки
+        logging.error(f"Ошибка при обновлении заявки: {e}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                             detail='Внутренняя ошибка сервера.')
 
 

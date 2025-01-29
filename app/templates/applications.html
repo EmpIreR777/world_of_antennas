@@ -12,7 +12,7 @@
 <main>
     <h1>{{ title_h1 }}</h1>
     {% if access %}
-    <input type="hidden" id="current-user-id" value="{{ current_user_id }}">
+    <input type="hidden" id="worker_id" value="{{ worker_id }}">
     <table id="appointments-table">
         <thead>
             <tr>
@@ -51,9 +51,9 @@
                 <td>
                     {% if user_role %}
                     <select class="status-select">
-                        {% for status in ['Не обработана', 'Принята', 'Выполнена', 'Отменена'] %}
-                        <option value="{{ status }}" {% if status == application.status %}selected{% endif %}>
-                            {{ status }}
+                        {% for status in statuses %}
+                        <option value="{{ status.name }}" {% if status == application.status %}selected{% endif %}>
+                            {{ status.value }}
                         </option>
                         {% endfor %}
                     </select>

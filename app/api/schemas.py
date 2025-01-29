@@ -1,6 +1,6 @@
 from typing import Optional
 from datetime import date, time
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from .models import Application
 
@@ -38,8 +38,14 @@ class AppointmentData(BaseModel):
 class AppointmentUpdateStatusData(BaseModel):
     application_id: int = Field(..., alias='application_id')
     master_id: int = Field(..., alias='master_id')
-    status: Application.StatusEnum = Field(..., alias='status')
+    status: str = Field(..., alias='status')
 
     class Config:
         allow_population_by_field_name = True
         use_enum_values = True
+
+    @field_validator('status')
+    def validate_status(cls, value):
+        if value not in [status.name for status in Application.StatusEnum]:
+            raise ValueError(f"Неверный статус: {value}")
+        return value

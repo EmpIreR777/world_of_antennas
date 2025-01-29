@@ -21,7 +21,6 @@ router = APIRouter(prefix='/api', tags=['API'])
 async def create_appointment(request: Request):
     try:
         data = await request.json()
-        print(data)
         latitude = data.get('latitude')
         longitude = data.get('longitude')
         validated_data = AppointmentData(**data)
@@ -108,26 +107,3 @@ async def create_appointment(request: Request):
         )
 
 
-@router.post('/update-application-status', response_class=JSONResponse)
-async def update_application_status(request: Request, data: AppointmentUpdateStatusData):
-    data = await request.json()
-    validated_data = AppointmentUpdateStatusData(**data)
-    print('///////////////////////////', data)
-    try:
-        # Обновление записи в базе данных
-        updated_count= await ApplicationDAO.update(
-            filter_by={'id': validated_data.application_id},
-            status=validated_data.status,
-            master_id=validated_data.master_id
-        )
-
-        if updated_count == 0:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Заявка не найдена или не была обновлена.')
-
-        return JSONResponse(content={'success': True})
-
-    except SQLAlchemyError as e:
-        # Логирование ошибки
-        print(f"Ошибка при обновлении заявки: {e}")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                             detail='Внутренняя ошибка сервера.')

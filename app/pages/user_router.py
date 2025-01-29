@@ -9,6 +9,7 @@ from app.api.dao import ShopDAO, ServiceDAO, ApplicationDAO, UserDAO
 
 
 router = APIRouter(prefix='', tags=['frontend user'])
+
 templates = Jinja2Templates(directory='app/templates')
 
 
@@ -40,7 +41,6 @@ async def read_root(request: Request, user_id: int = None, first_name: str = Non
 
 @router.get('/applications', response_class=HTMLResponse)
 async def read_root(request: Request, user_id: int = None):
-    print(user_id)
     """
     Обработчик маршрута /applications{user_id} для отображения заявок с пагинацией.
     """
