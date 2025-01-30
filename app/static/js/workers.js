@@ -155,12 +155,16 @@ async function submitNewItem(event, workerId) {
 
 // Функция для обновления количества товара
 async function updateQuantity(element) {
-    const workerId = element.getAttribute('data-worker-id');
-    const itemId = element.getAttribute('data-item-id');
+    // Получаем workerId и itemId через dataset
+    const workerId = element.dataset.workerId;
+    const itemId = element.dataset.itemId;
     const newQuantity = element.value;
 
+    // Проверка валидности введенного значения
     if (newQuantity === '' || isNaN(Number(newQuantity)) || Number(newQuantity) < 0) {
         alert('Некорректное количество');
+        // Возвращаем предыдущее значение
+        element.value = element.defaultValue;
         return;
     }
 
@@ -173,23 +177,29 @@ async function updateQuantity(element) {
     try {
         const response = await fetch('/worker/update_worker_quantity', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json',
+            headers: {
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify(formData)
         });
 
         if (response.ok) {
             // Можно добавить уведомление об успешном обновлении
-            console.log('Количество обновлено успешно.');
+            console.log('Количество обновлено успешно');
+            // Обновляем defaultValue, чтобы при ошибке возвращалось корректное значение
+            element.defaultValue = newQuantity;
         } else {
             const errorData = await response.json();
             throw new Error(errorData.message || 'Ошибка при обновлении количества');
         }
     } catch (error) {
         console.error('Ошибка:', error);
+        // Возвращаем предыдущее значение в случае ошибки
+        element.value = element.defaultValue;
         alert('Произошла ошибка при обновлении количества: ' + error.message);
     }
 }
+
 
 // Функция для удаления товара
 async function deleteItem(workerId, itemId) {
@@ -208,7 +218,7 @@ async function deleteItem(workerId, itemId) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(formData)
+            body: JSON.stringify(formData) // Отправляем данные как JSON
         });
 
         if (response.ok) {
@@ -223,22 +233,3 @@ async function deleteItem(workerId, itemId) {
         alert('Произошла ошибка при удалении товара: ' + error.message);
     }
 }
-
-// Добавляем обработчики событий при загрузке страницы
-document.addEventListener('DOMContentLoaded', function() {
-    // Можно добавить дополнительную инициализацию при необходимости
-});
-
-
- /* Функции для увеличения и уменьшения количества */
-//  function incrementQuantity(workerId, itemId) {
-//     const input = document.getElementById(`quantity_${workerId}_${itemId}`);
-//     input.value = parseInt(input.value) + 1;
-// }
-
-// function decrementQuantity(workerId, itemId) {
-//     const input = document.getElementById(`quantity_${workerId}_${itemId}`);
-//     if (parseInt(input.value) > 0) {
-//         input.value = parseInt(input.value) - 1;
-//     }
-// }

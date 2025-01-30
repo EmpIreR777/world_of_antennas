@@ -23,6 +23,21 @@ class ItemCreateRequest(BaseModel):
         }
 
 
+class ItemUpdateQuantity(BaseModel):
+    worker_id: int = Field(..., description='ID работника')
+    item_id: int = Field(..., description='ID товара')
+    quantity: float = Field(..., gt=0, description='Количество предметов')
+
+    class Config:
+        from_attributes = True
+        json_schema_extra = {
+            'example': {
+                'worker_id': 123,
+                'quantity': 5.0,
+            }
+        }
+
+
 class AppointmentUpdateStatusData(BaseModel):
     application_id: int = Field(..., alias='application_id')
     master_id: int = Field(..., alias='master_id')

@@ -208,26 +208,49 @@ class ApplicationDAO(BaseDAO):
                 return None
 
     @classmethod
-    async def get_all_applications(cls):
+    async def get_all_applications(
+        cls, 
+        sort_by: str = None, 
+        order: str = 'asc', 
+        offset: int = 0, 
+        limit: int = 10
+        ):
         """
-        Возвращает все заявки в базе данных с дополнительной информацией о магазине и услуге.
+        Возвращает заявки с пагинацией и сортировкой.
 
-        Возвращает:
-            Список всех заявок с именами магазинов и услуг.
+        :param sort_by: Поле для сортировки.
+        :param order: Направление сортировки.
+        :param offset: Смещение (начало выборки).
+        :param limit: Количество элементов на странице.
+        :return: Список заявок.
         """
         async with async_session_maker() as session:
             try:
-                # Используем joinedload для загрузки связанных данных
+                # Базовый запрос с загрузкой связанных данных
                 query = (
-                    select(cls.model)
-                    .options(joinedload(cls.model.shop),
-                            joinedload(cls.model.service),
-                            joinedload(cls.model.master)
-                            )
+                    select(Application)
+                    .options(
+                        joinedload(Application.shop),
+                        joinedload(Application.service),
+                        joinedload(Application.master)
+                    )
                 )
+                
+                # Добавляем сортировку, если указано поле
+                if sort_by and hasattr(Application, sort_by):
+                    sort_field = getattr(Application, sort_by)
+                    if order == 'desc':
+                        sort_field = sort_field.desc()
+                    query = query.order_by(sort_field)
+
+                # Добавляем пагинацию
+                query = query.offset(offset).limit(limit)
+
+                # Выполняем запрос
                 result = await session.execute(query)
                 applications = result.scalars().all()
-                # Возвращаем список словарей с нужными полями
+
+                # Формируем список словарей с нужными полями
                 return [
                     {
                         'application_id': app.id,
@@ -245,7 +268,7 @@ class ApplicationDAO(BaseDAO):
                     for app in applications
                 ]
             except SQLAlchemyError as e:
-                logging.error(f'Ошибка при загрузке всех приложений: {e}')
+                logging.error(f'Ошибка при загрузке всех заявок: {e}')
                 return None
 
     # @classmethod

@@ -1,7 +1,8 @@
+import logging
 from typing import List
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.future import select
-from sqlalchemy import update as sqlalchemy_update, delete as sqlalchemy_delete
+from sqlalchemy import func, update as sqlalchemy_update, delete as sqlalchemy_delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.models import User
@@ -130,6 +131,7 @@ class BaseDAO:
                     await session.commit()
                 except SQLAlchemyError as e:
                     await session.rollback()
+                    logging.error(f'Ошибка при подсчёте записей: {e}')
                     raise e
                 return result.rowcount
 
@@ -159,6 +161,13 @@ class BaseDAO:
         :return: Общее количество записей
         """
         async with async_session_maker() as session:
-            query = select(cls.model).filter_by(**filter_by)
-            result = await session.execute(query)
-            return result.scalar_one_or_none() or 0
+            try:
+                # Используем func.count() для подсчёта записей
+                query = select(func.count()).select_from(cls.model)
+                if filter_by:
+                    query = query.filter_by(**filter_by)
+                result = await session.execute(query)
+                return result.scalar_one()  # Возвращаем число, а не None
+            except SQLAlchemyError as e:
+                logging.error(f'Ошибка при подсчёте записей: {e}')
+                return 0  # В случае ошибки возвращаем 0

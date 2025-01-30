@@ -9,6 +9,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from app.api.dao import ApplicationDAO, UserDAO
 from app.api.models import Application
 from app.bot.create_bot import bot
+from app.pages.pagination import paginate
 from app.pages.schemas import AppointmentUpdateStatusData
 
 
@@ -18,7 +19,14 @@ templates = Jinja2Templates(directory='app/templates')
 
 
 @router.get('/admin', response_class=HTMLResponse)
-async def read_works(request: Request, worker_id: int = None):
+async def read_works(
+    request: Request, 
+    worker_id: int = None,
+    sort_by: str = None,  # Поле для сортировки
+    order: str = 'asc',   # Направление сортировки (по умолчанию - по возрастанию)
+    page: int = 1,        # Номер страницы (по умолчанию - 1)
+    page_size: int = 3   # Количество элементов на странице (по умолчанию - 10)
+    ):
     """
     Обработчик маршрута /admin{worker_id} для отображения заявок с пагинацией.
     """
@@ -29,18 +37,31 @@ async def read_works(request: Request, worker_id: int = None):
         data_page['message'] = 'Работник магазина не найден, для которого нужно отобразить все заявки.'
         return templates.TemplateResponse('applications.html', data_page)
     else:
-        applications = await ApplicationDAO.get_all_applications()
+        # Получаем общее количество заявок
+        total_applications = await ApplicationDAO.count()
+
+        # Вычисляем параметры пагинации
+        pagination = paginate(total_applications, page, page_size)
+
+        # Получаем заявки с пагинацией и сортировкой
+        applications = await ApplicationDAO.get_all_applications(
+            sort_by=sort_by, 
+            order=order, 
+            offset=pagination['offset'], 
+            limit=pagination['limit']
+        )
+
+        # Передаем данные в шаблон
         data_page['worker_id'] = worker_id
         data_page['statuses'] = Application.StatusEnum
         data_page['access'] = True
         data_page['user_role'] = True
+        data_page['applications'] = applications
+        data_page['page'] = page
+        data_page['page_size'] = page_size
+        data_page['total_pages'] = pagination["total_pages"]
 
-        if len(applications):
-            data_page['applications'] = applications
-            return templates.TemplateResponse('applications.html', data_page)
-        else:
-            data_page['message'] = 'У вас нет заявок!'
-            return templates.TemplateResponse('applications.html', data_page)
+        return templates.TemplateResponse('applications_wokers.html', data_page)
 
 
 @router.post('/update-application-status', response_class=JSONResponse)

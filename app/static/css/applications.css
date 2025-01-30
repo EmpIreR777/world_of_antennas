@@ -224,6 +224,7 @@ tr:hover {
     border-color: #666;
 }
 
+
 /* Адаптивные стили для экранов до 1024px */
 @media (max-width: 1024px) {
     main {
@@ -297,3 +298,60 @@ tr:hover {
         font-size: 0.75em; /* Минимальный размер шрифта */
     }
 }
+
+
+th[data-sort] {
+    cursor: pointer;
+}
+
+th[data-sort].asc::after {
+    content: ' ▲';
+}
+
+th[data-sort].desc::after {
+    content: ' ▼';
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Стили для пагинации */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 2rem;
+}
+
+.pagination-link, .pagination-disabled, .current-page {
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: var(--text-color);
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: background-color var(--transition-speed) ease;
+}
+
+.pagination-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.pagination-disabled {
+    color: rgba(255, 255, 255, 0.5);
+    cursor: not-allowed;
+}
+
+.current-page {
+    background-color: rgba(78, 205, 196, 0.8);
+    color: var(--text-color);
+    font-weight: bold;
+}
+

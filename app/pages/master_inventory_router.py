@@ -4,10 +4,10 @@ from fastapi.templating import Jinja2Templates
 from fastapi.requests import Request
 from fastapi.responses import HTMLResponse, JSONResponse
 
-from app.api.models import InventoryItem, User
+from app.api.models import User
 from app.config import settings
 from app.api.dao import InventoryItemDAO, UserDAO, UserDAO
-from app.pages.schemas import ItemCreateRequest
+from app.pages.schemas import ItemCreateRequest, ItemUpdateQuantity
 
 
 router = APIRouter(prefix='/worker', tags=['frontend worker'])
@@ -40,7 +40,7 @@ async def get_worker_list_and_items_lists(request: Request, worker_id: int):
     return templates.TemplateResponse('workers.html', data_page)
 
 
-@router.post('/create_worker_items')
+@router.post('/create_worker_items', response_class=JSONResponse)
 async def create_worker_items(request: Request, data: ItemCreateRequest):
     """
     Обработчик маршрута для добавления товара в задолженность магазина.
@@ -69,33 +69,72 @@ async def create_worker_items(request: Request, data: ItemCreateRequest):
         )
 
 
-@router.post('/update_worker_quantity', response_class=HTMLResponse)
-async def update_worker_items(request: Request, worker_id: int):
+@router.put('/update_worker_quantity', response_class=JSONResponse)
+async def update_worker_items(request: Request, data: ItemUpdateQuantity):
     """
     Обработчик маршрута /update_worker_quantity для отображения панели администратора.
     """
-    data_page = {'request': request, 'access': False,
-                  'title_h1': 'Панель задолженности работников магазина'}
-    if worker_id is None or worker_id != settings.ADMIN_ID:
-        data_page['message'] = 'У вас не прав для получения информации о заявках!'
-        return templates.TemplateResponse('workers.html', data_page)
-    else:
-        data_page['access'] = True
-        data_page['workers'] = await UserDAO.get_all_applications()
-        return templates.TemplateResponse('workers.html', data_page)
+    print('Полученные данные:', data)
+    try:
+        user = await UserDAO.find_one_or_none_by_roles(telegram_id=data.worker_id)
+        if not user or user.role == User.RoleEnum.USER:
+            return JSONResponse(
+                status_code=status.HTTP_403_FORBIDDEN,
+                content={'message': 'У вас нет прав для обновления количества товара!'}
+            )
+
+        update_result = await InventoryItemDAO.update(
+            filter_by={
+                'id': data.item_id,
+                'user_id': data.worker_id
+            },
+            quantity=data.quantity,)
+
+        if update_result == 0:
+            return JSONResponse(
+                status_code=status.HTTP_404_NOT_FOUND,
+                content={'message': 'Товар не найден или не принадлежит этому рабочему'}
+            )
+        return JSONResponse(
+            content={'message': 'Количество успешно обновлено'}
+        )
+    except Exception as e:
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={'message': f'Произошла ошибка: {str(e)}'}
+        )
 
 
-@router.post('/delete_worker_item', response_class=HTMLResponse)
-async def delete_worker_item(request: Request, worker_id: int):
+@router.delete('/delete_worker_item', response_class=JSONResponse)
+async def delete_worker_item(request: Request, data: dict):
     """
-    Обработчик маршрута /inventory_item для отображения панели администратора.
+    Обработчик маршрута /delete_worker_item для удаления товара.
     """
-    data_page = {'request': request, 'access': False,
-                  'title_h1': 'Панель задолженности работников магазина'}
-    if worker_id is None or worker_id != settings.ADMIN_ID:
-        data_page['message'] = 'У вас не прав для получения информации о заявках!'
-        return templates.TemplateResponse('workers.html', data_page)
-    else:
-        data_page['access'] = True
-        data_page['workers'] = await UserDAO.get_all_applications()
-        return templates.TemplateResponse('workers.html', data_page)
+    try:
+        user = await UserDAO.find_one_or_none_by_roles(telegram_id=data.worker_id)
+        if not user or user.role == User.RoleEnum.USER:
+            return JSONResponse(
+                status_code=status.HTTP_403_FORBIDDEN,
+                content={'message': 'У вас нет прав для удаления товара!'}
+            )
+
+        delete_result = await InventoryItemDAO.delete(
+            filter_by={
+                'id': data.item_id,
+                'user_id': data.worker_id
+            }
+        )
+
+        if delete_result == 0:
+            return JSONResponse(
+                status_code=status.HTTP_404_NOT_FOUND,
+                content={'message': 'Товар не найден или не принадлежит этому рабочему'}
+            )
+        return JSONResponse(
+            content={'message': 'Товар успешно удалён'}
+        )
+    except Exception as e:
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={'message': f'Произошла ошибка: {str(e)}'}
+        )

@@ -178,6 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+// Обновление статуса заявки
 document.addEventListener('DOMContentLoaded', () => {
     const masterId = document.getElementById('worker_id').getAttribute('value');
 
@@ -231,35 +232,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-    // // Функция для отображения уведомлений (пример)
-    // function showNotification(message, type) {
-    //     // Реализация уведомлений зависит от вашей библиотеки или подхода
-    //     // Например, можно использовать alert или более сложные решения
-    //     alert(\${type.toUpperCase()}: ${message}');
-    // }
 
-    // /**
-    //  * Функция для отображения уведомлений пользователю.
-    //  * Можно заменить на любой другой метод отображения уведомлений.
-    //  * @param {string} message - Текст сообщения
-    //  * @param {string} type - Тип сообщения ('success' или 'error')
-    //  */
-    
-    // function showNotification(message, type) {
-    //     // Создать элемент уведомления
-    //     const notification = document.createElement('div');
-    //     notification.className = `notification ${type}`;
-    //     notification.innerText = message;
+document.addEventListener('DOMContentLoaded', () => {
+    const table = document.getElementById('appointments-table');
+    const headers = table.querySelectorAll('th[data-sort]');
+    const tbody = table.querySelector('tbody');
 
-    //     // Добавить уведомление в DOM (например, в начало <main>)
-    //     const main = document.querySelector('main');
-    //     if (main) {
-    //         main.prepend(notification);
-    //     }
+    headers.forEach(header => {
+        header.addEventListener('click', () => {
+            const sortBy = header.getAttribute('data-sort');
+            const isAscending = header.classList.toggle('asc');
+            sortTable(sortBy, isAscending);
+        });
+    });
 
-    //     // Автоматически удалить уведомление через 3 секунды
-    //     setTimeout(() => {
-    //         notification.remove();
-    //     }, 3000);
-    // }
-// });
+    function sortTable(sortBy, isAscending) {
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+
+        rows.sort((a, b) => {
+            const aValue = a.querySelector(`td[data-${sortBy}]`).getAttribute(`data-${sortBy}`);
+            const bValue = b.querySelector(`td[data-${sortBy}]`).getAttribute(`data-${sortBy}`);
+
+            if (aValue < bValue) return isAscending ? -1 : 1;
+            if (aValue > bValue) return isAscending ? 1 : -1;
+            return 0;
+        });
+
+        // Очистите таблицу и добавьте отсортированные строки
+        tbody.innerHTML = '';
+        rows.forEach(row => tbody.appendChild(row));
+    }
+});
