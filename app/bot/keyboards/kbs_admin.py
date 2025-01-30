@@ -9,7 +9,7 @@ def admin_keyboard(user_id: int) -> InlineKeyboardMarkup:
     Клавиатура для администратора, отправка медиа всем пользователям и всем работникам.
     """
     url_applications_admin = f'{settings.BASE_SITE}/admin?worker_id={user_id}'
-    url_worker_items = f'{settings.BASE_SITE}/worker_list?worker_id={user_id}'
+    url_worker_items = f'{settings.BASE_SITE}/worker/worker_list?worker_id={user_id}'
     kb = InlineKeyboardBuilder()
     kb.button(text='📝 Смотреть заявки', web_app=WebAppInfo(url=url_applications_admin))
     kb.button(text='💱 Смотреть задолженности', web_app=WebAppInfo(url=url_worker_items))

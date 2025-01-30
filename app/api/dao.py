@@ -4,10 +4,9 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import joinedload
 from sqlalchemy import and_, select, func, case
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import update as sqlalchemy_update
 
 from app.dao.base import BaseDAO
-from app.api.models import User, Service, Application, Shop
+from app.api.models import InventoryItem, User, Service, Application, Shop
 from app.database import async_session_maker
 
 
@@ -35,8 +34,8 @@ class UserDAO(BaseDAO):
                 return [
                     {   'id': user.telegram_id,
                         'first_name': user.first_name,
-                        'username': user.username,
                         'role': user.role.value,
+                        'username': user.username,
                         'inventory_items': [
                             {
                                 'item_name': item.item_name,
@@ -96,8 +95,8 @@ class UserDAO(BaseDAO):
             result = await session.execute(query)
             return result.scalar_one_or_none()
 
-# class InventoryItemDAO(BaseDAO):
-#     model = InventoryItem
+class InventoryItemDAO(BaseDAO):
+    model = InventoryItem
 
 
 

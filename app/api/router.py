@@ -5,8 +5,7 @@ from fastapi.requests import Request
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
 
-from app.api.models import Application, User
-from app.api.schemas import AppointmentUpdateStatusData, AppointmentData
+from app.api.schemas import AppointmentData
 from app.bot.create_bot import bot
 from app.api.dao import ApplicationDAO, ServiceDAO, ShopDAO
 from app.bot.keyboards.kbs_user import main_keyboard
@@ -100,7 +99,7 @@ async def create_appointment(request: Request):
             content={'message': 'success!'}
         )
     except Exception as e:
-        logging.error(f"Error in create_appointment: {e}")
+        logging.error(f'Error in create_appointment: {e}')
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={'message': 'Internal Server Error', 'detail': str(e)}

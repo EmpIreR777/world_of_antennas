@@ -39,28 +39,34 @@ async def cmd_back_home(message: Message) -> None:
     await send_message_with_delay(message=message)
     await greet_user(message=message, is_new_user=False)
 
+
 @router.callback_query(F.data == 'back_about_us')
 @router.message(F.text == 'ℹ️ О нас')
 async def about_us(event: Union[Message, CallbackQuery]):
+    """
+    Обрабатывает нажатие кнопки 'О нас'.
+    """
     if isinstance(event, CallbackQuery):
-        call = event.message
-        await send_message_with_delay(message=call)
-        await call.delete()  # Удаляем предыдущее сообщение если хотим TODO
         await event.answer(text='Возвращаемся назад')
+        await send_message_with_delay(message=event.message)
+        await event.message.edit_text(
+            text=get_about_us_text(),
+            reply_markup=app_keyboard()
+        )
     else:
-        # Если это обычное сообщение
-        message = event
-        # await message.delete() # Удаляем предыдущее сообщение если хотим TODO
-    await send_message_with_delay(message=message)
-    # Отправляем информацию "О нас"
-    await message.answer(
-        get_about_us_text(),
-        reply_markup=app_keyboard()
-    )
+        await send_message_with_delay(message=event)
+        await event.answer(
+                text=get_about_us_text(),
+                reply_markup=app_keyboard()
+        )
 
 
 @router.callback_query(F.data.in_(['Васильева 75', 'Горный Алтайская улица, 26Б']))
+
 async def process_shop_selection(call: CallbackQuery):
+    """
+    Обрабатывает вывод информации о магазинах МИР АНТЕНН'.
+    """
     # Удаляем предыдущее сообщение с текстом "О нас" и инлайн кнопками
     # await call.message.delete() # оставить кнопки или удалять? TODO
 
@@ -80,6 +86,9 @@ async def process_shop_selection(call: CallbackQuery):
 
 @router.callback_query(F.data == 'user_back_home')
 async def cmd_back_home_user(call: CallbackQuery):
+    """
+    Обрабатывает нажатие кнопки 'На главную'.
+    """
     # Удаляем предыдущее сообщение с текстом "О нас" и инлайн кнопками
     await call.answer(f'{await get_compliments()} \n {call.from_user.full_name}👤!')
     await send_message_with_delay(message=call.message)

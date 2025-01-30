@@ -6,19 +6,10 @@ from fastapi.responses import JSONResponse
 from fastapi.responses import HTMLResponse
 from sqlalchemy.exc import SQLAlchemyError
 
-from app.api.models import Application, User
-from app.config import settings
 from app.api.dao import ApplicationDAO, UserDAO
-
-
-
-from app.api.models import Application, User
-from app.api.schemas import AppointmentUpdateStatusData, AppointmentData
+from app.api.models import Application
 from app.bot.create_bot import bot
-from app.api.dao import ApplicationDAO, ServiceDAO, ShopDAO
-from app.bot.keyboards.kbs_user import main_keyboard
-from app.config import settings
-from app.bot.utils.utils import send_message_add_user_workers
+from app.pages.schemas import AppointmentUpdateStatusData
 
 
 router = APIRouter(prefix='', tags=['frontend admin'])
@@ -53,7 +44,7 @@ async def read_works(request: Request, worker_id: int = None):
 
 
 @router.post('/update-application-status', response_class=JSONResponse)
-async def update_application_status(data: AppointmentUpdateStatusData):
+async def update_application_status(request: Request, data: AppointmentUpdateStatusData):
     try:
         # Обновление записи в базе данных
         updated_count= await ApplicationDAO.update(

@@ -25,6 +25,9 @@ router = Router()
 @router.callback_query(F.data == '🔑 Админ панель', F.from_user.id.in_(settings.ADMIN_IDS))
 @router.message(F.text == '🔑 Админ панель', F.from_user.id.in_(settings.ADMIN_IDS))
 async def admin_panel(event: Union[Message, CallbackQuery]):
+    """
+    Обрабатывает нажатие кнопки '🔑 Админ панель' callback_query и message.
+    """
     if isinstance(event, CallbackQuery):
         call = event
         await send_message_with_delay(message=call.message)
@@ -100,6 +103,9 @@ async def admin_statistic(call: CallbackQuery):
 
 @router.callback_query(F.data == 'back_home', F.from_user.id.in_(settings.ADMIN_IDS))
 async def cmd_back_home_admin(call: CallbackQuery):
+    """
+    Обрабатывает нажатие кнопки На главную.
+    """
     await send_message_with_delay(message=call.message)
     await call.answer(f'С возвращением, {call.from_user.full_name}!')
     await call.message.answer(

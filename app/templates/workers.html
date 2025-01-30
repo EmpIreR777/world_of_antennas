@@ -13,22 +13,23 @@
     <h1>{{ title_h1 }}</h1>
 
     {% if access %}
+    
         {% if items_workers %}
             <table id="workers-table">
                 <thead>
                     <tr>
-                        <th>Имя</th>
                         <th>Username</th>
-                        <th>Роль</th>
+                        <th>Должность</th>
+                        <th>Имя</th>
                         <th>Товары</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for worker in items_workers %}
                         <tr data-worker-id="{{ worker.id }}">
-                            <td>{{ worker.first_name }}</td>
                             <td>{{ worker.username }}</td>
                             <td>{{ worker.role }}</td>
+                            <td>{{ worker.first_name }}</td>
                             <td>
                                 <div class="add-item-container">
                                     <button class="add-item-btn" onclick="toggleAddItemForm('{{ worker.id }}', this)">
@@ -55,8 +56,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="comment_{{ worker.id }}">Комментарий:</label>
-                                                <textarea id="comment_{{ worker.id }}" maxlength="200"></textarea>
+                                                <label for="comment_{{ worker.id }}">Комментарий:</label><textarea id="comment_{{ worker.id }}" maxlength="200"></textarea>
                                             </div>
                                             <div class="form-buttons">
                                                 <button type="submit" class="save-btn">Сохранить</button>
@@ -79,7 +79,8 @@
                                         <tbody>
                                             {% for item in worker.inventory_items %}
                                                 <tr data-item-id="{{ item.id }}">
-                                                    <td>{{ item.item_name }}</td><td>
+                                                    <td>{{ item.item_name }}</td>
+                                                    <td>
                                                         <input 
                                                             type="number" 
                                                             class="quantity-input" 

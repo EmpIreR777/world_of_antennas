@@ -49,15 +49,39 @@ function clearAddItemForm(workerId) {
     }
 }
 
-// Функция для отправки нового товара с валидацией
+
+// Функция для переключения видимости формы добавления товара
+function toggleAddItemForm(workerId, button) {
+    const form = document.getElementById(`add-item-form-${workerId}`);
+    if (form.style.display === 'none') {
+        form.style.display = 'block';
+    } else {
+        form.style.display = 'none';
+    }
+}
+
+// Функция для очистки и скрытия формы добавления товара
+function clearAddItemForm(workerId) {
+    const form = document.getElementById(`add-item-form-${workerId}`);
+    const inputs = form.querySelectorAll('input, textarea, select');
+    inputs.forEach(input => input.value = '');
+    form.style.display = 'none';
+}
+
+// Функция для отправки нового товара
 async function submitNewItem(event, workerId) {
     event.preventDefault();
 
-    // Получение значений из полей формы
+    // Получение элементов формы с уникальными ID
     const itemNameElement = document.getElementById(`item_name_${workerId}`);
     const quantityElement = document.getElementById(`quantity_${workerId}`);
     const unitTypeElement = document.getElementById(`unit_type_${workerId}`);
     const commentElement = document.getElementById(`comment_${workerId}`);
+
+    if (!itemNameElement || !quantityElement || !unitTypeElement || !commentElement) {
+        console.error('Не удалось найти один из элементов формы.');
+        return;
+    }
 
     const itemName = itemNameElement.value.trim();
     const quantity = quantityElement.value.trim();
@@ -98,7 +122,7 @@ async function submitNewItem(event, workerId) {
 
     // Формирование данных для отправки
     const formData = {
-        worker_id: workerId,
+        worker_id: Number(workerId),
         item_name: itemName,
         quantity: quantityNumber,
         unit_type: unitType,
@@ -119,49 +143,64 @@ async function submitNewItem(event, workerId) {
             // Перезагрузка страницы для отображения новых данных
             location.reload();
         } else {
-            throw new Error('Ошибка при добавлении товара');
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Ошибка при добавлении товара');
         }
     } catch (error) {
         console.error('Ошибка:', error);
-        alert('Произошла ошибка при добавлении товара');
+        alert('Произошла ошибка при добавлении товара: ' + error.message);
     }
 }
 
-// Функция обновления количества товара
-async function updateQuantity(input) {
-    const workerId = input.dataset.workerId;
-    const itemId = input.dataset.itemId;
-    const newQuantity = input.value;
+
+// Функция для обновления количества товара
+async function updateQuantity(element) {
+    const workerId = element.getAttribute('data-worker-id');
+    const itemId = element.getAttribute('data-item-id');
+    const newQuantity = element.value;
+
+    if (newQuantity === '' || isNaN(Number(newQuantity)) || Number(newQuantity) < 0) {
+        alert('Некорректное количество');
+        return;
+    }
+
+    const formData = {
+        worker_id: Number(workerId),
+        item_id: Number(itemId),
+        quantity: Number(newQuantity)
+    };
 
     try {
         const response = await fetch('/worker/update_worker_quantity', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
+            headers: {'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                worker_id: workerId,
-                item_id: itemId,
-                quantity: newQuantity
-            })
+            body: JSON.stringify(formData)
         });
 
-        if (!response.ok) {
-            throw new Error('Ошибка при обновлении количества');
+        if (response.ok) {
+            // Можно добавить уведомление об успешном обновлении
+            console.log('Количество обновлено успешно.');
+        } else {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Ошибка при обновлении количества');
         }
     } catch (error) {
         console.error('Ошибка:', error);
-        alert('Произошла ошибка при обновлении количества');
-        // Возвращаем предыдущее значение
-        input.value = input.defaultValue;
+        alert('Произошла ошибка при обновлении количества: ' + error.message);
     }
 }
 
-// Функция удаления товара
+// Функция для удаления товара
 async function deleteItem(workerId, itemId) {
     if (!confirm('Вы уверены, что хотите удалить этот товар?')) {
         return;
     }
+
+    const formData = {
+        worker_id: Number(workerId),
+        item_id: Number(itemId)
+    };
 
     try {
         const response = await fetch('/worker/delete_worker_item', {
@@ -169,24 +208,19 @@ async function deleteItem(workerId, itemId) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                worker_id: workerId,
-                item_id: itemId
-            })
+            body: JSON.stringify(formData)
         });
 
         if (response.ok) {
-            // Удаляем строку из таблицы
-            const row = document.querySelector(`tr[data-item-id="${itemId}"]`);
-            if (row) {
-                row.remove();
-            }
+            // Перезагрузка страницы для отображения изменений
+            location.reload();
         } else {
-            throw new Error('Ошибка при удалении товара');
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Ошибка при удалении товара');
         }
     } catch (error) {
         console.error('Ошибка:', error);
-        alert('Произошла ошибка при удалении товара');
+        alert('Произошла ошибка при удалении товара: ' + error.message);
     }
 }
 
