@@ -51,7 +51,6 @@ async def read_works(
             limit=pagination['limit']
         )
 
-        # Передаем данные в шаблон
         data_page['worker_id'] = worker_id
         data_page['statuses'] = Application.StatusEnum
         data_page['access'] = True
