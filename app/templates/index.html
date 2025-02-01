@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block styles %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/index.css">
+{% endblock %}
+
+{% block content %}
+<header>
+    <img class="header-image"
+        src="/static/img/antenna.jpg"
+        alt="Профессиональная установка антенн на крыше" width="1500" height="1000">
+        <div class="header-content">
+        <svg class="scissors" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M30,40 L70,80 M30,80 L70,40 M50,60 L90,20 M50,60 L10,20"/>
+        </svg>
+        <h1><a href="https://mir-ant.ru/" class="glow-link">{{ title }}</a></h1>
+
+    </div>
+</header>
+<main>
+    <section class="intro">
+        <h2 class="animate__animated animate__fadeInUp">Надежная связь для вашего комфорта</h2>
+        <div class="divider animate__animated animate__fadeInUp"></div>
+        <p class="animate__animated animate__fadeInUp">
+            Наши <span class="highlight">профессиональные специалисты</span> обеспечат вас 
+            <span class="highlight">качественной связью и интернетом</span> в любой точке 
+            Алтайского края и Республики Алтай.
+        </p>
+    </section>
+
+    <section class="services">
+        <h2 class="section-title animate__animated animate__fadeInUp">Наши услуги</h2>
+        <div class="services-grid">
+            <div class="service-card animate__animated animate__zoomIn">
+                <h3>Консультация и подбор</h3>
+                <p>Профессиональный подбор оборудования под ваши задачи</p>
+            </div>
+            <div class="service-card animate__animated animate__zoomIn" style="animation-delay: 0.2s;">
+                <h3>Монтаж антенн</h3>
+                <p>Качественная установка с гарантией</p>
+            </div>
+            <div class="service-card animate__animated animate__zoomIn" style="animation-delay: 0.4s;">
+                <h3>Усиление связи</h3>
+                <p>Решения для стабильной мобильной связи и интернета</p>
+            </div>
+            <div class="service-card animate__animated animate__zoomIn" style="animation-delay: 0.6s;">
+                <h3>Производство кронштейнов</h3>
+                <p>Изготовление конструкций любой сложности</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="advantages">
+        <h2 class="section-title animate__animated animate__fadeInUp">Почему выбирают нас:</h2>
+        <ul class="advantages-list animate__animated animate__fadeInUp">
+            <li>Опыт работы с 2004 года</li>
+            <li>Работаем без предоплаты</li>
+            <li>Гарантия качества</li>
+            <li>Быстрая доставка</li>
+        </ul>
+    </section>
+
+    <!-- Кнопка для связи -->
+    <section class="contact">
+        <a id="contact-button" class="btn" href="#contact-form">Получить консультацию</a>
+    </section>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/index.js"></script>
+{% endblock %}

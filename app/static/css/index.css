@@ -1,0 +1,289 @@
+/* Импорт шрифтов Google: Cormorant Garamond и Montserrat */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@300;400;600&display=swap');
+
+/* Базовые стили для всего документа */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23222' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 60L60 0H30L0 30M60 60V30L30 60'/%3E%3C/g%3E%3C/svg%3E");
+    background-attachment: fixed;
+}
+
+/* Стили для секции заголовка */
+header {
+    color: white;
+    padding: 4rem 0;
+    margin-bottom: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(1deg, #000000, #1a1a1a);
+    animation: shadowGlow 6s infinite;
+}
+
+header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(270deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.152) 25%,
+            rgba(255, 255, 255, 0.475) 50%,
+            rgba(255, 255, 255, 0.153) 75%,
+            rgba(255, 255, 255, 0) 100%);
+    opacity: 0.5;
+    animation: shimmer 11s infinite;
+    filter: blur(8px);
+}
+
+/* Анимации */
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    50% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes shadowGlow {
+    0%, 100% {
+        box-shadow: 0 0.125rem 0.9375rem rgba(255, 255, 255, 0.127);
+    }
+
+    50% {
+        box-shadow: 0 0.125rem 1.5625rem rgba(255, 255, 255, 0.475);
+    }
+}
+
+/* Стили для списка преимуществ */
+.advantages-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.advantages-list li {
+    position: relative;
+    padding-left: 1.25rem;
+    margin-bottom: 0.9375rem;
+}
+
+.advantages-list li::before {
+    content: '✔️';
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #506655;
+    font-size: 1.125rem;
+    line-height: 1;
+}
+
+/* Контейнер для содержимого заголовка */
+.header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+}
+
+/* Стили для фонового изображения заголовка */
+.header-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.4;
+    z-index: 1;
+    filter: grayscale(50%) contrast(120%);
+}
+
+/* Стили для основного заголовка (h1) */
+h1 {
+    margin: 1.875rem 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1875em;
+    text-shadow: 0.125rem 0.125rem 0.25rem rgba(0, 0, 0, 0.5);
+    font-size: clamp(2em, 5vw, 3.5em);
+}
+
+/* Стили для основной области контента */
+main {
+    max-width: 50em;
+    margin: 3.75rem auto;
+    padding: 0 1.25rem;
+}
+
+/* Стили для кнопок */
+.btn {
+    padding: 0.9375rem 1.875rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #FF6B6B);
+    background-size: 200% 200%;
+    animation: gradient 3s ease infinite;
+    border: none;
+    margin: 1.25rem 0;
+    display: inline-block;
+    border-radius: 3.125rem;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 0.25rem 0.9375rem rgba(0, 0, 0, 0.2);
+    transition: all 0.5s ease;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Стили для иконки ножниц */
+.scissors {
+    width: 5rem;
+    height: 5rem;
+    fill: white;
+    filter: drop-shadow(0.125rem 0.125rem 0.125rem rgba(0, 0, 0, 0.3));
+    margin-bottom: 1.25rem;
+}
+
+/* Стили для второстепенных заголовков (h2) */
+h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2em;
+    font-weight: 600;
+    margin: 2.5rem 0 1.25rem 0;
+    color: #fff;
+}
+
+/* Стили для параграфного текста */
+p {
+    font-size: 1.1em;
+    line-height: 1.8;
+    margin: 1.25rem 0;
+    color: #ccc;
+}
+
+/* Стили для выделенного текста */
+.highlight {
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Стили для разделительной линии */
+.divider {
+    width: 3.125rem;
+    height: 0.125rem;
+    background-color: #fff;
+    margin: 2.5rem auto;
+}
+
+/* Стили для ссылок со свечением */
+.glow-link {
+    text-decoration: none;
+    color: #0edbdf;
+    display: inline-block;
+    margin: 1.875rem 0;
+    text-shadow: 0 0 0.0625rem rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    font-size: 1.75rem;
+    transform-origin: center center;
+}
+
+.glow-link:hover {
+    color: #e93b28;
+    text-shadow: 0 0 0.5rem rgba(243, 81, 32, 0.875);
+    transform: scale(1.1);
+    animation: textPulse 0.3s ease-in-out;
+}
+
+@keyframes textPulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1.1);
+    }
+}
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+    .scissors {
+        width: 3.75rem;
+        height: 3.75rem;
+    }
+
+    .btn {
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 2rem;
+        width: 80%;
+        max-width: 300px;
+        margin: 1rem auto;
+        display: block;
+    }
+
+    h2 {
+        font-size: 1.8em;
+    }
+
+    p {
+        font-size: 1em;
+    }
+
+    header {
+        padding: 2.5rem 0;
+    }
+
+    main {
+        margin: 2.5rem auto;
+        padding: 0 0.75rem;
+    }
+
+    .glow-link {
+        font-size: 1.5rem;
+    }
+
+    .advantages-list li {
+        padding-left: 1rem;
+        font-size: 0.95em;
+    }
+
+    .divider {
+        width: 2.5rem;
+        height: 0.1rem;
+    }
+}

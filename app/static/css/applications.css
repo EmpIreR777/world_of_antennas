@@ -1,0 +1,294 @@
+/* Импорт шрифтов с Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@300;400;600&display=swap');
+
+/* Определение CSS-переменных для консистентности цвета и анимаций */
+:root {
+    --primary-bg: #000;
+    --text-color: #fff;
+    --accent-color: rgba(255, 255, 255, 0.05);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --transition-speed: 0.6s;
+}
+
+/* Стили для тела страницы и HTML-контейнера */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    text-align: center;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.95)),
+                      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23222' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 60L60 0H30L0 30M60 60V30L30 60'/%3E%3C/g%3E%3C/svg%3E");
+    background-attachment: fixed;
+    min-height: 100vh;
+    scroll-behavior: smooth;
+}
+
+/* Анимация пульсации для основного контента */
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 107, 107, 0.3),
+                    0 0 30px rgba(78, 205, 196, 0.3),
+                    0 0 40px rgba(255, 107, 107, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(255, 107, 107, 0.5),
+                    0 0 40px rgba(78, 205, 196, 0.5),
+                    0 0 50px rgba(255, 107, 107, 0.5);
+    }
+}
+
+/* Стили для основного контейнера страницы */
+main {
+    width: 95%;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 20px;
+    background: var(--accent-color);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px var(--shadow-color),
+                0 0 15px rgba(255, 255, 255, 0.1),
+                0 0 30px rgba(255, 255, 255, 0.05),
+                0 0 45px rgba(255, 255, 255, 0.025);
+    backdrop-filter: blur(10px);
+    transition: transform var(--transition-speed) ease;
+    animation: pulse 6s ease-in-out infinite;
+    overflow-x: auto;
+}
+
+/* Стили для заголовка страницы */
+h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--text-color);
+    transition: width var(--transition-speed) ease;
+}
+
+h1:hover::after {
+    width: 120px;
+}
+
+/* Стили для таблицы */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 2rem;
+    background: var(--accent-color);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform var(--transition-speed) ease;
+}
+
+th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color var(--transition-speed) ease;
+}
+
+th {
+    background-color: rgba(255, 255, 255, 0.1);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+tr:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+}
+
+/* Стили для статусов и номера клиента */
+#appointments-table td:nth-child(7) {
+    font-weight: bold;
+}
+
+.copy-phone {
+    color: #66a7eb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.copy-phone:hover {
+    text-decoration: underline;
+}
+
+/* Стили для уведомления при копировании номера */
+.copy-notification {
+    position: fixed;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: linear-gradient(45deg, rgba(255,107,107,0.5), rgba(78,205,196,0.5));
+    color: #ffffff;
+    padding: 15px 30px;
+    font-size: 16px;
+    border-radius: 20px;
+    z-index: 9999;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Стили для селекта статуса заявки */
+.status-select {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #311313;
+    background-color: #333;
+    color: #fff;
+}
+
+.status-select option {
+    background-color: #333;
+    color: #fff;
+}
+
+.status-select option:hover {
+    background-color: #444;
+}
+
+.status-select:focus {
+    outline: none;
+    border-color: #555;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+}
+
+.status-select:hover {
+    background-color: #444;
+    border-color: #666;
+}
+
+/* Стили для пагинации */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 2rem;
+}
+
+.pagination-link, .pagination-disabled, .current-page {
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: var(--text-color);
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: background-color var(--transition-speed) ease;
+}
+
+.pagination-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.pagination-disabled {
+    color: rgba(255, 255, 255, 0.5);
+    cursor: not-allowed;
+}
+
+.current-page {
+    background-color: rgba(78, 205, 196, 0.8);
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+/* Адаптивные стили */
+@media (max-width: 1024px) {
+    main {
+        padding: 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2em;
+    }
+    
+    th, td {
+        padding: 0.8rem;
+    }
+    
+    .status-select {
+        padding: 4px;
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.8em;
+    }
+    
+    th, td {
+        padding: 0.6rem;
+        font-size: 0.9em;
+    }
+    
+    main {
+        padding: 15px;
+        margin: 1rem auto;
+    }
+    
+    table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    th, td {
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5em;
+    }
+    
+    th, td {
+        padding: 0.5rem;
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 360px) {
+    h1 {
+        font-size: 1.3em;
+    }
+    
+    th, td {
+        padding: 0.4rem;
+        font-size: 0.75em;
+    }
+}
+
+/* Стили для сортировки таблицы */
+th[data-sort] {
+    cursor: pointer;
+}
+
+th[data-sort].asc::after {
+    content: ' ▲';
+}
+
+th[data-sort].desc::after {
+    content: ' ▼';
+}

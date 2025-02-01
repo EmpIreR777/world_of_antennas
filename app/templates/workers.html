@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ title_h1 }}
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="/static/css/workers.css">
+{% endblock %}
+
+{% block content %}
+<main>
+    <h1>{{ title_h1 }}</h1>
+
+    {% if access %}
+    
+        {% if items_workers %}
+            <table id="workers-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Должность</th>
+                        <th>Имя</th>
+                        <th>Товары</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for worker in items_workers %}
+                        <tr data-worker-id="{{ worker.id }}">
+                            <td>{{ worker.username }}</td>
+                            <td>{{ worker.role }}</td>
+                            <td>{{ worker.first_name }}</td>
+                            <td>
+                                <div class="add-item-container">
+                                    <button class="add-item-btn" onclick="toggleAddItemForm('{{ worker.id }}', this)">
+                                        Добавить товар
+                                    </button>
+                                    <!-- Форма добавления товара, изначально скрыта -->
+                                    <div id="add-item-form-{{ worker.id }}" class="add-item-form" style="display: none;">
+                                        <form onsubmit="submitNewItem(event, '{{ worker.id }}')" class="add-item-form__form">
+                                            <div class="form-group">
+                                                <label for="item_name_{{ worker.id }}">Название товара:</label>
+                                                <input type="text" id="item_name_{{ worker.id }}" required maxlength="100">
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label for="quantity_{{ worker.id }}">Количество:</label>
+                                                    <input type="number" id="quantity_{{ worker.id }}" required min="0" class="quantity-input">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="unit_type_{{ worker.id }}">Ед. измерения:</label>
+                                                    <select id="unit_type_{{ worker.id }}" required>
+                                                        <option value="шт.">шт.</option>
+                                                        <option value="м.">м.</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="comment_{{ worker.id }}">Комментарий:</label><textarea id="comment_{{ worker.id }}" maxlength="200"></textarea>
+                                            </div>
+                                            <div class="form-buttons">
+                                                <button type="submit" class="save-btn">Сохранить</button>
+                                                <button type="button" class="cancel-btn" onclick="clearAddItemForm('{{ worker.id }}')">Отмена</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                {% if worker.inventory_items %}
+                                    <table class="inventory-items-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Название товара</th>
+                                                <th>Количество</th>
+                                                <th>Ед. измерения</th>
+                                                <th>Комментарий</th>
+                                                <th>Действия</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in worker.inventory_items %}
+                                                <tr data-item-id="{{ item.id }}">
+                                                    <td>{{ item.item_name }}</td>
+                                                    <td>
+                                                        <input 
+                                                            type="number" 
+                                                            class="quantity-input" 
+                                                            value="{{ item.quantity }}" 
+                                                            data-worker-id="{{ worker.id }}" 
+                                                            data-item-id="{{ item.id }}" 
+                                                            min="0"
+                                                            onchange="updateQuantity(this)"
+                                                            defaultValue="{{ item.quantity }}"
+                                                        >
+                                                    </td>
+                                                    <td>{{ item.unit_type }}</td>
+                                                    <td>{{ item.comment if item.comment else 'комментария нет' }}</td>
+                                                    <td>
+                                                        <button class="delete-item-btn" onclick="deleteItem('{{ worker.id }}', '{{ item.id }}')">Удалить</button>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <p>Задолженностей нет</p>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>{{ message if message else 'Нет данных для отображения' }}</p>
+        {% endif %}
+    {% else %}
+        <p>{{ message }}</p>
+    {% endif %}
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/workers.js"></script>
+{% endblock %}

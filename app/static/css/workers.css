@@ -1,0 +1,346 @@
+/* Импорт шрифтов с Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@300;400;600&display=swap');
+
+/* Глобальные стили и переменные */
+:root {
+    --primary-bg: #000;
+    --text-color: #fff;
+    --accent-color: rgba(255, 255, 255, 0.05);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --button-bg: #2da69e;
+    --button-hover-bg: #218838;
+    --button-delete-bg: #ff6b6b;
+    --button-delete-hover-bg: #ff8787;
+    --transition-speed: 0.3s;
+    --select-bg: rgba(255, 255, 255, 0.1);
+    --select-hover-bg: rgba(255, 255, 255, 0.15);
+    --select-option-bg: rgba(255, 255, 255, 0.2);
+}
+
+/* Общие стили для всех элементов */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Стили для тела страницы и HTML-контейнера */
+body,
+html {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    text-align: center;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.95)),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23222' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 60L60 0H30L0 30M60 60V30L30 60'/%3E%3C/g%3E%3C/svg%3E");
+    background-attachment: fixed;
+    min-height: 100vh;
+    scroll-behavior: smooth;
+}
+
+/* Анимации */
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 107, 107, 0.3), 0 0 30px rgba(78, 205, 196, 0.3), 0 0 40px rgba(255, 107, 107, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(255, 107, 107, 0.5), 0 0 40px rgba(78, 205, 196, 0.5), 0 0 50px rgba(255, 107, 107, 0.5);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Основной контейнер */
+main {
+    width: 95%;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 20px;
+    background: var(--accent-color);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px var(--shadow-color), 0 0 15px rgba(255, 255, 255, 0.1), 0 0 30px rgba(255, 255, 255, 0.05), 0 0 45px rgba(255, 255, 255, 0.025);
+    backdrop-filter: blur(10px);
+    animation: pulse 6s ease-in-out infinite;
+    overflow-x: auto;
+}
+
+/* Заголовок */
+h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--text-color);
+    transition: width var(--transition-speed) ease;
+}
+
+h1:hover::after {
+    width: 120px;
+}
+
+/* Таблицы */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 2rem;
+    background: var(--accent-color);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+th,
+td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    background-color: rgba(255, 255, 255, 0.1);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+tr:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+}
+
+/* Кнопки */
+button {
+    padding: 10px 20px;
+    background-color: var(--button-bg);
+    color: var(--text-color);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+    font-size: 1em;
+    margin: 5px;
+}
+
+button:hover {
+    background-color: var(--button-hover-bg);
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+button.delete-item-btn {
+    background-color: var(--button-delete-bg);
+}
+
+button.delete-item-btn:hover {
+    background-color: var(--button-delete-hover-bg);
+}
+
+/* Формы */
+.form-group {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background: transparent;
+    color: var(--text-color);
+    transition: border-color var(--transition-speed) ease, background-color var(--transition-speed) ease;
+    font-size: 1em;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--button-bg);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.form-group select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: calc(100% - 12px) center;
+    padding-right: 35px;
+}
+
+.form-group select option {
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    padding: 8px;
+}
+
+/* Адаптивные стили */
+@media (max-width: 1024px) {
+    main {
+        padding: 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2em;
+    }
+
+    th,
+    td {
+        padding: 0.8rem;
+    }
+
+    button {
+        padding: 8px 16px;
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.8em;
+    }
+
+    th,
+    td {
+        padding: 0.6rem;
+        font-size: 0.9em;
+    }
+
+    main {
+        padding: 15px;
+        margin: 1rem auto;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5em;
+    }
+
+    th,
+    td {
+        padding: 0.5rem;
+        font-size: 0.8em;
+    }
+
+    button {
+        padding: 6px 12px;
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 360px) {
+    h1 {
+        font-size: 1.3em;
+    }
+
+    th,
+    td {
+        padding: 0.4rem;
+        font-size: 0.75em;
+    }
+
+    button {
+        padding: 5px 10px;
+        font-size: 0.75em;
+    }
+}
+
+/* Стили для строки формы */
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 150px;
+}
+
+.form-group label {
+    margin-bottom: 0.3rem;
+    font-size: 0.9em;
+}
+
+.quantity-input,
+.form-group select {
+    padding: 8px 12px;
+    font-size: 1em;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+    transition: border-color var(--transition-speed) ease, background-color var(--transition-speed) ease;
+    width: 150px;
+}
+
+.quantity-input:focus,
+.form-group select:focus {
+    border-color: var(--button-bg);
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 5px var(--button-bg);
+}
+
+@media (max-width: 600px) {
+    .form-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .form-group {
+        min-width: 100%;
+    }
+}

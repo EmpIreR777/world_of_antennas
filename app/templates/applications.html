@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ title_h1 }}
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="/static/css/applications.css">
+{% endblock %}
+
+{% block content %}
+<main>
+    <h1>{{ title_h1 }}</h1>
+    {% if access %}
+    <input type="hidden" id="worker_id" value="{{ worker_id }}">
+    <table id="appointments-table">
+        <thead>
+            <tr>
+                <th>Дата время</th>
+                <th>Клиент</th>
+                <th>Услуга</th>
+                <th>Адрес клиента</th>
+                <th>Телефон</th>
+                <th>Статус</th>
+                <th>Специалист</th>
+                <th>Комментарий</th>
+                <th>Адрес магазина</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for application in applications %}
+            <tr data-application-id="{{ application.application_id }}">
+                <td>
+                    <div class="datetime">
+                        <span class="date">{{ application.appointment_date }}</span>
+                        <span class="time">{{ application.appointment_time }}</span>
+                    </div>
+                </td>
+                <td>{{ application.client_name }}</td>
+                <td>{{ application.service_name }}</td>
+                <td>{{ application.address if application.address else 'Не указан' }}</td>
+                <td>
+                    {% if application.phone_number %}
+                    <a href="#" class="copy-phone" data-phone="{{ application.phone_number }}">
+                        {{ application.phone_number }}
+                    </a>
+                    {% else %}
+                    Не указан
+                    {% endif %}
+                </td>
+                <td>
+                    {% if user_role %}
+                    <select class="status-select">
+                        {% for status in statuses %}
+                        <option value="{{ status.name }}" {% if status == application.status %}selected{% endif %}>
+                            {{ status.value }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    {% else %}
+                    {{ application.status }}
+                    {% endif %}
+                </td>
+                <td>{{ application.master_name }}</td>
+                <td>{{ application.comment if application.comment else '---' }}</td>
+                <td>{{ application.address_name }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>{{ message }}</p>
+    {% endif %}
+</main>
+{# {% include 'include/paginations.html' %}  #}
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/applications.js"></script>
+{% endblock %}

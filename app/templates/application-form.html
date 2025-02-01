@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="/static/css/application-form.css">
+{% endblock %}
+
+{% block content %}
+<main>
+    <form id="applicationForm">
+        <h1>Оформление заявки</h1>
+
+        <div class="form-group">
+            <label for="client_name">Имя</label>
+            <input type="text" id="client_name" name="client_name" value="{{ first_name }}" required placeholder="Введите ваше имя">
+        </div>
+
+        <div class="form-group">
+            <label for="phone_number">Номер телефона</label>
+            <input type="tel" id="phone_number" name="phone_number" placeholder="Введите номер телефона" pattern="[0-9+]{10,15}">
+        </div>
+
+        <div class="form-group">
+            <label for="address">Адрес</label>
+            <input type="text" id="address" name="address" list="address-suggestions" required placeholder="Введите ваш адрес">
+            <datalist id="address-suggestions"></datalist>
+        </div>
+
+        <div class="form-group">
+            <label for="shop">Магазин</label>
+            <select id="shop_id" name="shop_id" required>
+                <option value="" disabled selected>Выберите магазин</option>
+                {% for shop in shops %}
+                <option value="{{ shop.shop_id }}">{{ shop.address_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="service">Услуга</label>
+            <select id="service_id" name="service_id" required>
+                <option value="" disabled selected>Выберите услугу</option>
+                {% for service in services %}
+                <option value="{{ service.service_id }}">{{ service.service_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="appointment_date">Дата</label>
+            <input type="date" id="appointment_date" name="appointment_date" required>
+        </div>
+
+        <div class="form-group">
+            <label for="appointment_time">Время</label>
+            <input type="time" id="appointment_time" name="appointment_time" required>
+        </div>
+
+        <div class="form-group">
+            <label for="comment">Комментарий</label>
+            <textarea id="comment" name="comment" rows="3" placeholder="Введите комментарий к заявке"></textarea>
+        </div>
+        {# Поля для широты и долготы #}
+        <input type="hidden" id="latitude" name="latitude">
+        <input type="hidden" id="longitude" name="longitude">
+
+        <input type="hidden" id="user_id" value="{{ user_id }}">
+        <button type="submit" class="btn">Отправить заявку</button>
+    </form>
+</main>
+
+
+{% include 'include/popup.html' %}
+
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/application-form.js"></script>
+{% endblock %}

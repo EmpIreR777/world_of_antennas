@@ -1,0 +1,483 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@300;400;600&display=swap');
+
+/* Общие стили для body и html */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #0a0a0a;
+    color: #fff;
+    text-align: center;
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 1)),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23222' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 60L60 0H30L0 30M60 60V30L30 60'/%3E%3C/g%3E%3C/svg%3E");
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Основной контейнер */
+main {
+    width: 90%;
+    max-width: 500px;
+    margin: 2rem auto;
+    animation: fadeIn 0.8s ease-out;
+}
+
+/* Анимации */
+
+/* Свечение для формы и всплывающих окон */
+@keyframes glowing {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 107, 107, 0.3),
+                    0 0 30px rgba(78, 205, 196, 0.3),
+                    0 0 40px rgba(255, 107, 107, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(255, 107, 107, 0.5),
+                    0 0 40px rgba(78, 205, 196, 0.5),
+                    0 0 50px rgba(255, 107, 107, 0.5);
+    }
+}
+
+/* Анимация градиента */
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Пульсация кнопки */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.5;
+    }
+}
+
+/* Модифицируем стили формы */
+form {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2.5rem;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.4s ease;
+    animation: glowing 3s infinite;
+    position: relative;
+}
+
+/* Добавляем дополнительный эффект при наведении на форму */
+form:hover {
+    transform: translateY(-5px) scale(1.02);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 40px rgba(78, 205, 196, 0.2);
+}
+
+/* Группы элементов формы */
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+/* Метки формы */
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #fff;
+    font-size: 0.95em;
+    transition: color 0.3s ease;
+}
+
+/* Поля ввода, селекты и текстовые области */
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.07);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+/* Текстовые области */
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Плейсхолдеры */
+input::placeholder, select::placeholder, textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Фокус на полях ввода */
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 15px rgba(78, 205, 196, 0.3);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Наведение на полях ввода */
+input:hover, select:hover, textarea:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Убираем стандартное оформление для дат и времени */
+input[type="date"],
+input[type="time"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    color-scheme: dark;
+}
+
+/* Индикаторы календаря и времени */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover,
+input[type="time"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+/* Обновленные стили для select */
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(25, 219, 219, 0.1);
+    background-color: rgba(255, 255, 255, 0.07);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+}
+
+select option {
+    background-color: #1a1a1a;
+    color: #fff;
+    padding: 12px;
+}
+
+/* Стили для кастомного селекта */
+.custom-select {
+    position: relative;
+    width: 100%;
+}
+
+.select-selected {
+    background-color: rgba(255, 255, 255, 0.07);
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.select-selected:after {
+    content: '';
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    width: 8px;
+    height: 8px;
+    border: 2px solid #fff;
+    border-top: 0;
+    border-left: 0;
+    transition: transform 0.3s ease;
+}
+
+.select-selected.select-arrow-active:after {
+    transform: translateY(-50%) rotate(-135deg);
+}
+
+.select-items {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    margin-top: 5px;
+    background: rgba(26, 26, 26, 0.95);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-height: 300px;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.select-items.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    animation: selectOpen 0.3s ease forwards;
+}
+
+.select-items div {
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.select-items div:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Стилизация скроллбара */
+.select-items::-webkit-scrollbar {
+    width: 8px;
+}
+
+.select-items::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.select-items::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.select-items::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Анимация появления элементов списка */
+.select-items div {
+    padding: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: itemFadeIn 0.3s forwards;
+}
+
+.select-items div:nth-child(1) { animation-delay: 0.05s; }
+.select-items div:nth-child(2) { animation-delay: 0.1s; }
+.select-items div:nth-child(3) { animation-delay: 0.15s; }
+
+/* Стили при фокусе */
+.select-selected:focus,
+.select-selected:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 15px rgba(78, 205, 196, 0.3);
+}
+
+/* Стили для активного элемента */
+.same-as-selected {
+    background-color: rgba(78, 205, 196, 0.2);
+}
+
+/* Анимация появления элементов списка */
+@keyframes itemFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Анимация при открытии/закрытии */
+@keyframes selectOpen {
+    from {
+        transform: scaleY(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+}
+
+/* Кнопка */
+.btn {
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #FF6B6B);
+    background-size: 200% 200%;
+    border: none;
+    margin: 20px 0;
+    display: inline-block;
+    border-radius: 50px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.5s ease;
+    position: relative;
+    overflow: hidden;
+    animation: gradient 3s ease infinite;
+}
+
+/* Эффект свечения при наведении */
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+    filter: brightness(110%);
+}
+
+/* Добавляем эффект блика */
+.btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    transform: rotate(45deg);
+    transition: 0.5s;
+    opacity: 0;
+}
+
+.btn:hover::after {
+    opacity: 1;
+    transform: rotate(45deg) translateX(50%);
+}
+
+/* Заголовок */
+h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+    animation: titleGlow 3s infinite alternate;
+    background: linear-gradient(45deg, #fff, #a0aec0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5),
+                 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+/* Анимация всплывающего окна */
+@keyframes scaleIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Попап окно */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.popup-content {
+    background-color: rgba(0, 0, 0, 0.95);
+    color: #fff;
+    padding: 2.5rem;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 90%;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3),
+                0 0 50px rgba(255, 255, 255, 0.2),
+                0 0 70px rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: scaleIn 0.3s ease-out, glowing 2s infinite ease-in-out;
+}
+
+.popup h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8em;
+    margin-bottom: 1.5rem;
+    color: #fff;
+}
+
+.popup p {
+    margin-bottom: 1.5rem;
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+/* Дополнительные стили для выделенного текста */
+.popup p strong {
+    font-weight: bold;
+    font-size: 1.3em;
+    color: #34ac6a;
+}
+
+/* Медиа-запросы */
+@media (max-width: 768px) {
+    main {
+        width: 95%;
+        margin: 1rem auto;
+    }
+
+    form {
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+
+    .btn {
+        padding: 12px;
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 500px) {
+    body, html {
+        font-size: 90%;
+    }
+
+    h1 {
+        font-size: 1.2em;
+    }
+
+    main {
+        padding: 0.5rem;
+    }
+}

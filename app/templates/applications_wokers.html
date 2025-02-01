@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ title_h1 }}
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="/static/css/applications.css">
+{% endblock %}
+
+{% block content %}
+<main>
+    <h1>{{ title_h1 }}</h1>
+    {% if access %}
+    <input type="hidden" id="worker_id" value="{{ worker_id }}">
+    <table id="appointments-table">
+        <thead>
+            <tr>
+                <th data-sort="appointment_date">Дата время</th>
+                <th data-sort="client_name">Клиент</th>
+                <th data-sort="service_name">Услуга</th>
+                <th data-sort="address">Адрес клиента</th>
+                <th data-sort="phone_number">Телефон</th>
+                <th data-sort="status">Статус</th>
+                <th data-sort="master_name">Специалист</th>
+                <th data-sort="comment">Комментарий</th>
+                <th data-sort="address_name">Адрес магазина</th>
+            </tr>
+        </thead>
+        {% for application in applications %}
+            <tr data-application-id="{{ application.application_id }}">
+                <td data-appointment_date="{{ application.appointment_date }}">
+                    <div class="datetime">
+                        <span class="date">{{ application.appointment_date }}</span>
+                        <span class="time">{{ application.appointment_time }}</span>
+                    </div>
+                </td>
+                <td data-client_name="{{ application.client_name }}">{{ application.client_name }}</td>
+                <td data-service_name="{{ application.service_name }}">{{ application.service_name }}</td>
+                <td data-address="{{ application.address }}">{{ application.address if application.address else 'Не указан' }}</td>
+                <td data-phone_number="{{ application.phone_number }}">
+                    {% if application.phone_number %}
+                    <a href="#" class="copy-phone" data-phone="{{ application.phone_number }}">
+                        {{ application.phone_number }}
+                    </a>
+                    {% else %}
+                    Не указан
+                    {% endif %}
+                </td>
+                <td data-status="{{ application.status }}">
+                    {% if user_role %}
+                    <select class="status-select">
+                        {% for status in statuses %}
+                        <option value="{{ status.name }}" {% if status == application.status %}selected{% endif %}>
+                            {{ status.value }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    {% else %}
+                    {{ application.status }}
+                    {% endif %}
+                </td>
+                <td data-master_name="{{ application.master_name }}">{{ application.master_name }}</td>
+                <td data-comment="{{ application.comment }}">{{ application.comment if application.comment else '---' }}</td>
+                <td data-address_name="{{ application.address_name }}">{{ application.address_name }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>{{ message }}</p>
+    {% endif %}
+</main>
+{% include 'include/paginations.html' %}
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/applications.js"></script>
+{% endblock %}
