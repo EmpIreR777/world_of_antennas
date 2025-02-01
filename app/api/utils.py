@@ -1,5 +1,5 @@
 import logging
-from fastapi import HTTPException, APIRouter
+from fastapi import HTTPException, APIRouter, status
 import httpx
 from urllib.parse import unquote
 
@@ -67,4 +67,4 @@ async def suggest_address(query: str):
 
     except Exception as e:
         logging.error(f'Error: {e}')
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-
+// Сортировка по всем полям
 document.addEventListener('DOMContentLoaded', () => {
     const table = document.getElementById('appointments-table');
     const headers = table.querySelectorAll('th[data-sort]');
