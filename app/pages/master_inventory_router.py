@@ -21,7 +21,7 @@ async def get_worker_list_and_items_lists(request: Request, worker_id: int):
     Обработчик маршрута /worker_list для отображения панели администратора.
     """
     data_page = {
-        'request': request, 
+        'request': request,
         'access': False,
         'title_h1': 'Панель задолженности работников магазина'
     }
@@ -74,7 +74,6 @@ async def update_worker_items(request: Request, data: ItemUpdateQuantity):
     """
     Обработчик маршрута /update_worker_quantity для отображения панели администратора.
     """
-    print('Полученные данные:', data)
     try:
         user = await UserDAO.find_one_or_none_by_roles(telegram_id=data.worker_id)
         if not user or user.role == User.RoleEnum.USER:
@@ -106,12 +105,14 @@ async def update_worker_items(request: Request, data: ItemUpdateQuantity):
 
 
 @router.delete('/delete_worker_item', response_class=JSONResponse)
-async def delete_worker_item(request: Request, data: dict):
+async def delete_worker_item(request: Request, worker_id: int, item_id: int):
     """
     Обработчик маршрута /delete_worker_item для удаления товара.
     """
+    print('Полученные данные:', item_id)
+
     try:
-        user = await UserDAO.find_one_or_none_by_roles(telegram_id=data.worker_id)
+        user = await UserDAO.find_one_or_none_by_roles(telegram_id=worker_id)
         if not user or user.role == User.RoleEnum.USER:
             return JSONResponse(
                 status_code=status.HTTP_403_FORBIDDEN,
@@ -119,10 +120,8 @@ async def delete_worker_item(request: Request, data: dict):
             )
 
         delete_result = await InventoryItemDAO.delete(
-            filter_by={
-                'id': data.item_id,
-                'user_id': data.worker_id
-            }
+                id = item_id,
+                user_id = worker_id
         )
 
         if delete_result == 0:

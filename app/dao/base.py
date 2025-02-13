@@ -131,7 +131,7 @@ class BaseDAO:
                     await session.commit()
                 except SQLAlchemyError as e:
                     await session.rollback()
-                    logging.error(f'Ошибка при подсчёте записей: {e}')
+                    logging.error(f'Ошибка при удаление записей: {e}')
                     raise e
                 return result.rowcount
 

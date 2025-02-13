@@ -28,7 +28,7 @@ class UserDAO(BaseDAO):
                 )
                 result = await session.execute(query)
                 users = result.unique().scalars().all()
-                
+
                 if not users:
                     return []
                 return [
@@ -37,7 +37,7 @@ class UserDAO(BaseDAO):
                         'role': user.role.value,
                         'username': user.username,
                         'inventory_items': [
-                            {
+                            {   'id': item.id,
                                 'item_name': item.item_name,
                                 'quantity': item.quantity,
                                 'unit_type': item.unit_type.value,

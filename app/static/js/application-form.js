@@ -100,12 +100,6 @@ document.getElementById('closePopup').addEventListener('click', async function (
     const latitude = parseFloat(document.getElementById('latitude').value);
     const longitude = parseFloat(document.getElementById('longitude').value);
 
-    // Проверка широты и долготы
-    if (!latitude || !longitude || isNaN(latitude) || isNaN(longitude)) {
-        alert("Пожалуйста, выберите адрес из списка подсказок.");
-        return;
-    }
-
     // Создаем объект с данными
     const appointmentData = {
         client_name: clientName,

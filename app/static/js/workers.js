@@ -176,7 +176,7 @@ async function updateQuantity(element) {
 
     try {
         const response = await fetch('/worker/update_worker_quantity', {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -207,18 +207,15 @@ async function deleteItem(workerId, itemId) {
         return;
     }
 
-    const formData = {
-        worker_id: Number(workerId),
-        item_id: Number(itemId)
-    };
-
     try {
-        const response = await fetch('/worker/delete_worker_item', {
-            method: 'POST',
+        // Формируем URL с GET-параметрами
+        const url = `/worker/delete_worker_item?worker_id=${encodeURIComponent(workerId)}&item_id=${encodeURIComponent(itemId)}`;
+
+        const response = await fetch(url, {
+            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(formData) // Отправляем данные как JSON
         });
 
         if (response.ok) {

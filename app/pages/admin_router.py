@@ -83,5 +83,3 @@ async def update_application_status(request: Request, data: AppointmentUpdateSta
         logging.error(f"Ошибка при обновлении заявки: {e}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                              detail='Внутренняя ошибка сервера.')
-
-
