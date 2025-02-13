@@ -3,10 +3,11 @@ from aiogram.types import Update
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from sqladmin import Admin # Админка
+from sqladmin import Admin
 from contextlib import asynccontextmanager
 
-from app.api.admin_panel import ApplicationAdmin, InventoryItemAdmin, ServiceAdmin, ShopAdmin, UserAdmin
+from app.api.admin_panel import ApplicationAdmin, InventoryItemAdmin, \
+      ServiceAdmin, ShopAdmin, UserAdmin
 from app.database import engine
 from app.bot.create_bot import bot, dp, stop_bot, start_bot
 from app.bot.handlers.user_router import router as user_router
@@ -16,8 +17,6 @@ from app.pages.admin_router import router as admin_router_pages
 from app.pages.master_inventory_router import router as workers_router_pages
 from app.api.utils import router as suggest_address_router
 from app.api.router import router as api_router
-
-
 from app.config import settings
 
 
