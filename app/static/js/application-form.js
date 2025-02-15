@@ -57,6 +57,10 @@ document.getElementById('address').addEventListener('change', function(e) {
     );
     
     if (selectedOption) {
+        console.log('Selected Option:', selectedOption);
+        console.log('Latitude:', selectedOption.dataset.latitude);
+        console.log('Longitude:', selectedOption.dataset.longitude);
+        
         document.getElementById('latitude').value = selectedOption.dataset.latitude;
         document.getElementById('longitude').value = selectedOption.dataset.longitude;
     }
@@ -100,6 +104,9 @@ document.getElementById('closePopup').addEventListener('click', async function (
     const latitude = parseFloat(document.getElementById('latitude').value);
     const longitude = parseFloat(document.getElementById('longitude').value);
 
+    console.log('Latitude:', latitude);
+    console.log('Longitude:', longitude);
+
     // Создаем объект с данными
     const appointmentData = {
         client_name: clientName,
@@ -114,6 +121,8 @@ document.getElementById('closePopup').addEventListener('click', async function (
         latitude: latitude,
         longitude: longitude,
     };
+
+    console.log('Appointment Data:', appointmentData);
 
     // Преобразуем объект в JSON строку и отправляем POST запрос
     try {

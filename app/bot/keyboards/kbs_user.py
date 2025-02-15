@@ -37,8 +37,8 @@ def home_user_keyboard() -> InlineKeyboardMarkup:
 
 def app_keyboard() -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder()
-    kb.button(text='Магазин на Васильева', callback_data='Васильева 75')
-    kb.button(text='Магазин в горном', callback_data='Горный Алтайская улица, 26Б')
+    kb.button(text='Магазин в Бийске', callback_data='Бийск Васильева 75')
+    kb.button(text='Магазин в Горно-Алтайске', callback_data='Горный Алтайская улица, 26Б')
     kb.button(text='🏠 На главную', callback_data='user_back_home')
     kb.adjust(2, 1)
     return kb.as_markup()

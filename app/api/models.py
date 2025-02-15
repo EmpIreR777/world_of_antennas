@@ -99,7 +99,7 @@ shop_services = Table(
     Base.metadata,
     Column('shop_id', Integer, ForeignKey('shops.shop_id'), primary_key=True),
     Column('service_id', Integer, ForeignKey('services.service_id'), primary_key=True)
-)
+    )
 
 
 class Shop(Base):
@@ -109,14 +109,9 @@ class Shop(Base):
     phone: Mapped[str] = mapped_column(String(20), nullable=True)
     working_hours: Mapped[str] = mapped_column(
         String(100), nullable=True)  # Часы работы
-    coordinates: Mapped[str] = mapped_column(
-        String(50), nullable=True)  # Координаты для карты
-    # image_url: Mapped[str] = mapped_column(String(255), nullable=True)  # URL изображения
-    image_url: Mapped[FileType | None] = mapped_column(
-        FileType(storage=settings.STORAGES['image']),
-        default='',
-        nullable=True,
-    )
+    latitude: Mapped[float] = mapped_column(nullable=False)
+    longitude: Mapped[float] = mapped_column(nullable=False)
+    photo: Mapped[str] = mapped_column(String(255), nullable=True)
     applications: Mapped[list['Application']] = relationship('Application', back_populates='shop')
     # Связь многие-ко-многим с услугами через вспомогательную таблицу
     services: Mapped[list['Service']] = relationship(

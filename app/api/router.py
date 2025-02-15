@@ -41,6 +41,7 @@ async def create_appointment(request: Request):
             f'🔧 <b>Услуга:</b> {service.service_name}\n'
             f'📅 <b>Дата:</b> {validated_data.appointment_date}\n'
             f'⏰ <b>Время:</b> {validated_data.appointment_time}\n'
+            f'📊 <b>Статус:</b> ⚠️ Не обработана\n'
             f'💭 <b>Комментарий:</b> {validated_data.comment or "Нет комментария"}\n\n'
             'Спасибо за выбор нашего магазина! ✨ Мы свяжемся с вами для подтверждения.\n'
         )
@@ -49,7 +50,7 @@ async def create_appointment(request: Request):
             f'🔔 <b>Новая заявка!</b>\n\n'
             f'📄 <b>Детали заявки:</b>\n'
             f'👤 <b>Имя клиента:</b> {validated_data.client_name}\n'
-            f'📞 <b>Телефон:</b> {validated_data.phone_number or "Не указан"}\n'
+    f'📞 <b>Телефон:</b> <a href="tel:{validated_data.phone_number}">{validated_data.phone_number or "Не указан"}</a>\n'
             f'📍 <b>Адрес:</b> {validated_data.address}\n'
             f'🏪 <b>Магазин:</b> {shop.address_name}\n'
             f'🔧 <b>Услуга:</b> {service.service_name}\n'
@@ -82,7 +83,7 @@ async def create_appointment(request: Request):
                 delay=5,
             )
         )
-        
+
         for admin_id in settings.ADMIN_IDS:
             asyncio.create_task(
                 send_message_add_user_workers(

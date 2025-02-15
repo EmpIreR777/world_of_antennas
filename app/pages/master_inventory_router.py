@@ -28,7 +28,6 @@ async def get_worker_list_and_items_lists(request: Request, worker_id: int):
     try:
         items_workers = await UserDAO.get_all_items_worker_list()
         data_page['access'] = True
-        # data_page['worker_id'] = worker_id
 
         data_page['items_workers'] = items_workers
         if not items_workers:

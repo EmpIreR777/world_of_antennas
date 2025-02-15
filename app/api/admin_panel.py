@@ -1,7 +1,12 @@
+from fastapi import Path, Request, UploadFile
 from sqladmin import ModelView
 from sqlalchemy.orm import Session
 from wtforms import SelectField
+from sqladmin.fields import FileField
+from fastapi_storages import FileSystemStorage
+from fastapi_storages.integrations.sqlalchemy import FileType
 
+from app.config import settings
 from app.api.models import User, Shop, Service, Application, InventoryItem
 
 
@@ -54,25 +59,34 @@ class UserAdmin(ModelView, model=User):
 # Административная панель для модели Магазин
 class ShopAdmin(ModelView, model=Shop):
     # Название модели в единственном числе
-    name = 'Магазин'
+    name = "Магазин"
     # Название модели во множественном числе
-    name_plural = 'Магазины'
+    name_plural = "Магазины"
     # Иконка для отображения в интерфейсе
-    icon = 'fa fa-store'
+    icon = "fa fa-store"
 
     # Метки колонок на русском языке
     column_labels = {
-        'shop_id': 'ID магазина',
-        'address_name': 'Адрес',
-        'phone': 'Телефон',
-        'working_hours': 'Часы работы',
-        'coordinates': 'Координаты',
-        'image_url': 'Изображение',
-        'services': 'Услуги',
+        "shop_id": "ID магазина",
+        "address_name": "Адрес",
+        "phone": "Телефон",
+        "working_hours": "Часы работы",
+        "latitude": "Широта",
+        "longitude": "Долгота",
+        "photo": "Изображение",
+        "services": "Услуги",
     }
 
     # Список колонок, отображаемых в таблице магазинов
-    column_list = [Shop.shop_id, Shop.address_name, Shop.image_url, Shop.phone, Shop.working_hours]
+    column_list = [
+        Shop.shop_id,
+        Shop.address_name,
+        Shop.photo,
+        Shop.phone,
+        Shop.working_hours,
+        Shop.latitude,
+        Shop.longitude,
+    ]
 
     # Список полей для поиска
     column_searchable_list = [Shop.address_name]
@@ -82,30 +96,73 @@ class ShopAdmin(ModelView, model=Shop):
 
     # Поля, отображаемые в формах создания и редактирования
     form_columns = [
-        Shop.address_name, 
-        Shop.phone,
-        Shop.working_hours,
-        Shop.coordinates,
-        Shop.image_url,
+        "address_name",
+        "phone",
+        "working_hours",
+        "latitude",
+        "longitude",
+        "photo",
+        "services",
     ]
 
+    # Настройка поля для загрузки фото
+    form_overrides = {
+        "photo": FileField,
+    }
+
+    async def on_model_change(self, data: dict, model: Shop, is_created: bool, request: Request) -> None:
+        """
+        Обрабатывает загрузку файла перед сохранением модели.
+        """
+        if "photo" in data and data["photo"]:
+            upload_file: UploadFile = data["photo"]
+
+            # Проверяем, что имя файла не None
+            if not upload_file.filename:
+                raise ValueError("Имя файла не может быть пустым")
+
+            # Используем оригинальное имя файла
+            file_name = upload_file.filename
+            file_path = settings.STORAGE_IMAGES / file_name
+
+            # Проверяем, существует ли файл с таким именем
+            counter = 1
+            while file_path.exists():
+                # Если файл существует, добавляем суффикс к имени
+                file_name = f"{Path(upload_file.filename).stem}_{counter}{Path(upload_file.filename).suffix}"
+                file_path = settings.STORAGE_IMAGES / file_name
+                counter += 1
+
+            # Сохраняем файл на диск
+            with open(file_path, "wb") as buffer:
+                buffer.write(await upload_file.read())
+
+            # Сохраняем путь к файлу в модели
+            model.photo = file_name
+
+            # Удаляем объект UploadFile из данных, чтобы SQLAlchemy не пытался его сохранить
+            data["photo"] = file_name  # Заменяем объект UploadFile на строку с именем файла
+
+        await super().on_model_change(data, model, is_created, request)
+
+    # Настройка отображения изображений в списке
+    column_formatters = {
+        "photo": lambda m, _: f'<img src="{settings.STORAGE_IMAGES / m.photo}" width="100">' if m.photo else "Нет фото",
+    }
+    column_formatters_detail = column_formatters
+
     # Разрешения на действия
-    can_create = True      # Разрешить создание новых записей
-    can_edit = True        # Разрешить редактирование записей
-    can_delete = True      # Разрешить удаление записей
-    can_view_details = True# Разрешить просмотр деталей записи
+    can_create = True  # Разрешить создание новых записей
+    can_edit = True  # Разрешить редактирование записей
+    can_delete = True  # Разрешить удаление записей
+    can_view_details = True  # Разрешить просмотр деталей записи
 
     # Фильтры для колонок
     column_filters = [Shop.services]
 
-    # Настройка отображения изображений в списке
-    # column_formatters = {
-    #     Shop.image_url: lambda v, c, m, p: f'<img src="{m.image_url}" width="50" height="50" />'
-    # }
-    # column_formatters_detail = column_formatters
-
     # Настройка размера страницы
     page_size = 20
+
 
 # Административная панель для модели Услуга
 class ServiceAdmin(ModelView, model=Service):

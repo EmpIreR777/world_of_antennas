@@ -1,6 +1,7 @@
 from aiogram.types import ReplyKeyboardMarkup, WebAppInfo, InlineKeyboardMarkup
-from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
+from aiogram.utils.keyboard import InlineKeyboardButton, InlineKeyboardBuilder
 
+from app.api.models import Application
 from app.config import settings
 
 
@@ -36,3 +37,15 @@ def send_message_keyboard(target: str) -> InlineKeyboardMarkup:
     return kb.as_markup()
 
 
+# Клавиатура для выбора статуса
+def update_status_apl_keyboard(application_id: int) -> InlineKeyboardMarkup:
+    """
+    Клавиатура для выбора статуса заявки.
+    """
+    keyboard = InlineKeyboardMarkup(row_width=2)
+    for status in Application.StatusEnum:
+        keyboard.add(InlineKeyboardButton(
+            text=status.value,
+            callback_data=f'status_{application_id}_{status.value}'
+        ))
+    return keyboard

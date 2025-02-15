@@ -66,6 +66,5 @@ async def suggest_address(query: str):
         return suggestions
 
     except Exception as e:
-        print('!!!!!!!!!!!!!!!!!!!!!!!', e)
         logging.error(f'Error: {e}')
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

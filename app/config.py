@@ -20,15 +20,13 @@ class Settings(BaseSettings):
     YANDEX_API_KEY: str
 
     BASE_DIR: Path = Path(__file__).resolve().parent
+
     STORAGE_IMAGES: Path = BASE_DIR / 'media/images'
-    # STORAGE_AUDIOS: Path = BASE_DIR / 'media/audios'
-    # STORAGE_ANIMATIONS: Path = BASE_DIR / 'media/animations'
     STORAGES: dict = {}
 
     model_config = SettingsConfigDict(
         env_file=env_file_path
     )
-    # model_config = SettingsConfigDict(env_file=BASE_DIR / '.env')
 
     def get_webhook_url(self) -> str:
         """Возвращает URL вебхука с кодированием специальных символов."""
@@ -44,16 +42,9 @@ class Settings(BaseSettings):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
         self._ensure_directories_exist(
-            self.STORAGE_IMAGES,
-            # self.STORAGE_AUDIOS,
-            # self.STORAGE_ANIMATIONS,
-        )
-
+            self.STORAGE_IMAGES,)
         self.STORAGES['image'] = FileSystemStorage(path=self.STORAGE_IMAGES)
-        # self.STORAGES['audio'] = FileSystemStorage(path=self.STORAGE_AUDIOS)
-        # self.STORAGES['animation'] = FileSystemStorage(path=self.STORAGE_ANIMATIONS)
 
     @staticmethod
     def _ensure_directories_exist(*paths: Path):

@@ -1,8 +1,8 @@
 """Initial revision
 
-Revision ID: b62fdac69877
+Revision ID: 94099c26a361
 Revises: 
-Create Date: 2025-01-16 22:51:29.037969
+Create Date: 2025-02-15 19:13:20.782352
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'b62fdac69877'
+revision: str = '94099c26a361'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -33,8 +33,9 @@ def upgrade() -> None:
     sa.Column('address_name', sa.String(length=255), nullable=False),
     sa.Column('phone', sa.String(length=20), nullable=True),
     sa.Column('working_hours', sa.String(length=100), nullable=True),
-    sa.Column('coordinates', sa.String(length=50), nullable=True),
-    sa.Column('image_url', sa.String(length=255), nullable=True),
+    sa.Column('latitude', sa.Float(), nullable=False),
+    sa.Column('longitude', sa.Float(), nullable=False),
+    sa.Column('photo', sa.String(), nullable=True),
     sa.Column('create_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.Column('update_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.PrimaryKeyConstraint('shop_id')
