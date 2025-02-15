@@ -25,7 +25,7 @@ async def read_works(
     sort_by: str = None,  # Поле для сортировки
     order: str = 'asc',   # Направление сортировки (по умолчанию - по возрастанию)
     page: int = 1,        # Номер страницы (по умолчанию - 1)
-    page_size: int = 3   # Количество элементов на странице (по умолчанию - 10)
+    page_size: int = 10    # Количество элементов на странице (по умолчанию - 10)
     ):
     """
     Обработчик маршрута /admin{worker_id} для отображения заявок с пагинацией.
@@ -58,7 +58,7 @@ async def read_works(
         data_page['applications'] = applications
         data_page['page'] = page
         data_page['page_size'] = page_size
-        data_page['total_pages'] = pagination["total_pages"]
+        data_page['total_pages'] = pagination['total_pages']
 
         return templates.TemplateResponse('applications_wokers.html', data_page)
 

@@ -1,7 +1,7 @@
 <div class="pagination">
     <!-- Ссылка на предыдущую страницу -->
     {% if page > 1 %}
-        <a href="?page={{ page - 1 }}&page_size={{ page_size }}" class="pagination-link">Предыдущая</a>
+        <a href="?worker_id={{ worker_id }}&page={{ page - 1 }}&page_size={{ page_size }}" class="pagination-link">Предыдущая</a>
     {% else %}
         <span class="pagination-disabled">Предыдущая</span>
     {% endif %}
@@ -11,13 +11,13 @@
         {% if p == page %}
             <span class="current-page">{{ p }}</span>
         {% else %}
-            <a href="?page={{ p }}&page_size={{ page_size }}" class="pagination-link">{{ p }}</a>
+            <a href="?worker_id={{ worker_id }}&page={{ p }}&page_size={{ page_size }}" class="pagination-link">{{ p }}</a>
         {% endif %}
     {% endfor %}
 
     <!-- Ссылка на следующую страницу -->
     {% if page < total_pages %}
-        <a href="?page={{ page + 1 }}&page_size={{ page_size }}" class="pagination-link">Следующая</a>
+        <a href="?worker_id={{ worker_id }}&page={{ page + 1 }}&page_size={{ page_size }}" class="pagination-link">Следующая</a>
     {% else %}
         <span class="pagination-disabled">Следующая</span>
     {% endif %}
