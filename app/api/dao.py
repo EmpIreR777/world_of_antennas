@@ -270,31 +270,3 @@ class ApplicationDAO(BaseDAO):
             except SQLAlchemyError as e:
                 logging.error(f'Ошибка при загрузке всех заявок: {e}')
                 return None
-
-    # @classmethod
-    # async def update(cls, filter_by: dict, **values):
-    #     """
-    #     Обновляет записи в базе данных по заданным условиям.
-    #     Args:
-    #         filter_by (dict): Словарь с условиями фильтрации {column_name: value}
-    #         **values: Значения для обновления в формате column_name=value
-    #     Returns:
-    #         int: Количество обновленных записей
-    #     Raises:
-    #         SQLAlchemyError: При ошибке обновления данных
-    #     """
-    #     async with async_session_maker() as session:
-    #         async with session.begin():
-    #             stmt = (
-    #                 sqlalchemy_update(cls)
-    #                 .where(*[getattr(cls, k) == v for k, v in filter_by.items()])
-    #                 .values(**values)
-    #                 .execution_options(synchronize_session='fetch')
-    #             )
-    #             try:
-    #                 result = await session.execute(stmt)
-    #                 await session.commit()
-    #                 return result.rowcount
-    #             except SQLAlchemyError as e:
-    #                 await session.rollback()
-    #                 raise e

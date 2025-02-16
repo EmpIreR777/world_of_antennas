@@ -49,17 +49,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% if user_role %}
-                    <select class="status-select">
-                        {% for status in statuses %}
-                        <option value="{{ status.name }}" {% if status == application.status %}selected{% endif %}>
-                            {{ status.value }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                    {% else %}
                     {{ application.status }}
-                    {% endif %}
                 </td>
                 <td>{{ application.master_name }}</td>
                 <td>{{ application.comment if application.comment else '---' }}</td>
