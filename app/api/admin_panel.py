@@ -1,10 +1,8 @@
 from fastapi import Path, Request, UploadFile
 from sqladmin import ModelView
-from sqlalchemy.orm import Session
-from wtforms import SelectField
+
 from sqladmin.fields import FileField
-from fastapi_storages import FileSystemStorage
-from fastapi_storages.integrations.sqlalchemy import FileType
+
 
 from app.config import settings
 from app.api.models import User, Shop, Service, Application, InventoryItem
